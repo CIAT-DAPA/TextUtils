@@ -1,0 +1,6 @@
+.metadata/
+*.lock
+/Textutils/*.project
+/Textutils/.classpath
+/RemoteSystemsTempFiles/
+/Textutils/.settings/
