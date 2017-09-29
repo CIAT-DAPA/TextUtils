@@ -10,6 +10,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -24,6 +27,10 @@ public class LineFilter {
 	private static final String LINE_JUMP = "\r\n";
 
 	public static void main(String[] args) {
+		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		Date date = new Date();
+		System.out.println(dateFormat.format(date)); 
+		
 		String fileName = "file.csv";
 		if (args.length > 0) {
 			fileName = args[0];
@@ -33,6 +40,10 @@ public class LineFilter {
 
 		LineFilter app = new LineFilter();
 		app.extract(fileName);
+		
+		date = new Date();
+		System.out.println();
+		System.out.println(dateFormat.format(date)); 
 	}
 
 	private void extract(String fileName) {
@@ -73,6 +84,7 @@ public class LineFilter {
 					bar.update(done / kilobyte, total);
 				}
 				/* */
+				
 				line = reader.readLine();
 
 			}
