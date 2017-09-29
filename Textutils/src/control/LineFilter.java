@@ -1,3 +1,5 @@
+package control;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -13,22 +15,35 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
+import model.ProgressBar;
+
 public class LineFilter {
 
 	private Map<String, Integer> colIndex;
 	private static final String SEPARATOR = "\t";
+	private static final String LINE_JUMP = "\r\n";
 
 	public static void main(String[] args) {
+		String fileName = "file.csv";
+		if (args.length > 0) {
+			fileName = args[0];
+		} else {
+			System.out.println("File not provided in arguments, using file.csv as default");
+		}
+		
 		LineFilter app = new LineFilter();
-		app.run();
+		app.extract(fileName);
 	}
 
-	private void run() {
+	private void extract(String fileName) {
 
-		String jump = "\r\n";
-		// if (args.length > 0) {
-		File input = new File("file.csv");
+
+		File input = new File(fileName);
 		File output = new File("file_filtered.csv");
+
+		int total = Math.toIntExact(input.getTotalSpace());
+		int done = 0;
+		ProgressBar bar = new ProgressBar();
 
 		try (BufferedWriter writer = new BufferedWriter(
 				new PrintWriter(new OutputStreamWriter(new FileOutputStream(output), "UTF-8")));
@@ -37,16 +52,19 @@ public class LineFilter {
 
 			/* header */
 			String line = reader.readLine();
+			done = line.length();
 			colIndex = getColumnsIndex(line);
 			writer.write(line);
-			writer.write(jump);
+			writer.write(LINE_JUMP);
 			/**/
 
 			line = reader.readLine();
 			while (line != null) {
 				if (isTarget(line)) {
 					writer.write(line);
-					writer.write(jump);
+					writer.write(LINE_JUMP);
+					done+=line.length();
+					bar.update(done, total);
 				}
 				line = reader.readLine();
 			}
@@ -57,21 +75,17 @@ public class LineFilter {
 			System.out.println("Cannot read " + input.getAbsolutePath());
 		}
 
-		// } else {
-		// System.out.println("File not provided in arguments");
-		// }
-
 	}
 
 	private boolean isTarget(String line) {
 		boolean flag = false;
-		line+="\t ";
+		line += "\t ";
 		String[] values = line.split(SEPARATOR);
 
 		if (!line.contains("SPECIES")) {
 			return false;
 		}
-		
+
 		/* excluding issues */
 		flag = false;
 		Set<String> issues = new LinkedHashSet<>();
@@ -80,13 +94,13 @@ public class LineFilter {
 		issues.add("ZERO_COORDINATE");
 
 		matchIssue: for (String issue : issues) {
-			if (values[colIndex.get("issue")].contains(issue)) {
+			if (!values[colIndex.get("issue")].contains(issue)) {
 				flag = true;
 				break matchIssue;
 			}
 		}
 		if (!flag) {
-			return flag; // return false 
+			return flag; // return false
 		}
 		/**/
 
