@@ -65,8 +65,9 @@ public class LineFilter {
 
 			/* progress bar */
 			ProgressBar bar = new ProgressBar();
-			int kilobyte = 1024;
-			int total = Math.toIntExact(input.length() / kilobyte);
+			int exp = (int) Math.ceil((input.length()+"").length()/3);
+			int dimensionality = (int) Math.pow(10, exp );
+			int total = Math.toIntExact(input.length() / dimensionality);
 			int done = line.length();
 			int lineNumber = 0;
 			/* */
@@ -80,22 +81,21 @@ public class LineFilter {
 				
 				/* show progress*/
 				done += line.length();
-				if (++lineNumber % kilobyte == 0) {
-					bar.update(done / kilobyte, total);
+				if (++lineNumber % dimensionality == 0) {
+					bar.update(done / dimensionality, total);
 				}
 				/* */
 				
 				line = reader.readLine();
 
 			}
-			bar.update(done / kilobyte, total);
+			bar.update(done / dimensionality, total);
 
 		} catch (FileNotFoundException e) {
 			System.out.println("File not found " + input.getAbsolutePath());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	private boolean isTarget(String line) {
