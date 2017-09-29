@@ -30,20 +30,15 @@ public class LineFilter {
 		} else {
 			System.out.println("File not provided in arguments, using file.csv as default");
 		}
-		
+
 		LineFilter app = new LineFilter();
 		app.extract(fileName);
 	}
 
 	private void extract(String fileName) {
 
-
 		File input = new File(fileName);
 		File output = new File("file_filtered.csv");
-
-		int total = Math.toIntExact(input.getTotalSpace());
-		int done = 0;
-		ProgressBar bar = new ProgressBar();
 
 		try (BufferedWriter writer = new BufferedWriter(
 				new PrintWriter(new OutputStreamWriter(new FileOutputStream(output), "UTF-8")));
@@ -52,27 +47,41 @@ public class LineFilter {
 
 			/* header */
 			String line = reader.readLine();
-			done = line.length();
 			colIndex = getColumnsIndex(line);
 			writer.write(line);
 			writer.write(LINE_JUMP);
-			/**/
+			/* */
+
+			/* progress bar */
+			ProgressBar bar = new ProgressBar();
+			int kilobyte = 1024;
+			int total = Math.toIntExact(input.length() / kilobyte);
+			int done = line.length();
+			int lineNumber = 0;
+			/* */
 
 			line = reader.readLine();
 			while (line != null) {
 				if (isTarget(line)) {
 					writer.write(line);
 					writer.write(LINE_JUMP);
-					done+=line.length();
-					bar.update(done, total);
 				}
+				
+				/* show progress*/
+				done += line.length();
+				if (++lineNumber % kilobyte == 0) {
+					bar.update(done / kilobyte, total);
+				}
+				/* */
 				line = reader.readLine();
+
 			}
+			bar.update(done / kilobyte, total);
 
 		} catch (FileNotFoundException e) {
 			System.out.println("File not found " + input.getAbsolutePath());
 		} catch (IOException e) {
-			System.out.println("Cannot read " + input.getAbsolutePath());
+			e.printStackTrace();
 		}
 
 	}
