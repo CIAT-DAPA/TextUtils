@@ -29,8 +29,8 @@ public class LineFilter {
 	public static void main(String[] args) {
 		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		Date date = new Date();
-		System.out.println(dateFormat.format(date)); 
-		
+		System.out.println(dateFormat.format(date));
+
 		String fileName = "file.csv";
 		if (args.length > 0) {
 			fileName = args[0];
@@ -40,10 +40,10 @@ public class LineFilter {
 
 		LineFilter app = new LineFilter();
 		app.extract(fileName);
-		
+
 		date = new Date();
 		System.out.println();
-		System.out.println(dateFormat.format(date)); 
+		System.out.println(dateFormat.format(date));
 	}
 
 	private void extract(String fileName) {
@@ -65,11 +65,13 @@ public class LineFilter {
 
 			/* progress bar */
 			ProgressBar bar = new ProgressBar();
-			int exp = (int) Math.ceil((input.length()+"").length()/3);
-			int dimensionality = (int) Math.pow(10, exp );
+			int exp = (int) Math.ceil((input.length() + "").length()) + 1;
+			int dimensionality = (int) Math.pow(2, exp);
 			int total = Math.toIntExact(input.length() / dimensionality);
 			int done = line.length();
 			int lineNumber = 0;
+			System.out.println("Reading " + input.length() / 1024 + "KB");
+			System.out.println("Updating progress each " + dimensionality + "KB read");
 			/* */
 
 			line = reader.readLine();
@@ -78,14 +80,14 @@ public class LineFilter {
 					writer.write(line);
 					writer.write(LINE_JUMP);
 				}
-				
-				/* show progress*/
+
+				/* show progress */
 				done += line.length();
 				if (++lineNumber % dimensionality == 0) {
 					bar.update(done / dimensionality, total);
 				}
 				/* */
-				
+
 				line = reader.readLine();
 
 			}
