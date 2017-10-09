@@ -49,7 +49,7 @@ public class LineFilter {
 	private void extract(String fileName) {
 
 		File input = new File(fileName);
-		File output = new File("file_filtered.csv");
+		File output = new File("records.csv");
 
 		try (BufferedWriter writer = new BufferedWriter(
 				new PrintWriter(new OutputStreamWriter(new FileOutputStream(output), "UTF-8")));
@@ -59,8 +59,8 @@ public class LineFilter {
 			/* header */
 			String line = reader.readLine();
 			colIndex = getColumnsIndex(line);
-			writer.write(line);
-			writer.write(LINE_JUMP);
+			// writer.write(line);
+			// writer.write(LINE_JUMP);
 			/* */
 
 			/* progress bar */
@@ -77,7 +77,7 @@ public class LineFilter {
 			line = reader.readLine();
 			while (line != null) {
 				if (isTarget(line)) {
-					writer.write(line);
+					writer.write(getGeospatialInfo(line));
 					writer.write(LINE_JUMP);
 				}
 
@@ -100,6 +100,12 @@ public class LineFilter {
 		}
 	}
 
+	private String getGeospatialInfo(String line) {
+		String[] values = line.split(SEPARATOR);
+		return values[colIndex.get("scientificname")] + SEPARATOR + values[colIndex.get("decimallatitude")] + SEPARATOR
+				+ values[colIndex.get("decimallongitude")];
+	}
+
 	private boolean isTarget(String line) {
 		boolean flag = false;
 		line += "\t ";
@@ -116,16 +122,11 @@ public class LineFilter {
 		issues.add("COUNTRY_COORDINATE_MISMATCH");
 		issues.add("ZERO_COORDINATE");
 
-		matchIssue: for (String issue : issues) {
-			if (!values[colIndex.get("issue")].contains(issue)) {
-				flag = true;
-				break matchIssue;
+		for (String issue : issues) {
+			if (values[colIndex.get("issue")].contains(issue)) {
+				return false;
 			}
 		}
-		if (!flag) {
-			return flag; // return false
-		}
-		/**/
 
 		/* matching with taxa */
 		flag = false;
