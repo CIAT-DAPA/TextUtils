@@ -81,7 +81,7 @@ public class LineFilter {
 			line = reader.readLine();
 			while (line != null) {
 				if (isTarget(line)) {
-					writer.write(getGeospatialInfo(line));
+					writer.write(line);
 					writer.write(LINE_JUMP);
 				}
 
@@ -105,6 +105,8 @@ public class LineFilter {
 		}
 	}
 
+	
+	@SuppressWarnings("unused")
 	private String getGeospatialInfo(String line) {
 		String[] values = line.split(SEPARATOR);
 		return values[colIndex.get("scientificname")] + SEPARATOR + values[colIndex.get("decimallatitude")] + SEPARATOR
@@ -134,8 +136,7 @@ public class LineFilter {
 		/* matching with taxa */
 
 		for (String taxon : taxa) {
-			//if (values[colIndex.get("taxonkey")].equals(taxon)) {
-			if (line.contains(taxon)) {
+			if (values[colIndex.get("taxonkey")].equals(taxon)) {
 				return true;
 			}
 		}
