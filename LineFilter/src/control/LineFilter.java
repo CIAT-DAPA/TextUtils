@@ -23,6 +23,7 @@ import model.ProgressBar;
 public class LineFilter {
 
 	private Map<String, Integer> colIndex;
+	private Set<String> taxa;
 	private static final String SEPARATOR = "\t";
 	private static final String LINE_JUMP = "\r\n";
 
@@ -50,6 +51,9 @@ public class LineFilter {
 
 		File input = new File(fileName);
 		File output = new File("records.csv");
+		
+		File taxaFile = new File("taxa.txt");
+		taxa = loadFilters(taxaFile);
 
 		try (BufferedWriter writer = new BufferedWriter(
 				new PrintWriter(new OutputStreamWriter(new FileOutputStream(output), "UTF-8")));
@@ -84,14 +88,15 @@ public class LineFilter {
 				/* show progress */
 				done += line.length();
 				if (++lineNumber % dimensionality == 0) {
-					bar.update(done / dimensionality, total);
+					bar.update(Math.toIntExact(done / dimensionality), total);
+					writer.flush();
 				}
 				/* */
 
 				line = reader.readLine();
 
 			}
-			bar.update(done / dimensionality, total);
+			bar.update(Math.toIntExact(done / dimensionality), total);
 
 		} catch (FileNotFoundException e) {
 			System.out.println("File not found " + input.getAbsolutePath());
@@ -107,7 +112,6 @@ public class LineFilter {
 	}
 
 	private boolean isTarget(String line) {
-		boolean flag = false;
 		line += "\t ";
 		String[] values = line.split(SEPARATOR);
 
@@ -116,7 +120,6 @@ public class LineFilter {
 		}
 
 		/* excluding issues */
-		flag = false;
 		Set<String> issues = new LinkedHashSet<>();
 		issues.add("COORDINATE_OUT_OF_RANGE");
 		issues.add("COUNTRY_COORDINATE_MISMATCH");
@@ -129,21 +132,16 @@ public class LineFilter {
 		}
 
 		/* matching with taxa */
-		flag = false;
-		File taxaFile = new File("taxa.txt");
-		Set<String> taxa = loadFilters(taxaFile);
-		matchTaxa: for (String taxon : taxa) {
-			if (values[colIndex.get("taxonkey")].equals(taxon)) {
-				flag = true;
-				break matchTaxa;
+
+		for (String taxon : taxa) {
+			//if (values[colIndex.get("taxonkey")].equals(taxon)) {
+			if (line.contains(taxon)) {
+				return true;
 			}
 		}
-		if (!flag) {
-			return flag; // return false in case taxon is not found
-		}
-		/**/
 
-		return flag;
+
+		return false;
 	}
 
 	private Set<String> loadFilters(File vocabularyFile) {

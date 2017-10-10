@@ -4,3 +4,9 @@
 /Textutils/.classpath
 /RemoteSystemsTempFiles/
 /Textutils/.settings/
+/LineFilter/*.project
+/LineFilter/*.classpath
+/LineFilter/.settings/*.prefs
+/ClearJSON/.settings/*.prefs
+/ClearJSON/*.classpath
+/ClearJSON/*.project
