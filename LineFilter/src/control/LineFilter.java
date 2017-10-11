@@ -26,6 +26,7 @@ public class LineFilter {
 	private Set<String> taxa;
 	private static final String SEPARATOR = "\t";
 	private static final String LINE_JUMP = "\r\n";
+	private static final String ES_PREFIX = "record.";
 
 	public static void main(String[] args) {
 		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -50,8 +51,8 @@ public class LineFilter {
 	private void extract(String fileName) {
 
 		File input = new File(fileName);
-		File output = new File("records.csv");
-		
+		File output = new File("records.json");
+
 		File taxaFile = new File("taxa.txt");
 		taxa = loadFilters(taxaFile);
 
@@ -81,8 +82,7 @@ public class LineFilter {
 			line = reader.readLine();
 			while (line != null) {
 				if (isTarget(line)) {
-					writer.write(line);
-					writer.write(LINE_JUMP);
+					writer.write(getAsESRecord(line));
 				}
 
 				/* show progress */
@@ -104,12 +104,40 @@ public class LineFilter {
 		}
 	}
 
-	
+	/** Getting only taxon and geocoordinates */
 	@SuppressWarnings("unused")
 	private String getGeospatialInfo(String line) {
 		String[] values = line.split(SEPARATOR);
 		return values[colIndex.get("scientificname")] + SEPARATOR + values[colIndex.get("decimallatitude")] + SEPARATOR
 				+ values[colIndex.get("decimallongitude")];
+	}
+
+	/** Getting record as ElasticSearch record */
+	private String getAsESRecord(String line) {
+		String[] values = line.split(SEPARATOR);
+		String json = ("{\"index\":{\"_index\":\"records" + "\",\"_type\":\"sampling\",\"_id\":"
+				+ values[colIndex.get("gbifid")] + "}}");
+		json += LINE_JUMP;
+
+		json += "{";
+		for (String column : colIndex.keySet()) {
+			String value = values[colIndex.get(column)];
+			if (!isNumeric(value)) {
+				value = "\"" + value + "\"";
+			}
+			json += ("\"" + ES_PREFIX + column + "\":" + value + ",");
+		}
+
+		json += "}";
+		json += LINE_JUMP;
+
+		return json;
+
+	}
+
+	public static boolean isNumeric(String s) {
+		// TODO check if format has exponential 'E'
+		return s.matches("[-+]?\\d*\\.?\\d+");
 	}
 
 	private boolean isTarget(String line) {
@@ -139,7 +167,6 @@ public class LineFilter {
 				return true;
 			}
 		}
-
 
 		return false;
 	}
