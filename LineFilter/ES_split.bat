@@ -33,5 +33,7 @@ for /f "tokens=*" %%a in (%file%) do (
 	set /a lineCounter=!lineCounter! + 1
 
 )
+echo curl -k -i --raw -o !splitFile!.log -X POST "http://localhost:9200/gbif/_bulk?pretty" -H "Content-Type: application/json" -H "User-Agent: Fiddler" -H "Host: localhost:9200" --data-binary @!splitFile!>>!uploaderFile!
+echo created !splitFile!
 echo pause>>!uploaderFile!
 

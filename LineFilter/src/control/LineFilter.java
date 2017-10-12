@@ -123,7 +123,7 @@ public class LineFilter {
 		for (String column : colIndex.keySet()) {
 			String value = values[colIndex.get(column)];
 			if (!column.equals("gbifid") && !column.equals("day") && !column.equals("month") && !column.equals("year")
-					&& !column.equals("taxonkey") && !column.equals("specieskey") && !column.equals("month")
+					&& !column.equals("taxonkey") && !column.equals("specieskey")
 					&& !column.equals("decimallatitude") && !column.equals("decimallongitude")
 					&& !column.equals("coordinateuncertaintyinmeters") && !column.equals("coordinateprecision")
 					&& !column.equals("elevation") && !column.equals("elevationaccuracy")
