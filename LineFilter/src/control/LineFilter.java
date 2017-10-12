@@ -81,6 +81,7 @@ public class LineFilter {
 
 			line = reader.readLine();
 			while (line != null) {
+				line += "\t ";
 				if (isTarget(line)) {
 					writer.write(getAsESRecord(line));
 				}
@@ -148,7 +149,6 @@ public class LineFilter {
 	}
 
 	private boolean isTarget(String line) {
-		line += "\t ";
 		String[] values = line.split(SEPARATOR);
 
 		if (!line.contains("SPECIES")) {
