@@ -51,13 +51,13 @@ public class LineFilter {
 	private void extract(String fileName) {
 
 		File input = new File(fileName);
-		File output = new File("records.json");
+		File output = new File("data.json");
 
 		File taxaFile = new File("taxa.txt");
 		taxa = loadFilters(taxaFile);
 
 		try (BufferedWriter writer = new BufferedWriter(
-				new PrintWriter(new OutputStreamWriter(new FileOutputStream(output), "UTF-8")));
+				new PrintWriter(new OutputStreamWriter(new FileOutputStream(output))));
 				BufferedReader reader = new BufferedReader(
 						new InputStreamReader(new FileInputStream(input), "UTF-8"))) {
 
@@ -115,16 +115,26 @@ public class LineFilter {
 	/** Getting record as ElasticSearch record */
 	private String getAsESRecord(String line) {
 		String[] values = line.split(SEPARATOR);
-		String json = ("{\"index\":{\"_index\":\"records" + "\",\"_type\":\"sampling\",\"_id\":"
+		String json = ("{\"index\":{\"_index\":\"gbif" + "\",\"_type\":\"record\",\"_id\":"
 				+ values[colIndex.get("gbifid")] + "}}");
 		json += LINE_JUMP;
 
 		json += "{";
 		for (String column : colIndex.keySet()) {
 			String value = values[colIndex.get(column)];
-			if (!isNumeric(value)) {
+			if (!column.equals("gbifid") && !column.equals("day") && !column.equals("month") && !column.equals("year")
+					&& !column.equals("taxonkey") && !column.equals("specieskey") && !column.equals("month")
+					&& !column.equals("decimallatitude") && !column.equals("decimallongitude")
+					&& !column.equals("coordinateuncertaintyinmeters") && !column.equals("coordinateprecision")
+					&& !column.equals("elevation") && !column.equals("elevationaccuracy")
+					&& !column.equals("depth")&& !column.equals("depthaccuracy")) {
 				value = "\"" + value + "\"";
+			}else{
+				if(value.equals("")){
+					value=""+Integer.MIN_VALUE;
+				}
 			}
+			
 			json += ("\"" + ES_PREFIX + column + "\":" + value + ",");
 		}
 
@@ -133,11 +143,6 @@ public class LineFilter {
 
 		return json;
 
-	}
-
-	public static boolean isNumeric(String s) {
-		// TODO check if format has exponential 'E'
-		return s.matches("[-+]?\\d*\\.?\\d+");
 	}
 
 	private boolean isTarget(String line) {
