@@ -57,7 +57,7 @@ public class LineFilter {
 		taxa = loadFilters(taxaFile);
 
 		try (BufferedWriter writer = new BufferedWriter(
-				new PrintWriter(new OutputStreamWriter(new FileOutputStream(output))));
+				new PrintWriter(new OutputStreamWriter(new FileOutputStream(output), "UTF-8")));
 				BufferedReader reader = new BufferedReader(
 						new InputStreamReader(new FileInputStream(input), "UTF-8"))) {
 
@@ -128,6 +128,7 @@ public class LineFilter {
 					&& !column.equals("coordinateuncertaintyinmeters") && !column.equals("coordinateprecision")
 					&& !column.equals("elevation") && !column.equals("elevationaccuracy")
 					&& !column.equals("depth")&& !column.equals("depthaccuracy")) {
+				value = value.replaceAll("\"", "'");
 				value = "\"" + value + "\"";
 			}else{
 				if(value.equals("")){
@@ -137,7 +138,8 @@ public class LineFilter {
 			
 			json += ("\"" + ES_PREFIX + column + "\":" + value + ",");
 		}
-
+		
+		json = json.substring(0, json.length()-1); // removing last comma
 		json += "}";
 		json += LINE_JUMP;
 
