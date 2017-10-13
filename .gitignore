@@ -10,3 +10,8 @@
 /ClearJSON/.settings/*.prefs
 /ClearJSON/*.classpath
 /ClearJSON/*.project
+/ToElasticSearch/.settings/*.prefs
+http___download_eclipse_org_recommenders_models_neon_
+caches
+/ToElasticSearch/*.classpath
+/ToElasticSearch/*.project

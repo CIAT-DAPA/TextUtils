@@ -1,4 +1,4 @@
-package model;
+
 
 /**@author c00kiemon5ter
  * Ascii progress meter. On completion this will reset itself,

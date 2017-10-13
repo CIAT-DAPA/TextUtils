@@ -1,0 +1,19 @@
+curl -k -i --raw -o mapping.log -X PUT "http://localhost:9200/gbif" -H "Content-Type: application/json" -H "User-Agent: Fiddler" -H "Host: localhost:9200" --data-binary @mapping.json 
+curl -k -i --raw -o data-part1.json.log -X POST "http://localhost:9200/gbif/_bulk?pretty" -H "Content-Type: application/json" -H "User-Agent: Fiddler" -H "Host: localhost:9200" --data-binary @data-part1.json
+curl -k -i --raw -o data-part2.json.log -X POST "http://localhost:9200/gbif/_bulk?pretty" -H "Content-Type: application/json" -H "User-Agent: Fiddler" -H "Host: localhost:9200" --data-binary @data-part2.json
+curl -k -i --raw -o data-part3.json.log -X POST "http://localhost:9200/gbif/_bulk?pretty" -H "Content-Type: application/json" -H "User-Agent: Fiddler" -H "Host: localhost:9200" --data-binary @data-part3.json
+curl -k -i --raw -o data-part4.json.log -X POST "http://localhost:9200/gbif/_bulk?pretty" -H "Content-Type: application/json" -H "User-Agent: Fiddler" -H "Host: localhost:9200" --data-binary @data-part4.json
+curl -k -i --raw -o data-part5.json.log -X POST "http://localhost:9200/gbif/_bulk?pretty" -H "Content-Type: application/json" -H "User-Agent: Fiddler" -H "Host: localhost:9200" --data-binary @data-part5.json
+curl -k -i --raw -o data-part6.json.log -X POST "http://localhost:9200/gbif/_bulk?pretty" -H "Content-Type: application/json" -H "User-Agent: Fiddler" -H "Host: localhost:9200" --data-binary @data-part6.json
+curl -k -i --raw -o data-part7.json.log -X POST "http://localhost:9200/gbif/_bulk?pretty" -H "Content-Type: application/json" -H "User-Agent: Fiddler" -H "Host: localhost:9200" --data-binary @data-part7.json
+curl -k -i --raw -o data-part8.json.log -X POST "http://localhost:9200/gbif/_bulk?pretty" -H "Content-Type: application/json" -H "User-Agent: Fiddler" -H "Host: localhost:9200" --data-binary @data-part8.json
+curl -k -i --raw -o data-part9.json.log -X POST "http://localhost:9200/gbif/_bulk?pretty" -H "Content-Type: application/json" -H "User-Agent: Fiddler" -H "Host: localhost:9200" --data-binary @data-part9.json
+curl -k -i --raw -o data-part10.json.log -X POST "http://localhost:9200/gbif/_bulk?pretty" -H "Content-Type: application/json" -H "User-Agent: Fiddler" -H "Host: localhost:9200" --data-binary @data-part10.json
+curl -k -i --raw -o data-part11.json.log -X POST "http://localhost:9200/gbif/_bulk?pretty" -H "Content-Type: application/json" -H "User-Agent: Fiddler" -H "Host: localhost:9200" --data-binary @data-part11.json
+curl -k -i --raw -o data-part12.json.log -X POST "http://localhost:9200/gbif/_bulk?pretty" -H "Content-Type: application/json" -H "User-Agent: Fiddler" -H "Host: localhost:9200" --data-binary @data-part12.json
+curl -k -i --raw -o data-part13.json.log -X POST "http://localhost:9200/gbif/_bulk?pretty" -H "Content-Type: application/json" -H "User-Agent: Fiddler" -H "Host: localhost:9200" --data-binary @data-part13.json
+curl -k -i --raw -o data-part14.json.log -X POST "http://localhost:9200/gbif/_bulk?pretty" -H "Content-Type: application/json" -H "User-Agent: Fiddler" -H "Host: localhost:9200" --data-binary @data-part14.json
+curl -k -i --raw -o data-part15.json.log -X POST "http://localhost:9200/gbif/_bulk?pretty" -H "Content-Type: application/json" -H "User-Agent: Fiddler" -H "Host: localhost:9200" --data-binary @data-part15.json
+curl -k -i --raw -o data-part16.json.log -X POST "http://localhost:9200/gbif/_bulk?pretty" -H "Content-Type: application/json" -H "User-Agent: Fiddler" -H "Host: localhost:9200" --data-binary @data-part16.json
+curl -k -i --raw -o data-part17.json.log -X POST "http://localhost:9200/gbif/_bulk?pretty" -H "Content-Type: application/json" -H "User-Agent: Fiddler" -H "Host: localhost:9200" --data-binary @data-part17.json
+pause
