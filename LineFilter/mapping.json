@@ -18,8 +18,6 @@
         "record.countrycode":{ "type" : "keyword"},
         "record.locality":{ "type" : "keyword"},
         "record.publishingorgkey":{ "type" : "keyword"},
-        "record.decimallatitude":{ "type" : "double" },
-        "record.decimallongitude":{ "type" : "double" },
         "record.coordinateuncertaintyinmeters":{ "type" : "double" },
         "record.coordinateprecision":{ "type" : "double" },
         "record.elevation":{ "type" : "double" },

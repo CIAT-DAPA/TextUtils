@@ -122,25 +122,34 @@ public class LineFilter {
 
 		json += "{";
 		for (String column : colIndex.keySet()) {
-			String value = values[colIndex.get(column)];
-			if (!column.equals("gbifid") && !column.equals("day") && !column.equals("month") && !column.equals("year")
-					&& !column.equals("taxonkey") && !column.equals("specieskey")
-					&& !column.equals("decimallatitude") && !column.equals("decimallongitude")
-					&& !column.equals("coordinateuncertaintyinmeters") && !column.equals("coordinateprecision")
-					&& !column.equals("elevation") && !column.equals("elevationaccuracy")
-					&& !column.equals("depth")&& !column.equals("depthaccuracy")) {
-				value = value.replaceAll("\"", "'");
-				value = "\"" + value + "\"";
-			}else{
-				if(value.equals("")){
-					value=""+Integer.MIN_VALUE;
+			if (!column.equals("decimallongitude") && !column.equals("decimallatitude")) {
+				String value = values[colIndex.get(column)];
+				if (!column.equals("gbifid") && !column.equals("day") && !column.equals("month")
+						&& !column.equals("year") && !column.equals("taxonkey") && !column.equals("specieskey")
+						&& !column.equals("coordinateuncertaintyinmeters") && !column.equals("coordinateprecision")
+						&& !column.equals("elevation") && !column.equals("elevationaccuracy") && !column.equals("depth")
+						&& !column.equals("depthaccuracy")) {
+					value = value.replaceAll("\"", "'");
+					value = "\"" + value + "\"";
+				} else {
+					if (value.equals("")) {
+						continue;
+					}
 				}
+
+				json += ("\"" + ES_PREFIX + column + "\":" + value + ",");
 			}
-			
-			json += ("\"" + ES_PREFIX + column + "\":" + value + ",");
 		}
-		
-		json = json.substring(0, json.length()-1); // removing last comma
+
+		if (!values[colIndex.get("decimallatitude")].equals("")
+				&& !values[colIndex.get("decimallongitude")].equals("")) {
+			// include geocoordinates
+			json += ("\"" + ES_PREFIX + "geolocation" + "\":" + "{\"lat\": " + values[colIndex.get("decimallatitude")]
+					+ ",\"lon\":" + values[colIndex.get("decimallongitude")] + "}");
+		} else {
+			json = json.substring(0, json.length()-1); // removing last comma
+		}
+
 		json += "}";
 		json += LINE_JUMP;
 
