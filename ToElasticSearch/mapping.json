@@ -1,0 +1,53 @@
+{
+ "mappings" : {
+  "record" : {
+   "properties" : {
+        "gbifid":{ "type": "integer","index" : "true" },
+        "datasetkey":{ "type" : "keyword"},
+        "occurrenceid":{ "type" : "keyword"},
+        "kingdom":{ "type" : "keyword"},
+        "phylum":{ "type" : "keyword"},
+        "class":{ "type" : "keyword"},
+        "order":{ "type" : "keyword"},
+        "family":{ "type" : "keyword"},
+        "genus":{ "type" : "keyword"},
+        "species":{ "type" : "keyword"},
+        "infraspecificepithet":{ "type" : "keyword"},
+        "taxonrank":{ "type" : "keyword"},
+        "scientificname":{ "type" : "keyword"},
+        "countrycode":{ "type" : "keyword"},
+        "locality":{ "type" : "keyword"},
+        "publishingorgkey":{ "type" : "keyword"},
+        "geolocation":{ "type" : "geo_point" },
+        "decimallatitude":{ "type" : "double" },
+        "decimallongitude":{ "type" : "double" },
+        "coordinateuncertaintyinmeters":{ "type" : "double" },
+        "coordinateprecision":{ "type" : "double" },
+        "elevation":{ "type" : "double" },
+        "elevationaccuracy":{ "type" : "double" },
+        "depth":{ "type" : "double" },
+        "depthaccuracy":{ "type" : "double" },
+        "eventdate":{ "type" : "date" },
+        "day":{ "type": "integer"},
+        "month":{ "type": "integer"},
+        "year":{ "type": "integer"},
+        "taxonkey":{ "type": "integer"},
+        "specieskey":{ "type": "integer"},
+        "basisofrecord":{ "type" : "keyword"},
+        "institutioncode":{ "type" : "keyword"},
+        "collectioncode":{ "type" : "keyword"},
+        "catalognumber":{ "type" : "keyword"},
+        "recordnumber":{ "type" : "keyword"},
+        "identifiedby":{ "type" : "keyword"},
+        "license":{ "type" : "keyword"},
+        "rightsholder":{ "type" : "keyword"},
+        "recordedby":{ "type" : "keyword"},
+        "typestatus":{ "type" : "keyword"},
+        "establishmentmeans":{ "type" : "keyword"},
+        "lastinterpreted":{ "type" : "date" },
+        "mediatype":{ "type" : "keyword"},
+        "issue":{ "type" : "keyword"}
+    }
+  }
+ }
+}

@@ -64,8 +64,8 @@ public class LineFilter {
 			/* header */
 			String line = reader.readLine();
 			colIndex = getColumnsIndex(line);
-			// writer.write(line);
-			// writer.write(LINE_JUMP);
+			writer.write(line);
+			writer.write(LINE_JUMP);
 			/* */
 
 			/* progress bar */
@@ -122,9 +122,9 @@ public class LineFilter {
 
 		json += "{";
 		for (String column : colIndex.keySet()) {
-			if (!column.equals("decimallongitude") && !column.equals("decimallatitude")) {
 				String value = values[colIndex.get(column)];
 				if (!column.equals("gbifid") && !column.equals("day") && !column.equals("month")
+						&& !column.equals("decimallongitude") && !column.equals("decimallatitude")
 						&& !column.equals("year") && !column.equals("taxonkey") && !column.equals("specieskey")
 						&& !column.equals("coordinateuncertaintyinmeters") && !column.equals("coordinateprecision")
 						&& !column.equals("elevation") && !column.equals("elevationaccuracy") && !column.equals("depth")
@@ -137,14 +137,15 @@ public class LineFilter {
 					}
 				}
 
-				json += ("\"" + ES_PREFIX + column + "\":" + value + ",");
+				json += ("\"" + column + "\":" + value + ",");
 			}
-		}
+		
 
 		if (!values[colIndex.get("decimallatitude")].equals("")
 				&& !values[colIndex.get("decimallongitude")].equals("")) {
 			// include geocoordinates
-			json += ("\"" + ES_PREFIX + "geolocation" + "\":" + "{\"lat\": " + values[colIndex.get("decimallatitude")]
+			
+			json += ("\"" + "geolocation" + "\":" + "{\"lat\": " + values[colIndex.get("decimallatitude")]
 					+ ",\"lon\":" + values[colIndex.get("decimallongitude")] + "}");
 		} else {
 			json = json.substring(0, json.length()-1); // removing last comma
