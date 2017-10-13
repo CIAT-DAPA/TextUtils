@@ -1,3 +1,4 @@
+package org.ciat;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -15,7 +16,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 
-public class ToElasticSearch {
+public class JSONifier {
 
 	private Map<String, Integer> colIndex;
 	private static final String SEPARATOR = "\t";
@@ -33,7 +34,7 @@ public class ToElasticSearch {
 			System.out.println("File not provided in arguments, using "+ fileName +" as default");
 		}
 
-		ToElasticSearch app = new ToElasticSearch();
+		JSONifier app = new JSONifier();
 		app.extract(fileName);
 
 		date = new Date();
@@ -54,8 +55,7 @@ public class ToElasticSearch {
 			/* header */
 			String line = reader.readLine();
 			colIndex = getColumnsIndex(line);
-			writer.write(line);
-			writer.write(LINE_JUMP);
+
 			/* */
 
 			/* progress bar */

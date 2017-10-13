@@ -1,3 +1,4 @@
+package org.ciat;
 
 
 import java.io.BufferedReader;
@@ -19,7 +20,7 @@ import java.util.Map;
 import java.util.Set;
 
 
-public class LineFilter {
+public class Filterer {
 
 	private Map<String, Integer> colIndex;
 	private Set<String> taxa;
@@ -38,7 +39,7 @@ public class LineFilter {
 			System.out.println("File not provided in arguments, using "+ fileName +" as default");
 		}
 
-		LineFilter app = new LineFilter();
+		Filterer app = new Filterer();
 		app.extract(fileName);
 
 		date = new Date();
