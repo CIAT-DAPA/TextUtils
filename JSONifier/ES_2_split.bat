@@ -1,7 +1,7 @@
 @echo off
 setLocal EnableDelayedExpansion
 
-set limit=10
+set limit=10000
 
 set lineCounter=0
 set filenameCounter=1

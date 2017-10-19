@@ -71,7 +71,7 @@ public class JSONifier {
 
 			line = reader.readLine();
 			while (line != null) {
-				line += "\t ";
+				line += SEPARATOR+" ";
 				writer.write(getAsESRecord(line));
 
 
