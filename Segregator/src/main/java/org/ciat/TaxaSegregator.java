@@ -23,8 +23,8 @@ public class TaxaSegregator {
 	private Map<String, Integer> colIndex = new LinkedHashMap<>();
 	// target columns
 	private String[] colTarget = { "gbifid", "countrycode", "taxonkey", "scientificname", "basisofrecord",
-			"decimallatitude", "decimallongitude", "coordinateuncertaintyinmeters", " coordinateprecision",
-			" elevation", " elevationaccuracy", " depth", " depthaccuracy" };
+			"decimallatitude", "decimallongitude", "coordinateuncertaintyinmeters", "coordinateprecision", "elevation",
+			"elevationaccuracy", "depth", "depthaccuracy" };
 
 	private static final String SEPARATOR = "\t";
 
@@ -125,7 +125,12 @@ public class TaxaSegregator {
 	private String getTargeValues(String[] values) {
 		String output = "";
 		for (String col : colTarget) {
-			output += values[colIndex.get(col)] + SEPARATOR;
+			if (colIndex.get(col) != null) {
+				output += values[colIndex.get(col)];
+			} else {
+				System.out.println("\"" + col + "\" is a target colum not found in the file");
+			}
+			output += SEPARATOR;
 		}
 		return output;
 	}
