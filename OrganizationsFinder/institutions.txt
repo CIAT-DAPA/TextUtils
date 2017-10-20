@@ -1,0 +1,438 @@
+DAV
+AAU
+ACAD
+Acadia University
+Agentes Bioactivos de Plantas Desérticas de Latinoamérica (ICBG)
+Agriculture & Agri-Food Canada
+ALA
+Ales Lebeda
+ALTA-VP
+Anymals.org
+Arboles de la Península de Yucatán/ Flora del Distrito de Tehuantepec/ Oaxaca y Familia Asteraceae en México (IBUNAM)
+Arboles y Arbustos Nativos para la Restauración Ecológica y Reforestación de México (IE-DF/UNAM)
+ARIZ
+ASC
+ASU
+ATGGC
+AVH
+AVRDC
+AWC
+BAYRT
+BC
+BCMEX
+BDI
+BGBM
+Biodiversity Institute of Ontario
+Bioimages
+Bioversity
+BISON
+BLM
+BM
+BNHM-UCB
+BOUM
+BPBM
+BRIT
+Brock University (BU)
+BRY
+BUT
+California State University Chico
+CAN
+CANB
+CAS
+CATA
+CATIE
+CCH
+CDA
+CEN
+CERETI
+CHAP
+CHIC
+CHR
+CHSC
+CIAT
+CIAT A global database for the distributions of crop wild relatives
+CIB
+CIBNOR
+CIB-UAEH
+CIB-UV
+CIBYC-UAEM
+CICB-UAT
+CICY
+CIHS-UAC
+CIIDIR-DURANGO
+CIIDIR-IPN
+CIIDIR-IPN-DGO
+CIMI
+CIMMYT
+CIP
+Claire Heinitz
+CLARK-A
+CLEMS
+CM
+CMN
+CNH
+CNS-UT
+COA
+COAH
+COL
+COLO
+Comissão Executiva do Plano da Lavoura Cacaueira (CEPLAC)
+CONABIO
+CONN
+Consortium of California Herbaria
+Coppens
+COTECOCA
+CP
+CP-CT
+CPNWH
+CRIA
+CS
+CUVC
+CZE National PGR Inventory
+DACB-UJAT
+DAV
+DBG
+DEMATTEIS
+DES
+DICTUS-USON
+DS
+DSC
+DSUND
+E
+EB-BUAP
+ECOSUR
+ECOSUR-CH
+ECOSUR-SC
+ECPGR
+EIU
+EKY
+EMC
+ENCB
+ENCB-IPN
+ENLC
+ENMU
+EST
+EURISCO
+European Bioinformatics Institute (EMBL-EBI)
+F
+FB-UMSNH
+FCB-UAEM
+FCF-UANL
+FCN-UAQ
+fcnym.unlp.edu.ar
+FC-UABC
+FC-UNAM
+Fernando de la Torre
+FESI-UNAM
+FFPRI
+FITECMA
+FITECMA-UMSNH
+FLAS
+Flora Nacional Cumbres Monterrey
+FML
+FMVZ-UADY
+FR
+FRT
+FSU
+FTG
+G
+GA
+GB
+GBIF
+GCNP
+GDA
+GEO
+GMDRC
+GOET
+Gouvernement du Quebec
+Greater Good
+GUA
+GZU
+H
+H.A. Stephens Herbarium
+HAL
+HAM
+Harvard University
+HAST
+HBC
+HBG
+HCIB
+Herbario del CIBNOR
+Herbario Kew del Real Jardín Botánico (RBGKEW)
+Herbarium GeoBHinton
+HIBG
+HNT
+HPC
+HSC
+HU
+HUH
+HUNT
+IAC
+IB-CUCBA-UDG
+IBUG
+IBUNAM
+IE
+IEA-UAT
+IEB
+IE-UNAM
+IEX
+IF
+IHNE
+IIZD- UASLP
+ILLS
+IMC y P
+IMECBIO-UDG
+iNaturalist
+INECOL
+INECOL-CRD
+INHS
+INIFAP
+INIFAP-CECOY
+INIFAP-SARH
+INIFAP-UPN
+INIREB
+Instituto de Botânica IBT
+Instituto Nacional de Pesquisas da Amazônia (INPA)
+IPA
+IPN
+IRENAT-CP
+IRN-CP
+IRVC
+JABOT
+James Frelichowski
+Jardin Botanique de Montréal
+JEMEZ
+JEO
+JEPS
+JMN_EDITS
+JOTR
+JROH
+K
+KANU
+Karen Williams
+Kew Millenium Seed Bank Partnership
+KHD
+Kim Hummer
+KNK
+KNWR
+KSP
+KSTC
+KU
+L
+LA
+Laura Marek
+LD
+LEGON-GC
+LISC
+LISU
+LL
+LSU
+M
+MA
+MABA
+MACN
+MADUG
+MANCH
+MARY
+MB
+Mcdold & Austin 1990
+Melanie Harrison 
+MESA
+Mexico Burge
+MexSEINet
+MEXU
+MICH
+Midwest Herbaria
+MIREN_ETH
+MISS
+MISSA
+MISU
+MMNS
+MNA
+MNCH
+MNHN
+MO
+MOR
+MPM
+MPM Milwaukee Public Museum Herbarium
+MSC
+MT
+MTTHORT
+MUR
+Museo Nacional de Costa Rica (MNCR)
+MWI
+NA
+Naturalis
+naturgucker
+NCSC
+NCU
+ND
+NHMUK
+NHN Leiden
+Nigel Maxted
+NLD037
+NMC
+NMCR
+NMSU
+NORDGEN
+NPS - Inventory and Monitoring Program - NPSpecies Park Species Lists
+NSW
+NTSRV
+NYBG
+O
+OBI
+OHN
+OKL
+OKLA
+OSA
+OSC
+OTS
+Pablo Jourdan
+PARADA
+PBDB
+PH
+Plants of Taiwan
+PMT
+POM
+Programa de repatriacion de datos de ejemplares mexicanos
+QFA
+QMEX
+R. L. McGregor Herbarium Vascular Plants Collection
+Reilley
+RENO
+Rio de Janeiro Botanical Garden Herbarium Collection (JBRJ)
+RM
+RMBL
+RMCA-Metafro-Infosys
+Rosalinda Gonzalez Santos
+Royal Ontario Museum (ROM)
+RSA
+RSABG
+SALA
+SANBI
+SANT
+SBBG
+SCFS
+SCIR
+SD
+SDNHM
+SDSU
+SEINET
+SERBO AC
+SEV
+SFV
+SI
+SINGER
+SINGER
+SJNM
+SJSU
+SMNK
+SNM
+SNSNMC
+Sonoran Atlas
+Stebbins 2013
+STU
+SUU
+Swain 2012
+TAIF
+TAMU
+TEX
+TEX-LL
+TLAX
+TLMF
+TRH
+TROM
+Tropicos
+TROY
+TTRS
+U
+U de G
+UA
+UAAAN
+UABC
+UACh
+UACHq
+UAG
+UAM
+UAM-I
+UAN
+UANL
+UAQ
+UAS
+UAZ
+UBC
+UC JEPS
+UCB
+UCBG
+UCD
+UCMC
+UCMP
+UConn
+UCR
+UCS
+UCSB
+UCSC
+UEFS
+UFPR
+UFRGS
+uglasiirsity
+UM
+UMN Herbarium
+UNA
+UNAM
+UNESPFCA
+UNICACH
+UNICAMP
+Universidad de Antioquia
+Universidade Federal de Minas Gerais (UFMG)
+Universidade Federal de Santa Catarina (UFSC)
+Universit  de Montr al Biodiversity Centre
+Université Laval
+University of Alberta Museums
+University of Alberta Vascular Plant Herbarium (ALTA-VP)
+University of Arizona
+University of British Columbia Herbarium (UBC) - Vascular Plant Collection
+University of Guelph  OAC Herbarium
+University of Lethbridge
+University of Manitoba
+University of Washington Herbarium (WTU)
+UNM
+UPS
+US
+USCH
+USDA NPGS GRIN
+USDA PLANTS Database
+USF
+USFS
+USMS
+USNM
+USON
+USP
+USU
+USUUB
+UT
+UTC
+UTEP
+UVSC
+UWBM
+UWSA
+UWSP
+VAL
+VegBank - Vegetation Plot Database
+VIT
+VSC
+W
+WAG
+WASH
+WCUH
+Wildlife Sightings
+WILLI
+Wilson et al. 2017
+WIS
+WOODS
+WU
+WVU
+YM-YOSE
+YPM
+Z
+ZSS
