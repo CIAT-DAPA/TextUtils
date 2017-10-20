@@ -23,7 +23,6 @@ public class OrganizationsFinder {
 	private Map<String, Integer> colIndex;
 	private Set<String> institutions;
 	private static final String SEPARATOR = "\t";
-	private static final String LINE_JUMP = "\r\n";
 
 	public static void main(String[] args) {
 		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -51,10 +50,10 @@ public class OrganizationsFinder {
 		File output = new File("orgs.csv");
 
 		File instFile = new File("institutions.txt");
-		institutions = loadFilters(instFile);
+		institutions = loadVocabulary(instFile);
 
-		try (BufferedWriter writer = new BufferedWriter(
-				new PrintWriter(new OutputStreamWriter(new FileOutputStream(output), "UTF-8")));
+		try (PrintWriter writer = new PrintWriter(
+				new BufferedWriter(new OutputStreamWriter(new FileOutputStream(output), "UTF-8")));
 				BufferedReader reader = new BufferedReader(
 						new InputStreamReader(new FileInputStream(input), "UTF-8"))) {
 
@@ -77,12 +76,13 @@ public class OrganizationsFinder {
 			Set<String> publishers = new LinkedHashSet<String>();
 			line = reader.readLine();
 			while (line != null) {
-				line += "\t ";
-				String code=isTarget(line);
-				if (code!=null) {
-					String pub = getPublisher(line);
+				line += SEPARATOR + " ";
+				String[] values = line.split(SEPARATOR);
+				String code=values[colIndex.get("institutioncode")];
+				if (institutions.contains(code)) {
+					String pub = values[colIndex.get("publishingorgkey")];
 					if (!publishers.contains(pub)) {
-						writer.write(code+SEPARATOR+pub+LINE_JUMP);
+						writer.println(code+SEPARATOR+pub);
 						publishers.add(pub);
 					}
 				}
@@ -106,31 +106,7 @@ public class OrganizationsFinder {
 		}
 	}
 
-	/** Getting only taxon and geocoordinates */
-	@SuppressWarnings("unused")
-	private String getGeospatialInfo(String line) {
-		String[] values = line.split(SEPARATOR);
-		return values[colIndex.get("scientificname")] + SEPARATOR + values[colIndex.get("decimallatitude")] + SEPARATOR
-				+ values[colIndex.get("decimallongitude")];
-	}
-
-	private String getPublisher(String line) {
-		String[] values = line.split(SEPARATOR);
-		return values[colIndex.get("publishingorgkey")];
-	}
-
-	private String isTarget(String line) {
-		String[] values = line.split(SEPARATOR);
-		for (String institution : institutions) {
-			if (values[colIndex.get("institutioncode")].equals(institution)) {
-				return institution;
-			}
-		}
-
-		return null;
-	}
-
-	private Set<String> loadFilters(File vocabularyFile) {
+	private Set<String> loadVocabulary(File vocabularyFile) {
 		Set<String> filters = new LinkedHashSet<String>();
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(vocabularyFile)))) {
 

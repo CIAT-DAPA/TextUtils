@@ -19,3 +19,4 @@ target
 /JSONifier/*.project
 /JSONifier/*.classpath
 /JSONifier/.settings/*.prefs
+/OrganizationsFinder/.settings/*.prefs
