@@ -1,6 +1,5 @@
 package org.ciat;
 
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -17,7 +16,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
-
+import java.util.TreeSet;
 
 public class Filterer {
 
@@ -34,7 +33,7 @@ public class Filterer {
 		if (args.length > 0) {
 			fileName = args[0];
 		} else {
-			System.out.println("File not provided in arguments, using "+ fileName +" as default");
+			System.out.println("File not provided in arguments, using " + fileName + " as default");
 		}
 
 		Filterer app = new Filterer();
@@ -51,10 +50,9 @@ public class Filterer {
 		File output = new File("data.csv");
 
 		File taxaFile = new File("taxa.txt");
-		taxa = loadVocabulary(taxaFile);
+		taxa = loadTargetTaxa(taxaFile);
 
-		try (PrintWriter writer = new PrintWriter(
-				new BufferedWriter(new FileWriter(output)));
+		try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(output)));
 				BufferedReader reader = new BufferedReader(
 						new InputStreamReader(new FileInputStream(input), "UTF-8"))) {
 
@@ -77,7 +75,7 @@ public class Filterer {
 
 			line = reader.readLine();
 			while (line != null) {
-				line += SEPARATOR+" ";
+				line += SEPARATOR + " ";
 				if (isTarget(line)) {
 					writer.println(line);
 				}
@@ -120,19 +118,16 @@ public class Filterer {
 			}
 		}
 
-		/* matching with taxa */
-
-		for (String taxon : taxa) {
-			if (values[colIndex.get("taxonkey")].equals(taxon)) {
-				return true;
-			}
+		/* check if contains target taxa */
+		if (taxa.contains(values[colIndex.get("taxonkey")])) {
+			return true;
 		}
 
 		return false;
 	}
 
-	private Set<String> loadVocabulary(File vocabularyFile) {
-		Set<String> filters = new LinkedHashSet<String>();
+	private Set<String> loadTargetTaxa(File vocabularyFile) {
+		Set<String> filters = new TreeSet<String>();
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(vocabularyFile)))) {
 
 			String line = reader.readLine();
