@@ -106,7 +106,7 @@ public class Filterer {
 			return false;
 		}
 
-		/* excluding issues */
+		/* excluding records with issues */
 		Set<String> issues = new LinkedHashSet<>();
 		issues.add("COORDINATE_OUT_OF_RANGE");
 		issues.add("COUNTRY_COORDINATE_MISMATCH");
@@ -118,7 +118,7 @@ public class Filterer {
 			}
 		}
 
-		/* check if contains target taxa */
+		/* check if it's a target taxon */
 		if (taxa.contains(values[colIndex.get("taxonkey")])) {
 			return true;
 		}

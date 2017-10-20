@@ -16,6 +16,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 public class TaxaSegregator {
 
@@ -79,20 +80,26 @@ public class TaxaSegregator {
 			System.out.println("Updating progress each " + dimensionality + "KB read");
 			/* */
 
+			Map<String, PrintWriter> writers = new TreeMap<String, PrintWriter>();
+
 			line = reader.readLine();
 			while (line != null) {
 				line += SEPARATOR + " ";
+
 				String[] values = line.split(SEPARATOR);
+
 				String taxon = values[colIndex.get("taxonkey")];
 				File output = new File(outputDir.getName() + "//" + taxon + ".csv");
-				if (isUsable(values)) {
+				if (!writers.keySet().contains(taxon)) {
+					writers.put(taxon, new PrintWriter(new BufferedWriter(new FileWriter(output, true))));
+				}
 
-					try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(output, true)))) {
-						if (!output.exists()) {
-							writer.println(header);
-						}
-						writer.println(getTargeValues(values));
+				if (isUsable(values)) {
+					PrintWriter writer = writers.get(taxon);
+					if (!output.exists()) {
+						writer.println(header);
 					}
+					writer.println(getTargeValues(values));
 				}
 				/* show progress */
 				done += line.length();
@@ -104,6 +111,11 @@ public class TaxaSegregator {
 
 			}
 			bar.update(Math.toIntExact(done / dimensionality), total);
+			
+			for(String key: writers.keySet()){
+				writers.get(key).flush();
+				writers.get(key).close();
+			}
 
 		} catch (FileNotFoundException e) {
 			System.out.println("File not found " + input.getAbsolutePath());
