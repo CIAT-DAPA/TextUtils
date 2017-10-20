@@ -76,7 +76,7 @@ public class Filterer {
 			line = reader.readLine();
 			while (line != null) {
 				line += SEPARATOR + " ";
-				if (isTarget(line)) {
+				if (isUseful(line)) {
 					writer.println(line);
 				}
 
@@ -99,14 +99,18 @@ public class Filterer {
 		}
 	}
 
-	private boolean isTarget(String line) {
+	private boolean isUseful(String line) {
 		String[] values = line.split(SEPARATOR);
 
 		if (!line.contains("SPECIES")) {
 			return false;
 		}
+		
 
-		/* excluding records with issues */
+		/* excluding records with geospatial issues */
+		if (values[colIndex.get("decimallatitude")].equals("") || values[colIndex.get("decimallongitude")].equals("")) {
+			return false;
+		}
 		Set<String> issues = new LinkedHashSet<>();
 		issues.add("COORDINATE_OUT_OF_RANGE");
 		issues.add("COUNTRY_COORDINATE_MISMATCH");

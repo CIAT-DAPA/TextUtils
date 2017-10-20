@@ -13,9 +13,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 
 public class TaxaSegregator {
@@ -92,15 +90,11 @@ public class TaxaSegregator {
 				File output = new File(outputDir.getName() + "//" + taxon + ".csv");
 				if (!writers.keySet().contains(taxon)) {
 					writers.put(taxon, new PrintWriter(new BufferedWriter(new FileWriter(output, true))));
+					 writers.get(taxon).println(header);
 				}
 
-				if (isUsable(values)) {
-					PrintWriter writer = writers.get(taxon);
-					if (!output.exists()) {
-						writer.println(header);
-					}
-					writer.println(getTargeValues(values));
-				}
+				writers.get(taxon).println(getTargetValues(values));
+				
 				/* show progress */
 				done += line.length();
 				if (++lineNumber % dimensionality == 0) {
@@ -127,14 +121,16 @@ public class TaxaSegregator {
 
 	private void clearOutputDirectory(File outputDir) {
 		if (outputDir.exists()) {
-			outputDir.delete();
+			for(File f:outputDir.listFiles()){
+				f.delete();
+			}
 		} else {
 			outputDir.mkdir();
 		}
 	}
 
 	/** Getting only targeted values **/
-	private String getTargeValues(String[] values) {
+	private String getTargetValues(String[] values) {
 		String output = "";
 		for (String col : colTarget) {
 			if (colIndex.get(col) != null) {
@@ -145,31 +141,6 @@ public class TaxaSegregator {
 			output += SEPARATOR;
 		}
 		return output;
-	}
-
-	private boolean isUsable(String[] values) {
-
-		if (!values[colIndex.get("taxonrank")].contains("SPECIES")) {
-			return false;
-		}
-
-		/* excluding issues */
-		Set<String> issues = new LinkedHashSet<>();
-		issues.add("COORDINATE_OUT_OF_RANGE");
-		issues.add("COUNTRY_COORDINATE_MISMATCH");
-		issues.add("ZERO_COORDINATE");
-
-		for (String issue : issues) {
-			if (values[colIndex.get("issue")].contains(issue)) {
-				return false;
-			}
-		}
-
-		if (values[colIndex.get("decimallatitude")].equals("") || values[colIndex.get("decimallongitude")].equals("")) {
-			return false;
-		}
-
-		return true;
 	}
 
 	private Map<String, Integer> getColumnsIndex(String line) {
