@@ -5,10 +5,9 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -20,19 +19,21 @@ import java.util.Set;
 
 public class TaxaSegregator {
 
-	private Map<String, Integer> colIndex;
-	private String[] colTarget = { "gbifid", "taxonkey", "scientificname", "decimallatitude", "decimallongitude",
-			"basisofrecord" };
+	// index of columns
+	private Map<String, Integer> colIndex = new LinkedHashMap<>();
+	// target columns
+	private String[] colTarget = { "gbifid", "countrycode", "taxonkey", "scientificname", "basisofrecord",
+			"decimallatitude", "decimallongitude", "coordinateuncertaintyinmeters", " coordinateprecision",
+			" elevation", " elevationaccuracy", " depth", " depthaccuracy" };
 
 	private static final String SEPARATOR = "\t";
-	private static final String LINE_JUMP = "\r\n";
 
 	public static void main(String[] args) {
 		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		Date date = new Date();
 		System.out.println(dateFormat.format(date));
 
-		String fileName = "gbif.csv";
+		String fileName = "data.csv";
 		if (args.length > 0) {
 			fileName = args[0];
 		} else {
@@ -50,52 +51,73 @@ public class TaxaSegregator {
 	private void extract(String fileName) {
 
 		File input = new File(fileName);
+		File outputDir = new File("data");
 
-		File taxaFile = new File("taxa.txt");
-		Set<String> taxa = loadVocabulary(taxaFile);
+		clearOutputDirectory(outputDir);
 
-		/* progress bar */
-		ProgressBar bar = new ProgressBar();
-		int total = taxa.size();
-		int done = 0;
-		bar.update(done, total);
-		/* */
-		for (String taxon : taxa) {
-			File output = new File("data//" + taxon + ".csv");
-			try (BufferedWriter writer = new BufferedWriter(
-					new PrintWriter(new OutputStreamWriter(new FileOutputStream(output), "UTF-8")));
-					BufferedReader reader = new BufferedReader(
-							new InputStreamReader(new FileInputStream(input), "UTF-8"))) {
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(input), "UTF-8"))) {
 
-				/* header */
-				String line = reader.readLine();
+			/* header */
+			String line = reader.readLine();
+			if (colIndex.isEmpty()) {
 				colIndex = getColumnsIndex(line);
-				String header = "";
-				for (String col : colTarget) {
-					header += col + SEPARATOR;
-				}
-				writer.write(header);
-				writer.write(LINE_JUMP);
-				/* */
-
-				line = reader.readLine();
-				while (line != null) {
-					line += SEPARATOR + " ";
-					String[] values = line.split(SEPARATOR);
-					if (values[colIndex.get("taxonkey")].equals(taxon) && isUsable(values)) {
-						writer.write(getTargeValues(values));
-						writer.write(LINE_JUMP);
-					}
-					line = reader.readLine();
-
-				}
-
-			} catch (FileNotFoundException e) {
-				System.out.println("File not found " + input.getAbsolutePath());
-			} catch (IOException e) {
-				e.printStackTrace();
 			}
-			bar.update(done++, total);
+			String header = "";
+			for (String col : colTarget) {
+				header += col + SEPARATOR;
+			}
+			/* */
+
+			/* progress bar */
+			ProgressBar bar = new ProgressBar();
+			int exp = (int) Math.ceil((input.length() + "").length()) + 1;
+			int dimensionality = (int) Math.pow(2, exp);
+			int total = Math.toIntExact(input.length() / dimensionality);
+			long done = line.length();
+			int lineNumber = 0;
+			System.out.println("Reading " + input.length() / 1024 + "KB");
+			System.out.println("Updating progress each " + dimensionality + "KB read");
+			/* */
+
+			line = reader.readLine();
+			while (line != null) {
+				line += SEPARATOR + " ";
+				String[] values = line.split(SEPARATOR);
+				String taxon = values[colIndex.get("taxonkey")];
+				File output = new File(outputDir.getName() + "//" + taxon + ".csv");
+				if (isUsable(values)) {
+
+					try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(output, true)))) {
+						if (!output.exists()) {
+							writer.println(header);
+						}
+						writer.println(getTargeValues(values));
+					}
+				}
+				/* show progress */
+				done += line.length();
+				if (++lineNumber % dimensionality == 0) {
+					bar.update(Math.toIntExact(done / dimensionality), total);
+				}
+				/* */
+				line = reader.readLine();
+
+			}
+			bar.update(Math.toIntExact(done / dimensionality), total);
+
+		} catch (FileNotFoundException e) {
+			System.out.println("File not found " + input.getAbsolutePath());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	private void clearOutputDirectory(File outputDir) {
+		if (outputDir.exists()) {
+			outputDir.delete();
+		} else {
+			outputDir.mkdir();
 		}
 	}
 
@@ -109,7 +131,6 @@ public class TaxaSegregator {
 	}
 
 	private boolean isUsable(String[] values) {
-		
 
 		if (!values[colIndex.get("taxonrank")].contains("SPECIES")) {
 			return false;
@@ -126,32 +147,12 @@ public class TaxaSegregator {
 				return false;
 			}
 		}
-		
-		if(values[colIndex.get("decimallatitude")].equals("")||values[colIndex.get("longitude")].equals("")){
+
+		if (values[colIndex.get("decimallatitude")].equals("") || values[colIndex.get("decimallongitude")].equals("")) {
 			return false;
 		}
 
 		return true;
-	}
-
-	private Set<String> loadVocabulary(File vocabularyFile) {
-		Set<String> filters = new LinkedHashSet<String>();
-		try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(vocabularyFile)))) {
-
-			String line = reader.readLine();
-			while (line != null) {
-				if (!line.isEmpty()) {
-					filters.add(line);
-				}
-				line = reader.readLine();
-			}
-
-		} catch (FileNotFoundException e) {
-			System.out.println("File not found " + vocabularyFile.getAbsolutePath());
-		} catch (IOException e) {
-			System.out.println("Cannot read " + vocabularyFile.getAbsolutePath());
-		}
-		return filters;
 	}
 
 	private Map<String, Integer> getColumnsIndex(String line) {

@@ -6,10 +6,9 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -25,7 +24,6 @@ public class Filterer {
 	private Map<String, Integer> colIndex;
 	private Set<String> taxa;
 	private static final String SEPARATOR = "\t";
-	private static final String LINE_JUMP = "\r\n";
 
 	public static void main(String[] args) {
 		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -55,16 +53,15 @@ public class Filterer {
 		File taxaFile = new File("taxa.txt");
 		taxa = loadVocabulary(taxaFile);
 
-		try (BufferedWriter writer = new BufferedWriter(
-				new PrintWriter(new OutputStreamWriter(new FileOutputStream(output), "UTF-8")));
+		try (PrintWriter writer = new PrintWriter(
+				new BufferedWriter(new FileWriter(output)));
 				BufferedReader reader = new BufferedReader(
 						new InputStreamReader(new FileInputStream(input), "UTF-8"))) {
 
 			/* header */
 			String line = reader.readLine();
 			colIndex = getColumnsIndex(line);
-			writer.write(line);
-			writer.write(LINE_JUMP);
+			writer.println(line);
 			/* */
 
 			/* progress bar */
@@ -82,8 +79,7 @@ public class Filterer {
 			while (line != null) {
 				line += SEPARATOR+" ";
 				if (isTarget(line)) {
-					writer.write(line);
-					writer.write(LINE_JUMP);
+					writer.println(line);
 				}
 
 				/* show progress */
