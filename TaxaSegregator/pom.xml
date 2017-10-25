@@ -5,7 +5,7 @@
 <artifactId>LineFilter</artifactId>
 <packaging>jar</packaging>
 <version>1.0</version>
-<name>Filterer</name>
+<name>TaxaSegregator</name>
 <url>https://github.com/CIAT-DAPA/TextUtils</url>
 	
 	<properties>
@@ -79,7 +79,7 @@
 					<archive>
 					<manifest>
 						<!-- Jar file entry point -->
-						<mainClass>org.ciat.Filterer</mainClass>
+						<mainClass>org.ciat.${project.name}</mainClass>
 					</manifest>
 					</archive>
 				</configuration>

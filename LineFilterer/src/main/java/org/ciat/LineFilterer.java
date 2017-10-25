@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class Filterer {
+public class LineFilterer {
 
 	private Map<String, Integer> colIndex;
 	private Set<String> taxa;
@@ -36,7 +36,7 @@ public class Filterer {
 			System.out.println("File not provided in arguments, using " + fileName + " as default");
 		}
 
-		Filterer app = new Filterer();
+		LineFilterer app = new LineFilterer();
 		app.extract(fileName);
 
 		date = new Date();
