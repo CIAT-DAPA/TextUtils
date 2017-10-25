@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-public class Filterer {
+public class CWRFilterer {
 
 	private Map<String, Integer> colIndex;
 	private Map<Integer, CWR> taxaCWR;
@@ -36,7 +36,7 @@ public class Filterer {
 			System.out.println("File not provided in arguments, using " + fileName + " as default");
 		}
 
-		Filterer app = new Filterer();
+		CWRFilterer app = new CWRFilterer();
 		app.extract(fileName);
 
 		date = new Date();
@@ -47,7 +47,7 @@ public class Filterer {
 	private void extract(String fileName) {
 
 		File input = new File(fileName);
-		File output = new File("data.csv");
+		File output = new File("cwr.csv");
 
 		File taxaFile = new File("cwr.txt");
 		taxaCWR = loadTargetCRW(taxaFile);
@@ -122,9 +122,13 @@ public class Filterer {
 		}
 
 		/* check if it's a target taxon */
-		CWR cwr = taxaCWR.get(Integer.parseInt(values[colIndex.get("taxonkey")]));
-		if (cwr != null) {
-			return true;
+		String country = values[colIndex.get("countrycode")];
+		Integer taxonKey = Integer.parseInt(values[colIndex.get("taxonkey")]);
+		if (taxaCWR.containsKey(taxonKey)) {
+			/* check if taxon is native in that country */
+			if (taxaCWR.get(taxonKey).getNativeCountries().contains(country)) {
+				return true;
+			}
 		}
 
 		return false;
@@ -138,14 +142,14 @@ public class Filterer {
 			while (line != null) {
 				if (!line.isEmpty()) {
 					String[] values = line.split(SEPARATOR);
-					Integer taxon = Integer.parseInt(values[0]);
-					CWR newCWR = new CWR(Integer.parseInt(values[0]));
+					Integer taxonKey = Integer.parseInt(values[0]);
 					String country = values[1];
-					if (CWRs.keySet().contains(taxon)) {
-						CWRs.get(taxon).getNativeCountries().add(values[1]);
+					if (CWRs.containsKey(taxonKey)) {
+						CWRs.get(taxonKey).getNativeCountries().add(country);
 					} else {
+						CWR newCWR = new CWR(taxonKey);
 						newCWR.getNativeCountries().add(country);
-						CWRs.put(taxon, newCWR);
+						CWRs.put(taxonKey, newCWR);
 					}
 
 				}
