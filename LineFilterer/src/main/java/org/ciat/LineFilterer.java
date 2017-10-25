@@ -21,7 +21,7 @@ import java.util.TreeSet;
 public class LineFilterer {
 
 	private Map<String, Integer> colIndex;
-	private Set<String> taxa;
+	private Set<String> taxonKeys;
 	private static final String SEPARATOR = "\t";
 
 	public static void main(String[] args) {
@@ -49,8 +49,8 @@ public class LineFilterer {
 		File input = new File(fileName);
 		File output = new File("data.csv");
 
-		File taxaFile = new File("taxa.txt");
-		taxa = loadTargetTaxa(taxaFile);
+		File taxaFile = new File("taxonkey.txt");
+		taxonKeys = loadTargetTaxa(taxaFile);
 
 		try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(output)));
 				BufferedReader reader = new BufferedReader(
@@ -102,32 +102,39 @@ public class LineFilterer {
 	private boolean isUseful(String line) {
 		String[] values = line.split(SEPARATOR);
 
-		if (!line.contains("SPECIES")) {
+		if (colIndex.get("taxonrank") != null && !values[colIndex.get("taxonrank")].contains("SPECIES")) {
 			return false;
 		}
-		
 
 		/* excluding records with geospatial issues */
-		if (values[colIndex.get("decimallatitude")].equals("") || values[colIndex.get("decimallongitude")].equals("")) {
+		if (colIndex.get("decimallatitude") != null && values[colIndex.get("decimallatitude")].equals("")) {
 			return false;
 		}
+		/* excluding records with geospatial issues */
+		if (colIndex.get("decimallongitude") != null && values[colIndex.get("decimallongitude")].equals("")) {
+			return false;
+		}
+
 		Set<String> issues = new LinkedHashSet<>();
 		issues.add("COORDINATE_OUT_OF_RANGE");
 		issues.add("COUNTRY_COORDINATE_MISMATCH");
 		issues.add("ZERO_COORDINATE");
-
 		for (String issue : issues) {
-			if (values[colIndex.get("issue")].contains(issue)) {
+			if (colIndex.get("issue") != null && values[colIndex.get("issue")].contains(issue)) {
+				return false;
+			}
+		}
+		/**/
+
+		if (colIndex.get("taxonkey") != null) {
+			/* check if it's a target taxon */
+			String taxon = values[colIndex.get("taxonkey")];
+			if (!taxonKeys.contains(taxon)) {
 				return false;
 			}
 		}
 
-		/* check if it's a target taxon */
-		if (taxa.contains(values[colIndex.get("taxonkey")])) {
-			return true;
-		}
-
-		return false;
+		return true;
 	}
 
 	private Set<String> loadTargetTaxa(File vocabularyFile) {

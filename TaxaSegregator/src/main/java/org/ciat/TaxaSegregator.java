@@ -19,11 +19,10 @@ import java.util.TreeMap;
 public class TaxaSegregator {
 
 	// index of columns
-	private Map<String, Integer> colIndex = new LinkedHashMap<>();
+	private Map<String, Integer> colIndex = new LinkedHashMap<String, Integer>();
 	// target columns
-	private String[] colTarget = { "gbifid", "countrycode", "taxonkey", "scientificname", "basisofrecord",
-			"decimallatitude", "decimallongitude", "coordinateuncertaintyinmeters", "coordinateprecision", "elevation",
-			"elevationaccuracy", "depth", "depthaccuracy" };
+	private String[] colTarget = { "taxonkey", "decimallongitude", "decimallatitude" };
+	private String[] colMaxent = { "species", "lon", "lat" };
 
 	private static final String SEPARATOR = "\t";
 
@@ -62,7 +61,7 @@ public class TaxaSegregator {
 				colIndex = getColumnsIndex(line);
 			}
 			String header = "";
-			for (String col : colTarget) {
+			for (String col : colMaxent) {
 				header += col + SEPARATOR;
 			}
 			/* */
@@ -90,11 +89,11 @@ public class TaxaSegregator {
 				File output = new File(outputDir.getName() + "//" + taxon + ".csv");
 				if (!writers.keySet().contains(taxon)) {
 					writers.put(taxon, new PrintWriter(new BufferedWriter(new FileWriter(output, true))));
-					 writers.get(taxon).println(header);
+					writers.get(taxon).println(header);
 				}
 
 				writers.get(taxon).println(getTargetValues(values));
-				
+
 				/* show progress */
 				done += line.length();
 				if (++lineNumber % dimensionality == 0) {
@@ -105,8 +104,8 @@ public class TaxaSegregator {
 
 			}
 			bar.update(Math.toIntExact(done / dimensionality), total);
-			
-			for(String key: writers.keySet()){
+
+			for (String key : writers.keySet()) {
 				writers.get(key).flush();
 				writers.get(key).close();
 			}
@@ -121,7 +120,7 @@ public class TaxaSegregator {
 
 	private void clearOutputDirectory(File outputDir) {
 		if (outputDir.exists()) {
-			for(File f:outputDir.listFiles()){
+			for (File f : outputDir.listFiles()) {
 				f.delete();
 			}
 		} else {

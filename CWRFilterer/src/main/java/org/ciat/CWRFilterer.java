@@ -47,9 +47,9 @@ public class CWRFilterer {
 	private void extract(String fileName) {
 
 		File input = new File(fileName);
-		File output = new File("cwr.csv");
+		File output = new File("data.csv");
 
-		File taxaFile = new File("cwr.txt");
+		File taxaFile = new File("cwr.csv");
 		taxaCWR = loadTargetCRW(taxaFile);
 
 		try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(output)));
@@ -102,32 +102,38 @@ public class CWRFilterer {
 
 	private boolean isUseful(String[] values) {
 
-		if (!values[colIndex.get("taxonrank")].contains("SPECIES")) {
+		if (colIndex.get("taxonrank") != null && !values[colIndex.get("taxonrank")].contains("SPECIES")) {
 			return false;
 		}
 
 		/* excluding records with geospatial issues */
-		if (values[colIndex.get("decimallatitude")].equals("") || values[colIndex.get("decimallongitude")].equals("")) {
+		if (colIndex.get("decimallatitude") != null && values[colIndex.get("decimallatitude")].equals("")) {
 			return false;
 		}
+		/* excluding records with geospatial issues */
+		if (colIndex.get("decimallongitude") != null && values[colIndex.get("decimallongitude")].equals("")) {
+			return false;
+		}
+
 		Set<String> issues = new LinkedHashSet<>();
 		issues.add("COORDINATE_OUT_OF_RANGE");
 		issues.add("COUNTRY_COORDINATE_MISMATCH");
 		issues.add("ZERO_COORDINATE");
-
 		for (String issue : issues) {
-			if (values[colIndex.get("issue")].contains(issue)) {
+			if (colIndex.get("issue") != null && values[colIndex.get("issue")].contains(issue)) {
 				return false;
 			}
 		}
 
 		/* check if it's a target taxon */
-		String country = values[colIndex.get("countrycode")];
-		Integer taxonKey = Integer.parseInt(values[colIndex.get("taxonkey")]);
-		if (taxaCWR.containsKey(taxonKey)) {
-			/* check if taxon is native in that country */
-			if (taxaCWR.get(taxonKey).getNativeCountries().contains(country)) {
-				return true;
+		if (colIndex.get("taxonkey") != null && colIndex.get("countrycode") != null) {
+			String country = values[colIndex.get("countrycode")];
+			Integer taxonKey = Integer.parseInt(values[colIndex.get("taxonkey")]);
+			if (taxaCWR.containsKey(taxonKey)) {
+				/* check if taxon is native in that country */
+				if (taxaCWR.get(taxonKey).getNativeCountries().contains(country)) {
+					return true;
+				}
 			}
 		}
 
@@ -138,12 +144,13 @@ public class CWRFilterer {
 		Map<Integer, CWR> CWRs = new TreeMap<Integer, CWR>();
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(vocabularyFile)))) {
 
-			String line = reader.readLine();
+			String line = reader.readLine(); // skip header
+			line = reader.readLine();
 			while (line != null) {
 				if (!line.isEmpty()) {
 					String[] values = line.split(SEPARATOR);
-					Integer taxonKey = Integer.parseInt(values[0]);
-					String country = values[1];
+					Integer taxonKey = Integer.parseInt(values[1]);
+					String country = values[2];
 					if (CWRs.containsKey(taxonKey)) {
 						CWRs.get(taxonKey).getNativeCountries().add(country);
 					} else {
