@@ -149,8 +149,8 @@ public class CWRFilterer {
 			while (line != null) {
 				if (!line.isEmpty()) {
 					String[] values = line.split(SEPARATOR);
-					Integer taxonKey = Integer.parseInt(values[1]);
-					String country = values[2];
+					Integer taxonKey = Integer.parseInt(values[0]);
+					String country = values[1];
 					if (CWRs.containsKey(taxonKey)) {
 						CWRs.get(taxonKey).getNativeCountries().add(country);
 					} else {

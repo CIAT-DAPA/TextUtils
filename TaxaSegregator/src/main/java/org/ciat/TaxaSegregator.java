@@ -14,7 +14,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 public class TaxaSegregator {
 
@@ -78,6 +80,7 @@ public class TaxaSegregator {
 			/* */
 
 			Map<String, PrintWriter> writers = new TreeMap<String, PrintWriter>();
+			Map<String, Set<String>> coords = new TreeMap<String, Set<String>>();
 
 			line = reader.readLine();
 			while (line != null) {
@@ -90,9 +93,13 @@ public class TaxaSegregator {
 				if (!writers.keySet().contains(taxon)) {
 					writers.put(taxon, new PrintWriter(new BufferedWriter(new FileWriter(output, true))));
 					writers.get(taxon).println(header);
+					coords.put(taxon, new TreeSet<String>());
 				}
-
-				writers.get(taxon).println(getTargetValues(values));
+				String coord = getTargetValues(values);
+				if (!coords.get(taxon).contains(coord)) {
+					writers.get(taxon).println();
+					coords.get(taxon).add(coord);
+				}
 
 				/* show progress */
 				done += line.length();
