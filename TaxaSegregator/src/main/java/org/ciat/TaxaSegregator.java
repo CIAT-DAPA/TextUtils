@@ -23,8 +23,8 @@ public class TaxaSegregator {
 	// index of columns
 	private Map<String, Integer> colIndex = new LinkedHashMap<String, Integer>();
 	// target columns
-	private String[] colTarget = { "taxonkey", "decimallongitude", "decimallatitude" };
-	private String[] colMaxent = { "species", "lon", "lat" };
+	private String[] colTarget = { "taxonkey", "decimallongitude", "decimallatitude", "countrycode" };
+	private String[] colMaxent = { "species", "lon", "lat", "country" };
 
 	private static final String SEPARATOR = "\t";
 
@@ -51,7 +51,7 @@ public class TaxaSegregator {
 	private void extract(String fileName) {
 
 		File input = new File(fileName);
-		File outputDir = new File("data");
+		File outputDir = new File("coords");
 
 		clearOutputDirectory(outputDir);
 
@@ -90,14 +90,18 @@ public class TaxaSegregator {
 
 				String taxon = values[colIndex.get("taxonkey")];
 				File output = new File(outputDir.getName() + "//" + taxon + ".csv");
+
 				if (!writers.keySet().contains(taxon)) {
 					writers.put(taxon, new PrintWriter(new BufferedWriter(new FileWriter(output, true))));
 					writers.get(taxon).println(header);
 					coords.put(taxon, new TreeSet<String>());
 				}
+				
+				// get only target values to print
 				String coord = getTargetValues(values);
+				// include them only if they are new to avoid duplicates
 				if (!coords.get(taxon).contains(coord)) {
-					writers.get(taxon).println();
+					writers.get(taxon).println(coord);
 					coords.get(taxon).add(coord);
 				}
 
