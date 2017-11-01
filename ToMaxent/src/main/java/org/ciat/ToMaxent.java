@@ -18,7 +18,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-public class TaxaSegregator {
+public class ToMaxent {
 
 	// index of columns
 	private Map<String, Integer> colIndex = new LinkedHashMap<String, Integer>();
@@ -40,7 +40,7 @@ public class TaxaSegregator {
 			System.out.println("File not provided in arguments, using " + fileName + " as default");
 		}
 
-		TaxaSegregator app = new TaxaSegregator();
+		ToMaxent app = new ToMaxent();
 		app.extract(fileName);
 
 		date = new Date();
