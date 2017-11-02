@@ -4,8 +4,11 @@
    "properties" : {
         "id":{ "type": "integer","index" : "true" },
         "value":{ "type" : "double" },
-        "location": {
+        "topleft": {
                     "type": "geo_point"
+                },
+        "envelope": {
+                    "type": "geo_shape"
                 }
 
  
