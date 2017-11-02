@@ -1,0 +1,17 @@
+{
+ "mappings" : {
+  "record" : {
+   "properties" : {
+        "id":{ "type": "integer","index" : "true" },
+        "value":{ "type" : "double" },
+        "location": {
+                    "type": "geo_shape"
+                }
+
+ 
+    }
+  }
+ }
+}
+
+
