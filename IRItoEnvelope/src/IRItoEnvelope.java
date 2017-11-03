@@ -7,6 +7,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /*The precipitation data is on a 2.5 degree grid. 
  * In terms of the center point of each grid box, the first latitude is 88.75 N, the next is 86.25 N, and so on until it reaches 58.75 S. It stops there. 
@@ -22,11 +24,7 @@ public class IRItoEnvelope {
 	private final File outputFolder = new File("output");
 	private final String type = "record";
 	private final String index = "iri";
-	private int x;
-	private int y;
-
-	private final BoundingBox bbox = new BoundingBox(88.75, -178.75, -58.75, 178.75);
-	private final double cellSize = 2.5;
+	private Set<String> properties= new LinkedHashSet<String>();
 
 	public static void main(String[] args) {
 		IRItoEnvelope app = new IRItoEnvelope();
@@ -36,55 +34,82 @@ public class IRItoEnvelope {
 
 	private void transform() {
 
-		x = (int) (Math.abs((bbox.getLeftLon() + 1000) - (bbox.getRightLon() + 1000)) / cellSize);
-		y = (int) (Math.abs((bbox.getTopLat() + 1000) - (bbox.getBottonLat() + 1000)) / cellSize);
-		String[][] grid = new String[x][y];
 		if (inputFolder.exists() && inputFolder.isDirectory()) {
 			for (File input : inputFolder.listFiles()) {
+				BoundingBox bbox = new BoundingBox(88.75, -178.75, -58.75, 178.75);
+				double cellSize = 2.5;
+				String[][] grid;
+				int width = 1 + (int) (Math.abs((bbox.getLeftLon() + 1000) - (bbox.getRightLon() + 1000)) / cellSize);
+				int height = 1 + (int) (Math.abs((bbox.getTopLat() + 1000) - (bbox.getBottonLat() + 1000)) / cellSize);
+				grid = new String[height][width];
 				File output = new File(outputFolder.getName() + File.separatorChar + input.getName() + ".json");
-				addLocation(grid);
+				addSeason(input, grid,width,height);
+				addLocation(grid, bbox, cellSize,width,height);
 				addValues(input, grid);
-				writeRecords(output, grid);
+				writeRecords(output, grid,width,height);
 			}
+
 		}
+		writeMapping();
 
 	}
 
-	private void addLocation(String[][] grid) {
-		for (int i = 0; i < x; i++) {
-			for (int j = 0; j < y; j++) {
+	private void writeMapping() {
+		String mapping="";
+		mapping += "{\"mappings\":{\"record\":{\"properties\":{\"id\":{\"type\":\"integer\",\"index\":\"true\" }";			
+		mapping += ","+asJSONProperty("centroid","geo_point");
+		mapping += ","+asJSONProperty("region","geo_shape");
+		mapping += "\"season\":{\"type\":\"integer\"}";
+		mapping += "\"variable\":{\"type\":\"keyword\"}";
+		
+		for(String property:properties){
+			mapping+=","+property;
+		}
+
+		mapping += "}}}}";
+		
+		try (PrintWriter writer = new PrintWriter(new BufferedWriter(
+				new FileWriter(new File(outputFolder.getName() + File.separatorChar + "mapping.json"), true)))) {
+			writer.println(mapping);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void addSeason(File input, String[][] grid, int width, int height) {
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
+				grid[j][i] += ",\"season\":"
+						+ input.getName().substring(input.getName().length() - 2, input.getName().length());
+				grid[j][i] += ",\"variable\":\""
+						+ input.getName().substring(input.getName().length() - 7, input.getName().length() - 5) + "\"";
+			}
+		}
+		
+	}
+
+	private void addLocation(String[][] grid, BoundingBox bbox, double cellSize, int width, int height) {
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
 				int id = i * 1000 + j;
-				grid[i][j] = "{\"index\":{\"_index\":\"" + index + "\",\"_type\":\"" + type + "\",\"_id\":" + id + "}}"
+				grid[j][i] = "{\"index\":{\"_index\":\"" + index + "\",\"_type\":\"" + type + "\",\"_id\":" + id + "}}"
 						+ "\r\n";
 				double topLat = bbox.getTopLat() - cellSize * j;
 				double leftLon = bbox.getLeftLon() + cellSize * i;
 				double bottonLat = bbox.getTopLat() - cellSize * (j + 1);
 				double rightLon = bbox.getLeftLon() + cellSize * (i + 1);
 
-				grid[i][j] += "{\"id\":" + id + ",\"centroid\" :\"" + (topLat - (cellSize / 2)) + ", "
+				grid[j][i] += "{\"id\":" + id + ",\"centroid\" :\"" + (topLat - (cellSize / 2)) + ", "
 						+ (leftLon + (cellSize / 2)) + "\"";
-				grid[i][j] += ",\"region\":{\"type\":\"envelope\",\"coordinates\":[[" + leftLon + ", " + topLat
-						+ "],[" + rightLon + "," + bottonLat + "]]}";
+				grid[j][i] += ",\"region\":{\"type\":\"envelope\",\"coordinates\":[[" + leftLon + ", " + topLat + "],["
+						+ rightLon + "," + bottonLat + "]]}";
 			}
 		}
 
 	}
 
-	private void writeRecords(File output, String[][] grid) {
-		try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(output, true)))) {
-
-			for (int i = 0; i < x; i++) {
-				for (int j = 0; j < y; j++) {
-					grid[i][j] += "}";
-					//System.out.println(grid[i][j]);
-					writer.println(grid[i][j]);
-				}
-			}
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
+	private String asJSONProperty(String name, String type) {
+		return "\"" + name + "\": {\"type\":" + type + "\"}";
 	}
 
 	private void addValues(File input, String[][] grid) {
@@ -99,15 +124,22 @@ public class IRItoEnvelope {
 			int indexY = 0;
 			int indexX = 0;
 			while (line != null) {
-				if (line.startsWith("9") || line.startsWith("-") || line.startsWith("8") || line.startsWith("7")
+				// if it's a value line
+				line = line.trim();
+				if (line.startsWith("0") || line.startsWith("9") || line.startsWith("8") || line.startsWith("7")
 						|| line.startsWith("6") || line.startsWith("7") || line.startsWith("6") || line.startsWith("5")
-						|| line.startsWith("4") || line.startsWith("3") || line.startsWith("2")
-						|| line.startsWith("1")) {
-
+						|| line.startsWith("4") || line.startsWith("3") || line.startsWith("2") || line.startsWith("1")
+						|| line.startsWith("-")) {
+					line = line.replaceAll("-", " -").trim();
+					String[] values = line.split(" ");
+					for (indexX = 0; indexX < values.length; indexX++) {
+						grid[indexY][indexX] += ",\"" + varName + "\":" + values[indexX];
+					}
+					indexY++;
 				} else {
 					varName = line.replaceAll(" ", "_");
 					indexY = 0;
-					indexX = 0;
+					properties.add(asJSONProperty(varName, "double"));
 				}
 				line = reader.readLine();
 			}
@@ -117,6 +149,24 @@ public class IRItoEnvelope {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+	}
+
+	private void writeRecords(File output, String[][] grid, int width, int height) {
+		try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(output, true)))) {
+
+			for (int i = 0; i < width; i++) {
+				for (int j = 0; j < height; j++) {
+					grid[j][i] += "}";
+					writer.println(grid[j][i]);
+				}
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+
 
 	}
 
