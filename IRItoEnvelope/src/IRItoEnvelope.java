@@ -20,11 +20,14 @@ There are 71 latitudes. Within each latitude, the longitudes start at -179 E, th
 */
 
 public class IRItoEnvelope {
-	private final File inputFolder = new File("input_test");
+	private static final String NULL = "9.000";
+	private final File inputFolder = new File("input");
 	private final File outputFolder = new File("output");
+	private final File mappingFile = new File(outputFolder.getName() + File.separatorChar + "mapping.json");
+	private final File uploadFile = new File(outputFolder.getName() + File.separatorChar + "upload.bat");
 	private final String type = "record";
 	private final String index = "iri";
-	private Set<String> properties= new LinkedHashSet<String>();
+	private Set<String> properties = new LinkedHashSet<String>();
 
 	public static void main(String[] args) {
 		IRItoEnvelope app = new IRItoEnvelope();
@@ -34,19 +37,44 @@ public class IRItoEnvelope {
 
 	private void transform() {
 
+		try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(uploadFile, true)))) {
+
+			writer.println("curl -k -i --raw -o " + mappingFile.getName()
+					+ ".log -X PUT \"http://localhost:9200/iri\" -H \"Content-Type: application/json\" -H \"Host: localhost:9200\" --data-binary @"
+					+ mappingFile.getName());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 		if (inputFolder.exists() && inputFolder.isDirectory()) {
 			for (File input : inputFolder.listFiles()) {
-				BoundingBox bbox = new BoundingBox(88.75, -178.75, -58.75, 178.75);
-				double cellSize = 2.5;
+				BoundingBox bbox;
+				double cellSize;
+				String variable = input.getName().substring(input.getName().length() - 7, input.getName().length() - 5);
+				int season = Integer.parseInt(input.getName().substring(input.getName().length() - 2, input.getName().length()));
+				switch (variable) {
+				case "P1":
+					bbox = new BoundingBox(88.75, -178.75, -58.75, 178.75);
+					cellSize = 2.5;
+					break;
+				case "T1":
+					bbox = new BoundingBox(81, -179, -59, 179);
+					cellSize = 2;
+					break;
+				default:
+					bbox = new BoundingBox(88.75, -178.75, -58.75, 178.75);
+					cellSize = 2.5;
+					break;
+				}
 				String[][] grid;
 				int width = 1 + (int) (Math.abs((bbox.getLeftLon() + 1000) - (bbox.getRightLon() + 1000)) / cellSize);
 				int height = 1 + (int) (Math.abs((bbox.getTopLat() + 1000) - (bbox.getBottonLat() + 1000)) / cellSize);
 				grid = new String[height][width];
 				File output = new File(outputFolder.getName() + File.separatorChar + input.getName() + ".json");
-				addSeason(input, grid,width,height);
-				addLocation(grid, bbox, cellSize,width,height);
+				addLocation(grid, bbox, cellSize, width, height);
+				addSeason(variable, season, grid, width, height);
 				addValues(input, grid);
-				writeRecords(output, grid,width,height);
+				writeRecords(output, grid, width, height);
 			}
 
 		}
@@ -54,38 +82,14 @@ public class IRItoEnvelope {
 
 	}
 
-	private void writeMapping() {
-		String mapping="";
-		mapping += "{\"mappings\":{\"record\":{\"properties\":{\"id\":{\"type\":\"integer\",\"index\":\"true\" }";			
-		mapping += ","+asJSONProperty("centroid","geo_point");
-		mapping += ","+asJSONProperty("region","geo_shape");
-		mapping += "\"season\":{\"type\":\"integer\"}";
-		mapping += "\"variable\":{\"type\":\"keyword\"}";
-		
-		for(String property:properties){
-			mapping+=","+property;
-		}
-
-		mapping += "}}}}";
-		
-		try (PrintWriter writer = new PrintWriter(new BufferedWriter(
-				new FileWriter(new File(outputFolder.getName() + File.separatorChar + "mapping.json"), true)))) {
-			writer.println(mapping);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private void addSeason(File input, String[][] grid, int width, int height) {
+	private void addSeason(String variable, int season, String[][] grid, int width, int height) {
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
-				grid[j][i] += ",\"season\":"
-						+ input.getName().substring(input.getName().length() - 2, input.getName().length());
-				grid[j][i] += ",\"variable\":\""
-						+ input.getName().substring(input.getName().length() - 7, input.getName().length() - 5) + "\"";
+				grid[j][i] += ",\"season\":" + season;
+				grid[j][i] += ",\"variable\":\"" + variable + "\"";
 			}
 		}
-		
+
 	}
 
 	private void addLocation(String[][] grid, BoundingBox bbox, double cellSize, int width, int height) {
@@ -108,21 +112,15 @@ public class IRItoEnvelope {
 
 	}
 
-	private String asJSONProperty(String name, String type) {
-		return "\"" + name + "\": {\"type\":" + type + "\"}";
-	}
-
 	private void addValues(File input, String[][] grid) {
 
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(input), "UTF-8"))) {
 
 			/* header */
-			String line = reader.readLine();
-
-			line = reader.readLine();
 			String varName = "";
 			int indexY = 0;
 			int indexX = 0;
+			String line = reader.readLine();
 			while (line != null) {
 				// if it's a value line
 				line = line.trim();
@@ -133,7 +131,9 @@ public class IRItoEnvelope {
 					line = line.replaceAll("-", " -").trim();
 					String[] values = line.split(" ");
 					for (indexX = 0; indexX < values.length; indexX++) {
-						grid[indexY][indexX] += ",\"" + varName + "\":" + values[indexX];
+						if (!values[indexX].equals(NULL)) {
+							grid[indexY][indexX] += ",\"" + varName + "\":" + values[indexX];
+						}
 					}
 					indexY++;
 				} else {
@@ -153,7 +153,7 @@ public class IRItoEnvelope {
 	}
 
 	private void writeRecords(File output, String[][] grid, int width, int height) {
-		try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(output, true)))) {
+		try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(output)))) {
 
 			for (int i = 0; i < width; i++) {
 				for (int j = 0; j < height; j++) {
@@ -166,8 +166,39 @@ public class IRItoEnvelope {
 			e.printStackTrace();
 		}
 
+		try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(uploadFile, true)))) {
 
+			writer.println("curl -k -i --raw -o " + output.getName()
+					+ ".log -X POST \"http://localhost:9200/iri/_bulk?pretty\" -H \"Content-Type: application/json\" -H \"Host: localhost:9200\" --data-binary @"
+					+ output.getName());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 	}
 
+	private void writeMapping() {
+		String mapping = "";
+		mapping += "{\"mappings\":{\"record\":{\"properties\":{\"id\":{\"type\":\"integer\",\"index\":\"true\" }";
+		mapping += "," + asJSONProperty("centroid", "geo_point");
+		mapping += "," + asJSONProperty("region", "geo_shape");
+		mapping += "," + asJSONProperty("season", "integer");
+		mapping += "," + asJSONProperty("variable", "keyword");
+
+		for (String property : properties) {
+			mapping += "," + property;
+		}
+
+		mapping += "}}}}";
+
+		try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(mappingFile)))) {
+			writer.println(mapping);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private String asJSONProperty(String name, String type) {
+		return "\"" + name + "\": {\"type\":\"" + type + "\"}";
+	}
 }
