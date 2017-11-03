@@ -3,11 +3,10 @@
   "record" : {
    "properties" : {
         "id":{ "type": "integer","index" : "true" },
-        "value":{ "type" : "double" },
-        "topleft": {
+        "centroid": {
                     "type": "geo_point"
                 },
-        "envelope": {
+        "region": {
                     "type": "geo_shape"
                 }
 

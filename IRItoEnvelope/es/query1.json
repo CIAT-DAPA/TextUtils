@@ -1,0 +1,21 @@
+GET /iri/_search
+{
+    "query":{
+        "bool": {
+            "must": {
+                "match_all": {}
+            },
+            "filter": {
+                "geo_shape": {
+                    "region": {
+                        "shape": {
+                            "type": "envelope",
+                            "coordinates" : [[-180.0, 90.0], [180.0, -90]]
+                        },
+                        "relation": "within"
+                    }
+                }
+            }
+        }
+    }
+}
