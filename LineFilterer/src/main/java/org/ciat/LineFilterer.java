@@ -102,17 +102,46 @@ public class LineFilterer {
 	private boolean isUseful(String line) {
 		String[] values = line.split(SEPARATOR);
 
-		if (colIndex.get("taxonrank") != null && !values[colIndex.get("taxonrank")].contains("SPECIES")) {
-			return false;
+		if (colIndex.get("taxonrank") != null) {
+			if (!values[colIndex.get("taxonrank")].contains("SPECIES")) {
+				return false;
+			}
 		}
 
 		/* excluding records with geospatial issues */
-		if (colIndex.get("decimallatitude") != null && values[colIndex.get("decimallatitude")].equals("")) {
-			return false;
+		if (colIndex.get("decimallatitude") != null) {
+			if ((values[colIndex.get("decimallatitude")].equals("") || values[colIndex.get("decimallatitude")] == null
+					|| values[colIndex.get("decimallatitude")].equals("\\N"))
+					|| values[colIndex.get("decimallatitude")].equals("null")
+					|| values[colIndex.get("decimallatitude")].isEmpty()) {
+				return false;
+			}
+
+			if (!isNumeric(values[colIndex.get("decimallatitude")])) {
+				return false;
+			} else {
+				Double lat = Double.parseDouble(values[colIndex.get("decimallatitude")]);
+				if (lat == 0 || lat > 90 || lat < -90) {
+					return false;
+				}
+			}
 		}
 		/* excluding records with geospatial issues */
-		if (colIndex.get("decimallongitude") != null && values[colIndex.get("decimallongitude")].equals("")) {
-			return false;
+		if (colIndex.get("decimallongitude") != null) {
+			if ((values[colIndex.get("decimallongitude")].equals("") || values[colIndex.get("decimallongitude")] == null
+					|| values[colIndex.get("decimallongitude")].equals("\\N"))
+					|| values[colIndex.get("decimallongitude")].equals("null")
+					|| values[colIndex.get("decimallongitude")].isEmpty()) {
+				return false;
+			}
+			if (!isNumeric(values[colIndex.get("decimallongitude")])) {
+				return false;
+			} else {
+				Double lat = Double.parseDouble(values[colIndex.get("decimallongitude")]);
+				if (lat == 0 || lat > 180 || lat < -180) {
+					return false;
+				}
+			}
 		}
 
 		Set<String> issues = new LinkedHashSet<>();
@@ -161,9 +190,19 @@ public class LineFilterer {
 		Map<String, Integer> colIndex = new LinkedHashMap<String, Integer>();
 		String[] columnNames = line.split(SEPARATOR);
 		for (int i = 0; i < columnNames.length; i++) {
-			colIndex.put(columnNames[i], i);
+			colIndex.put(columnNames[i].trim(), i);
 		}
 		return colIndex;
+	}
+
+	public static boolean isNumeric(String str) {
+		try {
+			@SuppressWarnings("unused")
+			double d = Double.parseDouble(str);
+		} catch (NumberFormatException nfe) {
+			return false;
+		}
+		return true;
 	}
 
 }
