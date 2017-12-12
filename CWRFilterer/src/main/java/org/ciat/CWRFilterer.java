@@ -27,7 +27,7 @@ public class CWRFilterer {
 		Date date = new Date();
 		System.out.println(dateFormat.format(date));
 
-		String fileName = "gbif.csv";
+		String fileName = "occurrence.txt";
 		if (args.length > 0) {
 			fileName = args[0];
 		} else {
@@ -194,7 +194,7 @@ public class CWRFilterer {
 		Map<String, Integer> colIndex = new LinkedHashMap<String, Integer>();
 		String[] columnNames = line.split(SEPARATOR);
 		for (int i = 0; i < columnNames.length; i++) {
-			colIndex.put(columnNames[i].trim(), i);
+			colIndex.put(columnNames[i].trim().toLowerCase(), i);
 		}
 		return colIndex;
 	}

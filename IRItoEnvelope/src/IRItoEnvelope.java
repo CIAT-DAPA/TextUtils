@@ -48,65 +48,70 @@ public class IRItoEnvelope {
 
 		if (inputFolder.exists() && inputFolder.isDirectory()) {
 			for (File input : inputFolder.listFiles()) {
-				BoundingBox bbox;
-				double cellSize;
-				String variable = input.getName().substring(input.getName().length() - 7, input.getName().length() - 5);
-				int season = Integer.parseInt(input.getName().substring(input.getName().length() - 2, input.getName().length()));
-				switch (variable) {
-				case "P1":
-					bbox = new BoundingBox(88.75, -178.75, -58.75, 178.75);
-					cellSize = 2.5;
-					break;
-				case "T1":
-					bbox = new BoundingBox(81, -179, -59, 179);
-					cellSize = 2;
-					break;
-				default:
-					bbox = new BoundingBox(88.75, -178.75, -58.75, 178.75);
-					cellSize = 2.5;
-					break;
+				if (input.getName().indexOf("skill") == 0) {
+					BoundingBox bbox;
+					double cellSize;
+					String variable = input.getName().substring(input.getName().length() - 7,
+							input.getName().length() - 5);
+					int season = Integer.parseInt(
+							input.getName().substring(input.getName().length() - 2, input.getName().length()));
+					switch (variable) {
+					case "P1":
+						bbox = new BoundingBox(88.75, -178.75, -58.75, 178.75);
+						cellSize = 2.5;
+						break;
+					case "T1":
+						bbox = new BoundingBox(81, -179, -59, 179);
+						cellSize = 2;
+						break;
+					default:
+						bbox = new BoundingBox(88.75, -178.75, -58.75, 178.75);
+						cellSize = 2.5;
+						break;
+					}
+					String[][] grid;
+					int width = 1
+							+ (int) (Math.abs((bbox.getLeftLon() + 1000) - (bbox.getRightLon() + 1000)) / cellSize);
+					int height = 1
+							+ (int) (Math.abs((bbox.getTopLat() + 1000) - (bbox.getBottonLat() + 1000)) / cellSize);
+					grid = new String[height][width];
+					File output = new File(outputFolder.getName() + File.separatorChar + input.getName() + ".json");
+					addSeason(variable, season, grid, width, height);
+					addLocation(grid, bbox, cellSize, width, height);
+					addValues(input, grid);
+					writeRecords(output, grid, width, height);
 				}
-				String[][] grid;
-				int width = 1 + (int) (Math.abs((bbox.getLeftLon() + 1000) - (bbox.getRightLon() + 1000)) / cellSize);
-				int height = 1 + (int) (Math.abs((bbox.getTopLat() + 1000) - (bbox.getBottonLat() + 1000)) / cellSize);
-				grid = new String[height][width];
-				File output = new File(outputFolder.getName() + File.separatorChar + input.getName() + ".json");
-				addLocation(grid, bbox, cellSize, width, height);
-				addSeason(variable, season, grid, width, height);
-				addValues(input, grid);
-				writeRecords(output, grid, width, height);
 			}
-
 		}
 		writeMapping();
+	}
+
+	private void addLocation(String[][] grid, BoundingBox bbox, double cellSize, int width, int height) {
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
+				double topLat = bbox.getTopLat() - cellSize * j;
+				double leftLon = bbox.getLeftLon() + cellSize * i;
+				double bottonLat = bbox.getTopLat() - cellSize * (j + 1);
+				double rightLon = bbox.getLeftLon() + cellSize * (i + 1);
+
+				grid[j][i] += ",\"centroid\" :\"" + (topLat - (cellSize / 2)) + ", " + (leftLon + (cellSize / 2)) + "\"";
+				grid[j][i] += ",\"region\":{\"type\":\"envelope\",\"coordinates\":[[" + leftLon + ", " + topLat + "],["
+						+ rightLon + "," + bottonLat + "]]}";
+			}
+		}
 
 	}
 
 	private void addSeason(String variable, int season, String[][] grid, int width, int height) {
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
-				grid[j][i] += ",\"season\":" + season;
-				grid[j][i] += ",\"variable\":\"" + variable + "\"";
-			}
-		}
-
-	}
-
-	private void addLocation(String[][] grid, BoundingBox bbox, double cellSize, int width, int height) {
-		for (int i = 0; i < width; i++) {
-			for (int j = 0; j < height; j++) {
-				int id = i * 1000 + j;
+				long id = Long.parseLong(((int)variable.charAt(0)) + "" + season + "" + (i * 100 + j));
 				grid[j][i] = "{\"index\":{\"_index\":\"" + index + "\",\"_type\":\"" + type + "\",\"_id\":" + id + "}}"
 						+ "\r\n";
-				double topLat = bbox.getTopLat() - cellSize * j;
-				double leftLon = bbox.getLeftLon() + cellSize * i;
-				double bottonLat = bbox.getTopLat() - cellSize * (j + 1);
-				double rightLon = bbox.getLeftLon() + cellSize * (i + 1);
-
-				grid[j][i] += "{\"id\":" + id + ",\"centroid\" :\"" + (topLat - (cellSize / 2)) + ", "
-						+ (leftLon + (cellSize / 2)) + "\"";
-				grid[j][i] += ",\"region\":{\"type\":\"envelope\",\"coordinates\":[[" + leftLon + ", " + topLat + "],["
-						+ rightLon + "," + bottonLat + "]]}";
+				grid[j][i] += "{\"id\":" + id;
+				grid[j][i] += ",\"variable\":\"" + variable + "\"";
+				grid[j][i] += ",\"season\":" + season;
+				grid[j][i] += ",\"variable\":\"" + variable + "\"";
 			}
 		}
 

@@ -23,8 +23,8 @@ public class ToMaxent {
 	// index of columns
 	private Map<String, Integer> colIndex = new LinkedHashMap<String, Integer>();
 	// target columns
-	private String[] colTarget = { "taxonkey", "decimallongitude", "decimallatitude", "countrycode" };
-	private String[] colMaxent = { "species", "lon", "lat", "country" };
+	private String[] colTarget = { "taxonkey", "decimallongitude", "decimallatitude", "countrycode", "stateProvince", "county" };
+	private String[] colMaxent = { "species", "lon", "lat", "country", "stateProvince", "county" };
 
 	private static final String SEPARATOR = "\t";
 
@@ -93,7 +93,7 @@ public class ToMaxent {
 
 				if (!writers.keySet().contains(taxon)) {
 					writers.put(taxon, new PrintWriter(new BufferedWriter(new FileWriter(output, true))));
-					writers.get(taxon).println(header);
+					//writers.get(taxon).println(header);
 					coords.put(taxon, new TreeSet<String>());
 				}
 				
