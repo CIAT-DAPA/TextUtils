@@ -19,6 +19,9 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class OrganizationsSummary {
 
 	private Map<String, Integer> colIndex;
@@ -70,6 +73,13 @@ public class OrganizationsSummary {
 			/* */
 
 			Set<String> publishers = new LinkedHashSet<String>();
+
+			String head = "institutioncode" + SEPARATOR + "publishingorgkey" + SEPARATOR;
+			for (String keyfield : fields) {
+				head += keyfield + SEPARATOR;
+			}
+			writer.println(head);
+
 			line = reader.readLine();
 			while (line != null) {
 				line += SEPARATOR + " ";
@@ -109,6 +119,9 @@ public class OrganizationsSummary {
 		return colIndex;
 	}
 
+	private String[] fields = { "key", "endorsingNodeKey", "title", "language", "email", "phone", "homepage", "city",
+			"country", "postalCode", "latitude", "longitude", "numPublishedDatasets", "created", "modified" };
+
 	private CharSequence fetchInfo(String key) {
 
 		// make connection
@@ -126,14 +139,18 @@ public class OrganizationsSummary {
 			try (BufferedReader br = new BufferedReader(new InputStreamReader(urlc.getInputStream()))) {
 
 				// get result
-				String result = br.readLine();
-				String[] values = result.split("\",\"");
-				result = "";
-				for (int i = 0; i<values.length && i < 11; i++) {
-					String[] pair = values[i].split("\":\"");
-					if (pair.length == 2) {
-						result += pair[1] + SEPARATOR;
+				String json = br.readLine();
+				String result = "";
+				for (String keyfield : fields) {
+
+					JSONObject object = new JSONObject(json);
+					if (object.has(keyfield)) {
+						String value = object.get(keyfield) + "";
+						result += value + SEPARATOR;
+					} else {
+						result += "" + SEPARATOR;
 					}
+
 				}
 				return result;
 
