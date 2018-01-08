@@ -5,7 +5,7 @@
 <artifactId>OrganizationsSummary</artifactId>
 <packaging>jar</packaging>
 <version>1.0</version>
-<name>CWRFilterer</name>
+<name>OrganizationsSummary</name>
 <url>https://github.com/CIAT-DAPA/TextUtils</url>
 	
 	<properties>
@@ -89,7 +89,23 @@
 					</archive>
 				</configuration>
 			</plugin>
-
+			
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 

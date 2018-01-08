@@ -14,17 +14,13 @@ import java.net.URLConnection;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.Map;
 import java.util.Set;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class OrganizationsSummary {
 
-	private Map<String, Integer> colIndex;
 	private static final String SEPARATOR = "\t";
 
 	public static void main(String[] args) {
@@ -32,11 +28,11 @@ public class OrganizationsSummary {
 		Date date = new Date();
 		System.out.println(dateFormat.format(date));
 
-		String fileName = "gbif.csv";
+		String fileName = "orgs_keys.csv";
 		if (args.length > 0) {
 			fileName = args[0];
 		} else {
-			System.out.println("File not provided in arguments, using " + fileName + " as default");
+			System.out.println("Processing " + fileName);
 		}
 
 		OrganizationsSummary app = new OrganizationsSummary();
@@ -58,7 +54,6 @@ public class OrganizationsSummary {
 
 			/* header */
 			String line = reader.readLine();
-			colIndex = getColumnsIndex(line);
 			/* */
 
 			/* progress bar */
@@ -84,8 +79,8 @@ public class OrganizationsSummary {
 			while (line != null) {
 				line += SEPARATOR + " ";
 				String[] values = line.split(SEPARATOR);
-				String code = values[colIndex.get("institutioncode")];
-				String pub = values[colIndex.get("publishingorgkey")];
+				String code = values[0];
+				String pub = values[1];
 				if (!publishers.contains(pub)) {
 					writer.println(code + SEPARATOR + pub + SEPARATOR + fetchInfo(pub));
 					publishers.add(pub);
@@ -110,16 +105,8 @@ public class OrganizationsSummary {
 		}
 	}
 
-	private Map<String, Integer> getColumnsIndex(String line) {
-		Map<String, Integer> colIndex = new LinkedHashMap<String, Integer>();
-		String[] columnNames = line.split(SEPARATOR);
-		for (int i = 0; i < columnNames.length; i++) {
-			colIndex.put(columnNames[i], i);
-		}
-		return colIndex;
-	}
 
-	private String[] fields = { "key", "endorsingNodeKey", "title", "language", "email", "phone", "homepage", "city",
+	private String[] fields = { "key", "endorsingNodeKey", "title", "description", "language", "email", "phone", "homepage", "city",
 			"country", "postalCode", "latitude", "longitude", "numPublishedDatasets", "created", "modified" };
 
 	private CharSequence fetchInfo(String key) {
@@ -146,6 +133,9 @@ public class OrganizationsSummary {
 					JSONObject object = new JSONObject(json);
 					if (object.has(keyfield)) {
 						String value = object.get(keyfield) + "";
+						value = value.replaceAll("\n", " ");
+						value = value.replaceAll("\r", " ");
+						value = value.replaceAll(SEPARATOR, " ");
 						result += value + SEPARATOR;
 					} else {
 						result += "" + SEPARATOR;
