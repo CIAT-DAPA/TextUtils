@@ -33,7 +33,7 @@ public class OrganizationsFinder {
 		if (args.length > 0) {
 			fileName = args[0];
 		} else {
-			System.out.println("File not provided in arguments, using " + fileName + " as default");
+			System.out.println("Processing " + fileName );
 		}
 
 		OrganizationsFinder app = new OrganizationsFinder();
