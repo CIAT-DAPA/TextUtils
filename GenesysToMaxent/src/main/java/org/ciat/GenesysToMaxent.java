@@ -53,7 +53,6 @@ public class GenesysToMaxent {
 		File input = new File(fileName);
 		File outputDir = new File("coords");
 
-		clearOutputDirectory(outputDir);
 
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(input), "UTF-8"))) {
 
@@ -129,15 +128,6 @@ public class GenesysToMaxent {
 
 	}
 
-	private void clearOutputDirectory(File outputDir) {
-		if (outputDir.exists()) {
-			for (File f : outputDir.listFiles()) {
-				f.delete();
-			}
-		} else {
-			outputDir.mkdir();
-		}
-	}
 
 	/** Getting only targeted values **/
 	private String getTargetValues(String[] values) {
