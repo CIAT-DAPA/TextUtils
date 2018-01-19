@@ -18,7 +18,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-public class ToMaxent {
+public class GBIFToMaxent {
 
 	// index of columns
 	private Map<String, Integer> colIndex = new LinkedHashMap<String, Integer>();
@@ -40,7 +40,7 @@ public class ToMaxent {
 			System.out.println("File not provided in arguments, using " + fileName + " as default");
 		}
 
-		ToMaxent app = new ToMaxent();
+		GBIFToMaxent app = new GBIFToMaxent();
 		app.extract(fileName);
 
 		date = new Date();
