@@ -23,8 +23,8 @@ public class ToMaxent {
 	// index of columns
 	private Map<String, Integer> colIndex = new LinkedHashMap<String, Integer>();
 	// target columns
-	private String[] colTarget = { "taxonkey", "decimallongitude", "decimallatitude", "countrycode", "stateProvince", "county" };
-	private String[] colMaxent = { "species", "lon", "lat", "country", "stateProvince", "county" };
+	private String[] colTarget = { "taxonkey", "decimallongitude", "decimallatitude", "countrycode" };
+	private String[] colMaxent = { "species", "lon", "lat", "country", "type" };
 
 	private static final String SEPARATOR = "\t";
 
@@ -93,10 +93,10 @@ public class ToMaxent {
 
 				if (!writers.keySet().contains(taxon)) {
 					writers.put(taxon, new PrintWriter(new BufferedWriter(new FileWriter(output, true))));
-					//writers.get(taxon).println(header);
+					// writers.get(taxon).println(header);
 					coords.put(taxon, new TreeSet<String>());
 				}
-				
+
 				// get only target values to print
 				String coord = getTargetValues(values);
 				// include them only if they are new to avoid duplicates
@@ -146,10 +146,11 @@ public class ToMaxent {
 			if (colIndex.get(col) != null) {
 				output += values[colIndex.get(col)];
 			} else {
-				System.out.println("\"" + col + "\" is a target colum not found in the file");
+				System.out.println("\"" + col + "\" is a target column not found in the file");
 			}
 			output += SEPARATOR;
 		}
+		output += getBasis(values[colIndex.get("basisofrecord")]);
 		return output;
 	}
 
@@ -160,6 +161,17 @@ public class ToMaxent {
 			colIndex.put(columnNames[i], i);
 		}
 		return colIndex;
+	}
+
+	private enum Basis {
+		G, H
+	}
+
+	private Basis getBasis(String basisofrecord) {
+		if (basisofrecord.toUpperCase().equals("LIVING_SPECIMEN")) {
+			return Basis.G;
+		}
+		return Basis.H;
 	}
 
 }
