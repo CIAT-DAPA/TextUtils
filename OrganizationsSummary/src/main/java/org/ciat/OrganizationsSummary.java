@@ -70,7 +70,7 @@ public class OrganizationsSummary {
 			Set<String> publishers = new LinkedHashSet<String>();
 
 			String head = "institutioncode" + SEPARATOR + "publishingorgkey" + SEPARATOR;
-			for (String keyfield : fields) {
+			for (String keyfield : targetFields) {
 				head += keyfield + SEPARATOR;
 			}
 			writer.println(head);
@@ -106,10 +106,10 @@ public class OrganizationsSummary {
 	}
 
 
-	private String[] fields = { "key", "endorsingNodeKey", "title", "description", "language", "email", "phone", "homepage", "city",
+	private String[] targetFields = { "key", "endorsingNodeKey", "title", "description", "language", "email", "phone", "homepage", "city",
 			"country", "postalCode", "latitude", "longitude", "numPublishedDatasets", "created", "modified" };
 
-	private CharSequence fetchInfo(String key) {
+	private String fetchInfo(String key) {
 
 		// make connection
 
@@ -128,7 +128,7 @@ public class OrganizationsSummary {
 				// get result
 				String json = br.readLine();
 				String result = "";
-				for (String keyfield : fields) {
+				for (String keyfield : targetFields) {
 
 					JSONObject object = new JSONObject(json);
 					if (object.has(keyfield)) {

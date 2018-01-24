@@ -24,6 +24,7 @@ public class GBIFToMaxent {
 	private Map<String, Integer> colIndex = new LinkedHashMap<String, Integer>();
 	// target columns
 	private String[] colTarget = { "taxonkey", "decimallongitude", "decimallatitude", "countrycode" };
+	// maxent columns
 	private String[] colMaxent = { "species", "lon", "lat", "country", "type" };
 
 	private static final String SEPARATOR = "\t";
@@ -62,10 +63,10 @@ public class GBIFToMaxent {
 			if (colIndex.isEmpty()) {
 				colIndex = getColumnsIndex(line);
 			}
-			String header = "";
-			for (String col : colMaxent) {
-				header += col + SEPARATOR;
-			}
+			//String header = "";
+			//for (String col : colMaxent) {
+			//	header += col + SEPARATOR;
+			//}
 			/* */
 
 			/* progress bar */
