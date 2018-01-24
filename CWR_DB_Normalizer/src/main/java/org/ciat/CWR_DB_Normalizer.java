@@ -15,9 +15,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 
 import org.json.JSONObject;
@@ -77,11 +75,13 @@ public class CWR_DB_Normalizer {
 			/* */
 
 			line = reader.readLine();
+			String past = "";
 			while (line != null) {
 
 				String normal = normalize(line);
-				if (normal != null) {
+				if (normal != null && !normal.equals(past)) {
 					writer.println(normal);
+					past = normal;
 				}
 
 				/* show progress */
@@ -106,25 +106,32 @@ public class CWR_DB_Normalizer {
 	private String normalize(String line) {
 		line = line.replace("\"", "");
 		String[] values = line.split(INPUT_SEPARATOR);
-		if (values[colIndex.get("final_origin_stat")] != null
-				&& values[colIndex.get("final_origin_stat")].equals("native")) {
+		if (!values[colIndex.get("final_origin_stat")].equals("introduced")) {
 			if (values[colIndex.get("coord_source")].equals("original")
 					|| values[colIndex.get("coord_source")].equals("georef")) {
 				if (values[colIndex.get("visibility")].equals("1")) {
 					if (values[colIndex.get("source")].equals("G") || values[colIndex.get("source")].equals("H")) {
 
-						String taxonKey = fetchTaxonInfo(values[colIndex.get("taxon_final")]);
-						String lon = values[colIndex.get("final_lon")];
-						String lat = values[colIndex.get("final_lat")];
-						String country = values[colIndex.get("final_iso2")];
-						String type = values[colIndex.get("source")];
-						System.out.println(taxonKey + OUTPUT_SEPARATOR + lon + OUTPUT_SEPARATOR + lat + OUTPUT_SEPARATOR
-								+ country + OUTPUT_SEPARATOR + type + System.lineSeparator());
-						if (taxonKey != null && isNumeric(lon) && isNumeric(lat) && country.length() == 2) {
+						String date = values[colIndex.get("colldate")];
+						if (date.length() > 3) {
+							date = date.substring(0, 4);
+							if (isNumeric(date)) {
+								
+								int year = Integer.parseInt(date);
+								String lon = values[colIndex.get("final_lon")];
+								String lat = values[colIndex.get("final_lat")];
+								String country = values[colIndex.get("final_iso2")];
+								String type = values[colIndex.get("source")];
+								if (year > 1949 && isNumeric(lon) && isNumeric(lat) && country.length() == 2) {
 
-							String result = taxonKey + OUTPUT_SEPARATOR + lon + OUTPUT_SEPARATOR + lat
-									+ OUTPUT_SEPARATOR + country + OUTPUT_SEPARATOR + type;
-							return result;
+									String taxonKey = fetchTaxonInfo(values[colIndex.get("taxon_final")]);
+									if (taxonKey != null) {
+										String result = taxonKey + OUTPUT_SEPARATOR + lon + OUTPUT_SEPARATOR + lat
+												+ OUTPUT_SEPARATOR + country + OUTPUT_SEPARATOR + type;
+										return result;
+									}
+								}
+							}
 						}
 
 					}
