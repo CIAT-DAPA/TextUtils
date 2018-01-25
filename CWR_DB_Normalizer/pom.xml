@@ -2,10 +2,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 <modelVersion>4.0.0</modelVersion>
 <groupId>org.ciat</groupId>
-<artifactId>TaxonNormalizer</artifactId>
+<artifactId>CWR_DB_Normalizer</artifactId>
 <packaging>jar</packaging>
 <version>1.0</version>
-<name>OrganizationsSummary</name>
+<name>${project.artifactId}</name>
 <url>https://github.com/CIAT-DAPA/TextUtils</url>
 	
 	<properties>

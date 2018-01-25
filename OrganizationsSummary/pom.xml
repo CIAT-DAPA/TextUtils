@@ -5,7 +5,7 @@
 <artifactId>OrganizationsSummary</artifactId>
 <packaging>jar</packaging>
 <version>1.0</version>
-<name>OrganizationsSummary</name>
+<name>${project.artifactId}</name>
 <url>https://github.com/CIAT-DAPA/TextUtils</url>
 	
 	<properties>

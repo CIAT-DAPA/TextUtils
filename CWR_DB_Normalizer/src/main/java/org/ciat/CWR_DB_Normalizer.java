@@ -32,7 +32,7 @@ public class CWR_DB_Normalizer {
 		Date date = new Date();
 		System.out.println(dateFormat.format(date));
 
-		String fileName = "gbif.csv";
+		String fileName = "D:\\aichi13\\ciat_cwr\\gbif.csv";
 		if (args.length > 0) {
 			fileName = args[0];
 		} else {
@@ -106,34 +106,35 @@ public class CWR_DB_Normalizer {
 	private String normalize(String line) {
 		line = line.replace("\"", "");
 		String[] values = line.split(INPUT_SEPARATOR);
-		if (!values[colIndex.get("final_origin_stat")].equals("introduced")) {
-			if (values[colIndex.get("coord_source")].equals("original")
-					|| values[colIndex.get("coord_source")].equals("georef")) {
-				if (values[colIndex.get("visibility")].equals("1")) {
-					if (values[colIndex.get("source")].equals("G") || values[colIndex.get("source")].equals("H")) {
+		if (values.length == colIndex.size()) {
+			if (!values[colIndex.get("final_origin_stat")].equals("introduced")) {
+				if (values[colIndex.get("coord_source")].equals("original")
+						|| values[colIndex.get("coord_source")].equals("georef")) {
+					if (values[colIndex.get("visibility")].equals("1")) {
+						if (values[colIndex.get("source")].equals("G") || values[colIndex.get("source")].equals("H")) {
 
-						String date = values[colIndex.get("colldate")];
-						if (date.length() > 3) {
-							date = date.substring(0, 4);
-							if (isNumeric(date)) {
-								
-								int year = Integer.parseInt(date);
-								String lon = values[colIndex.get("final_lon")];
-								String lat = values[colIndex.get("final_lat")];
-								String country = values[colIndex.get("final_iso2")];
-								String type = values[colIndex.get("source")];
-								if (year > 1949 && isNumeric(lon) && isNumeric(lat) && country.length() == 2) {
+							String date = values[colIndex.get("colldate")];
+							if (date.length() > 3) {
+								date = date.substring(0, 4);
+								if (isNumeric(date)) {
 
-									String taxonKey = fetchTaxonInfo(values[colIndex.get("taxon_final")]);
-									if (taxonKey != null) {
-										String result = taxonKey + OUTPUT_SEPARATOR + lon + OUTPUT_SEPARATOR + lat
-												+ OUTPUT_SEPARATOR + country + OUTPUT_SEPARATOR + type;
-										return result;
+									int year = Integer.parseInt(date);
+									String lon = values[colIndex.get("final_lon")];
+									String lat = values[colIndex.get("final_lat")];
+									String country = values[colIndex.get("final_iso2")];
+									String type = values[colIndex.get("source")];
+									if (year > 1949 && isNumeric(lon) && isNumeric(lat) && country.length() == 2) {
+
+										String taxonKey = fetchTaxonInfo(values[colIndex.get("taxon_final")]);
+										if (taxonKey != null) {
+											String result = taxonKey + OUTPUT_SEPARATOR + lon + OUTPUT_SEPARATOR + lat
+													+ OUTPUT_SEPARATOR + country + OUTPUT_SEPARATOR + type;
+											return result;
+										}
 									}
 								}
 							}
 						}
-
 					}
 				}
 			}
@@ -168,18 +169,23 @@ public class CWR_DB_Normalizer {
 
 				// get result
 				String json = br.readLine();
-				String field = "speciesKey";
+				String keyField = "usageKey";
+				String rankField = "rank";
 
 				JSONObject object = new JSONObject(json);
-				if (object.has(field)) {
-					String value = object.get(field) + "";
-					value = value.replaceAll("\n", "");
-					value = value.replaceAll("\r", "");
-					value = value.replaceAll(INPUT_SEPARATOR, " ");
-					result += value;
-					// add result in the Map
-					speciesKeys.put(name, value);
-					return result;
+				if (object.has(rankField) && object.has(keyField)) {
+					String rank = object.get(rankField) + "";
+					// check if the taxon is an specie or subspecie
+					if (rank.contains("SPECIE")) {
+						String value = object.get(keyField) + "";
+						value = value.replaceAll("\n", "");
+						value = value.replaceAll("\r", "");
+						value = value.replaceAll(INPUT_SEPARATOR, " ");
+						result += value;
+						// add result in the Map
+						speciesKeys.put(name, value);
+						return result;
+					}
 				}
 
 			} catch (IOException e) {
