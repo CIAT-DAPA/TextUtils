@@ -54,7 +54,6 @@ public class FileProgressBar {
 		if (done == total) {
 			System.out.flush();
 			System.out.println();
-			init();
 		}
 	}
 

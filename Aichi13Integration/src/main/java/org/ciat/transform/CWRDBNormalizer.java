@@ -45,6 +45,9 @@ public class CWRDBNormalizer {
 
 			line = reader.readLine();
 			String past = "";
+			String header = "taxonkey" + OUTPUT_SEPARATOR + "decimallongitude" + OUTPUT_SEPARATOR + "decimallatitude"
+					+ OUTPUT_SEPARATOR + "countrycode" + OUTPUT_SEPARATOR + "type";
+			writer.println(header);
 			while (line != null) {
 
 				String normal = normalize(line);
@@ -61,7 +64,7 @@ public class CWRDBNormalizer {
 
 			}
 			bar.finish();
-			
+
 		} catch (FileNotFoundException e) {
 			System.out.println("File not found " + input.getAbsolutePath());
 		} catch (IOException e) {

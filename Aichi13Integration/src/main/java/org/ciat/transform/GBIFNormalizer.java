@@ -17,16 +17,14 @@ import java.util.TreeSet;
 import org.ciat.model.FileProgressBar;
 import org.ciat.model.Utils;
 
-public class LineFilterer {
+public class GBIFNormalizer {
 
 	private Map<String, Integer> colIndex;
 	private Set<String> taxonKeys;
 	private static final String SEPARATOR = "\t";
 
 	/** @return output file */
-	public void process(File input,File output) {
-
-
+	public void process(File input, File output) {
 
 		File taxaFile = new File("taxa.csv");
 		taxonKeys = loadTargetTaxa(taxaFile);
@@ -37,7 +35,7 @@ public class LineFilterer {
 
 			/* header */
 			String line = reader.readLine();
-			colIndex = Utils.getColumnsIndex(line,SEPARATOR);
+			colIndex = Utils.getColumnsIndex(line, SEPARATOR);
 			writer.println(line);
 			/* */
 
@@ -71,45 +69,15 @@ public class LineFilterer {
 	private boolean isUseful(String line) {
 		String[] values = line.split(SEPARATOR);
 
+		// exluding CWR dataset
+		if (colIndex.get("datasetkey") != null
+				&& values[colIndex.get("datasetkey")].contains("07044577-bd82-4089-9f3a-f4a9d2170b2e")) {
+			return false;
+		}
+
 		if (colIndex.get("taxonrank") != null) {
 			if (!values[colIndex.get("taxonrank")].contains("SPECIES")) {
 				return false;
-			}
-		}
-
-		/* excluding records with geospatial issues */
-		if (colIndex.get("decimallatitude") != null) {
-			if ((values[colIndex.get("decimallatitude")].equals("") || values[colIndex.get("decimallatitude")] == null
-					|| values[colIndex.get("decimallatitude")].equals("\\N"))
-					|| values[colIndex.get("decimallatitude")].equals("null")
-					|| values[colIndex.get("decimallatitude")].isEmpty()) {
-				return false;
-			}
-
-			if (!Utils.isNumeric(values[colIndex.get("decimallatitude")])) {
-				return false;
-			} else {
-				Double lat = Double.parseDouble(values[colIndex.get("decimallatitude")]);
-				if (lat == 0 || lat > 90 || lat < -90) {
-					return false;
-				}
-			}
-		}
-		/* excluding records with geospatial issues */
-		if (colIndex.get("decimallongitude") != null) {
-			if ((values[colIndex.get("decimallongitude")].equals("") || values[colIndex.get("decimallongitude")] == null
-					|| values[colIndex.get("decimallongitude")].equals("\\N"))
-					|| values[colIndex.get("decimallongitude")].equals("null")
-					|| values[colIndex.get("decimallongitude")].isEmpty()) {
-				return false;
-			}
-			if (!Utils.isNumeric(values[colIndex.get("decimallongitude")])) {
-				return false;
-			} else {
-				Double lat = Double.parseDouble(values[colIndex.get("decimallongitude")]);
-				if (lat == 0 || lat > 180 || lat < -180) {
-					return false;
-				}
 			}
 		}
 
@@ -154,6 +122,5 @@ public class LineFilterer {
 		}
 		return filters;
 	}
-
 
 }
