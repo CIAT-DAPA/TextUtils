@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.ciat.model.Basis;
 import org.ciat.model.FileProgressBar;
 import org.ciat.model.Utils;
 
@@ -36,7 +37,9 @@ public class GBIFNormalizer {
 			/* header */
 			String line = reader.readLine();
 			colIndex = Utils.getColumnsIndex(line, SEPARATOR);
-			writer.println(line);
+			String header = "taxonkey" + SEPARATOR + "decimallongitude" + SEPARATOR + "decimallatitude"
+					+ SEPARATOR + "countrycode" + SEPARATOR + "type";
+			writer.println(header);
 			/* */
 
 			/* progress bar */
@@ -46,8 +49,14 @@ public class GBIFNormalizer {
 			line = reader.readLine();
 			while (line != null) {
 				line += SEPARATOR + " ";
-				if (isUseful(line)) {
-					writer.println(line);
+				String[] values = line.split(SEPARATOR);
+				if (isUseful(values)) {
+					String result = values[colIndex.get("taxonkey")] + SEPARATOR
+							+ values[colIndex.get("decimallongitude")] + SEPARATOR
+							+ values[colIndex.get("decimallatitude")] + SEPARATOR + values[colIndex.get("countrycode")]
+							+ SEPARATOR + getBasis(values[colIndex.get("basisofrecord")]);
+					writer.println(result);
+					writer.println(result);
 				}
 
 				/* show progress */
@@ -66,15 +75,15 @@ public class GBIFNormalizer {
 		}
 	}
 
-	private boolean isUseful(String line) {
-		String[] values = line.split(SEPARATOR);
+	private boolean isUseful(String[] values) {
 
-		// exluding CWR dataset
+		// excluding CWR dataset
 		if (colIndex.get("datasetkey") != null
 				&& values[colIndex.get("datasetkey")].contains("07044577-bd82-4089-9f3a-f4a9d2170b2e")) {
 			return false;
 		}
 
+		// only allow species and subspecies
 		if (colIndex.get("taxonrank") != null) {
 			if (!values[colIndex.get("taxonrank")].contains("SPECIES")) {
 				return false;
@@ -121,6 +130,13 @@ public class GBIFNormalizer {
 			System.out.println("Cannot read " + vocabularyFile.getAbsolutePath());
 		}
 		return filters;
+	}
+
+	private Basis getBasis(String basisofrecord) {
+		if (basisofrecord.toUpperCase().equals("LIVING_SPECIMEN")) {
+			return Basis.G;
+		}
+		return Basis.H;
 	}
 
 }

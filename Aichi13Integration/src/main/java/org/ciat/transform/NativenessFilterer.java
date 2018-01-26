@@ -67,11 +67,6 @@ public class NativenessFilterer {
 
 	private boolean isUseful(String[] values) {
 
-		if (colIndex.get("taxonrank") != null) {
-			if (!values[colIndex.get("taxonrank")].contains("SPECIES")) {
-				return false;
-			}
-		}
 
 		/* excluding records with geospatial issues */
 		if (colIndex.get("decimallatitude") != null) {

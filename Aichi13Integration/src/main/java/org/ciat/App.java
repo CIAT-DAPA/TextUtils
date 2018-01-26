@@ -52,7 +52,7 @@ public class App {
 		// convert CWR to Maxen format
 		log("CWR to Maxent");
 		CWRDBToMaxent cwrdbToMaxent = new CWRDBToMaxent();
-		cwrdbToMaxent.process(new File("cwr2.csv"));
+		cwrdbToMaxent.process(new File("cwr3.csv"));
 		
 		log("Process finished");
 

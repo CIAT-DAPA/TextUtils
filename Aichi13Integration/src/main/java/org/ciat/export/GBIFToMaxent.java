@@ -15,7 +15,6 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import org.ciat.model.Basis;
 import org.ciat.model.FileProgressBar;
 import org.ciat.model.Utils;
 
@@ -24,7 +23,7 @@ public class GBIFToMaxent {
 	// index of columns
 	private Map<String, Integer> colIndex = new LinkedHashMap<String, Integer>();
 	// target columns
-	private String[] colTarget = { "taxonkey", "decimallongitude", "decimallatitude", "countrycode" };
+	private String[] colTarget = { "taxonkey", "decimallongitude", "decimallatitude", "countrycode", "type" };
 
 	private static final String SEPARATOR = "\t";
 
@@ -32,7 +31,7 @@ public class GBIFToMaxent {
 	public void process(File input) {
 
 		File outputDir = new File("coords");
-		if(!outputDir.exists()){
+		if (!outputDir.exists()) {
 			outputDir.mkdirs();
 		}
 
@@ -43,7 +42,7 @@ public class GBIFToMaxent {
 			/* header */
 			String line = reader.readLine();
 			if (colIndex.isEmpty()) {
-				colIndex = Utils.getColumnsIndex(line,SEPARATOR);
+				colIndex = Utils.getColumnsIndex(line, SEPARATOR);
 			}
 
 			/* progress bar */
@@ -112,24 +111,12 @@ public class GBIFToMaxent {
 		for (String col : colTarget) {
 			if (colIndex.get(col) != null) {
 				output += values[colIndex.get(col)];
+				output += SEPARATOR;
 			} else {
 				System.out.println("\"" + col + "\" is a target column not found in the file");
 			}
-			output += SEPARATOR;
 		}
-		output += getBasis(values[colIndex.get("basisofrecord")]);
 		return output;
-	}
-
-
-
-
-
-	private Basis getBasis(String basisofrecord) {
-		if (basisofrecord.toUpperCase().equals("LIVING_SPECIMEN")) {
-			return Basis.G;
-		}
-		return Basis.H;
 	}
 
 }

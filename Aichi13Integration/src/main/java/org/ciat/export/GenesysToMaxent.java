@@ -99,10 +99,10 @@ public class GenesysToMaxent {
 		for (String col : colTarget) {
 			if (colIndex.get(col) != null) {
 				output += values[colIndex.get(col)];
+				output += SEPARATOR; 
 			} else {
 				System.out.println("\"" + col + "\" is a target column not found in the file");
 			}
-			output += SEPARATOR;
 		}
 		output += Basis.G;
 		return output;

@@ -15,7 +15,6 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import org.ciat.model.Basis;
 import org.ciat.model.FileProgressBar;
 import org.ciat.model.Utils;
 
@@ -101,12 +100,11 @@ public class CWRDBToMaxent {
 		for (String col : colTarget) {
 			if (colIndex.get(col) != null) {
 				output += values[colIndex.get(col)];
+				output += SEPARATOR;
 			} else {
 				System.out.println("\"" + col + "\" is a target column not found in the file");
 			}
-			output += SEPARATOR;
 		}
-		output += Basis.G;
 		return output;
 	}
 
