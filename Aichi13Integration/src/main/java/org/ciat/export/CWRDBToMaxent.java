@@ -16,7 +16,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.ciat.model.Basis;
-import org.ciat.model.ProgressBar;
+import org.ciat.model.FileProgressBar;
 import org.ciat.model.Utils;
 
 public class CWRDBToMaxent {
@@ -44,14 +44,7 @@ public class CWRDBToMaxent {
 			}
 
 			/* progress bar */
-			ProgressBar bar = new ProgressBar();
-			int exp = (int) Math.ceil((input.length() + "").length()) + 1;
-			int dimensionality = (int) Math.pow(2, exp);
-			int total = Math.toIntExact(input.length() / dimensionality);
-			long done = line.length();
-			int lineNumber = 0;
-			System.out.println("Reading " + input.length() / 1024 + "KB");
-			System.out.println("Updating progress each " + dimensionality + "KB read");
+			FileProgressBar bar = new FileProgressBar(input.length());
 			/* */
 
 			Map<String, PrintWriter> writers = new TreeMap<String, PrintWriter>();
@@ -81,15 +74,11 @@ public class CWRDBToMaxent {
 				}
 
 				/* show progress */
-				done += line.length();
-				if (++lineNumber % dimensionality == 0) {
-					bar.update(Math.toIntExact(done / dimensionality), total);
-				}
+				bar.update(line.length());
 				/* */
 				line = reader.readLine();
 
 			}
-			bar.update(Math.toIntExact(done / dimensionality), total);
 
 			for (String key : writers.keySet()) {
 				writers.get(key).flush();
