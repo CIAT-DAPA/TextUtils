@@ -1,74 +1,85 @@
 package org.ciat.model;
 
-
-/**@author c00kiemon5ter
- * Ascii progress meter. On completion this will reset itself,
- * so it can be reused
- * <br /><br />
- * 100% ################################################## |
+/**
+ * @author c00kiemon5ter
+ * @author danipilze Ascii progress meter. modified to show progress on
+ *         processing files <br />
+ * 		<br />
+ *         100% ################################################## |
  */
 public class FileProgressBar {
-    private StringBuilder progress;
+	private StringBuilder progress;
 
-    private long lenght;
-    private int exp;
-    private int dimensionality;
-    private int total;
-    private long done;
-    private int lineNumber;
-    /**
-     * initialize progress bar properties.
-     */
-    public FileProgressBar(long fileLenght) {
-    	this.lenght=fileLenght;
-        init();
-    }
+	private long fileLenght;
+	private int exp;
+	private int dimensionality;
+	private int total;
+	private long done;
+	private int lineNumber;
 
-    /**
-     * called whenever the progress bar needs to be updated.
-     * that is whenever progress was made.
-     *
-     * @param done an int representing the work done so far
-     * @param total an int representing the total work
-     */
-    private void update(int done, int total) {
-        char[] workchars = {'|', '/', '-', '\\'};
-        String format = "\r%3d%% %s %c";
-        total= total<1?1:total;
-        
-        int percent = (++done * 100) / total;
-        int extrachars = (percent / 2) - this.progress.length();
+	/**
+	 * initialize progress bar properties.
+	 */
+	public FileProgressBar(long fileLenght) {
+		this.fileLenght = fileLenght;
+		init();
+	}
 
-        while (extrachars-- > 0) {
-            progress.append('#');
-        }
+	/**
+	 * called whenever the progress bar needs to be updated. that is whenever
+	 * progress was made.
+	 *
+	 * @param done
+	 *            an int representing the work done so far
+	 * @param total
+	 *            an int representing the total work
+	 */
+	private void update(int done, int total) {
+		char[] workchars = { '|', '/', '-', '\\' };
+		String format = "\r%3d%% %s %c";
+		total = total < 1 ? 1 : total;
 
-        System.out.printf(format, percent, progress,
-         workchars[done % workchars.length]);
+		int percent = 100;
+		if (done != total) {
+			percent = (++done * 100) / total;
+		}
+		int extrachars = (percent / 2) - this.progress.length();
 
-        if (done == total) {
-            System.out.flush();
-            System.out.println();
-            init();
-        }
-    }
-    
-    public void update(int lineLenght){
+		while (extrachars-- > 0) {
+			progress.append('#');
+		}
+
+		System.out.printf(format, percent, progress, workchars[done % workchars.length]);
+
+		if (done == total) {
+			System.out.flush();
+			System.out.println();
+			init();
+		}
+	}
+
+	public void update(int lineLenght) {
 		/* show progress */
-		done += lineLenght;
-		if (++lineNumber % dimensionality == 0) {
-			this.update(Math.toIntExact(done / dimensionality), total);
+		this.done += lineLenght;
+		if (++this.lineNumber % this.dimensionality == 0) {
+			this.update(Math.toIntExact(this.done / this.dimensionality), this.total);
 		}
 		/* */
-    }
+	}
 
-    private void init() {
-        this.progress = new StringBuilder(60);
-		this.exp = (int) Math.ceil((lenght + "").length()) + 1;
+	public void finish() {
+		/* show progress */
+		this.update(this.total, this.total);
+		/* */
+	}
+
+	private void init() {
+		this.progress = new StringBuilder(60);
+		this.exp = (int) Math.ceil((fileLenght + "").length()) + 1;
 		this.dimensionality = (int) Math.pow(2, exp);
-		this.total = Math.toIntExact(lenght / dimensionality);
-		this.done = lenght;
+		this.total = Math.toIntExact(fileLenght / dimensionality);
+		this.done = 0;
 		this.lineNumber = 0;
-		System.out.println("Processing " + lenght / 1024 + "KBs, updating progress each " + dimensionality + "KBs");
-    }
+		System.out.print("Processing " + fileLenght / 1024 + "KBs, updating progress each " + dimensionality + "KBs");
+	}
 }

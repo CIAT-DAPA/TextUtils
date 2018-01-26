@@ -82,6 +82,7 @@ public class GBIFToMaxent {
 				line = reader.readLine();
 
 			}
+			bar.finish();
 
 			for (String key : writers.keySet()) {
 				writers.get(key).flush();

@@ -79,6 +79,7 @@ public class CWRDBToMaxent {
 				line = reader.readLine();
 
 			}
+			bar.finish();
 
 			for (String key : writers.keySet()) {
 				writers.get(key).flush();

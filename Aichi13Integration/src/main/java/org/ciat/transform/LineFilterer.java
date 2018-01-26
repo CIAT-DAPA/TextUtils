@@ -59,6 +59,7 @@ public class LineFilterer {
 				line = reader.readLine();
 
 			}
+			bar.finish();
 
 		} catch (FileNotFoundException e) {
 			System.out.println("File not found " + input.getAbsolutePath());
