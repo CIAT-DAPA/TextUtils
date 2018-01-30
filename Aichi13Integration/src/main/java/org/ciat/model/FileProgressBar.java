@@ -79,6 +79,6 @@ public class FileProgressBar {
 		this.total = Math.toIntExact(fileLenght / dimensionality);
 		this.done = 0;
 		this.lineNumber = 0;
-		System.out.print("Processing " + fileLenght / 1024 + "KBs, updating progress each " + dimensionality + "KBs");
+		System.out.println("Processing " + fileLenght / 1024 + "KBs, updating progress each " + dimensionality + "KBs");
 	}
 }

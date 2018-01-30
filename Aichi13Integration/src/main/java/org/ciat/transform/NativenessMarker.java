@@ -16,7 +16,7 @@ import org.ciat.model.FileProgressBar;
 import org.ciat.model.TaxonNativeness;
 import org.ciat.model.Utils;
 
-public class NativenessFilterer {
+public class NativenessMarker {
 
 	private Map<String, Integer> colIndex;
 	private Map<Integer, TaxonNativeness> taxaCWR;

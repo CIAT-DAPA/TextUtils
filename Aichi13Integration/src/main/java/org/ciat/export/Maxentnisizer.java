@@ -14,25 +14,28 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import org.ciat.model.Basis;
+
 import org.ciat.model.FileProgressBar;
 import org.ciat.model.Utils;
 
-public class GenesysToMaxent {
+public class Maxentnisizer {
 
 	// index of columns
 	private Map<String, Integer> colIndex = new LinkedHashMap<String, Integer>();
 	// target columns
-	private String[] colTarget = { "taxonkey", "decimallongitude", "decimallatitude", "countrycode" };
+	private String[] colTarget = { "taxonkey", "decimallongitude", "decimallatitude", "countrycode", "type" };
 
 	private static final String SEPARATOR = "\t";
 
+	/** @return output file */
 	public void process(File input) {
 
 		File outputDir = new File("coords");
 		if (!outputDir.exists()) {
 			outputDir.mkdirs();
 		}
+
+		clearOutputDirectory(outputDir);
 
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(input), "UTF-8"))) {
 
@@ -72,11 +75,12 @@ public class GenesysToMaxent {
 					coords.get(taxon).add(coord);
 				}
 
+				/* show progress */
 				bar.update(line.length());
+				/* */
 				line = reader.readLine();
 
 			}
-			
 			bar.finish();
 
 			for (String key : writers.keySet()) {
@@ -86,11 +90,19 @@ public class GenesysToMaxent {
 
 		} catch (FileNotFoundException e) {
 			System.out.println("File not found " + input.getAbsolutePath());
-			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
 
+	private void clearOutputDirectory(File outputDir) {
+		if (outputDir.exists()) {
+			for (File f : outputDir.listFiles()) {
+				f.delete();
+			}
+		} else {
+			outputDir.mkdir();
+		}
 	}
 
 	/** Getting only targeted values **/
@@ -99,12 +111,11 @@ public class GenesysToMaxent {
 		for (String col : colTarget) {
 			if (colIndex.get(col) != null) {
 				output += values[colIndex.get(col)];
-				output += SEPARATOR; 
+				output += SEPARATOR;
 			} else {
 				System.out.println("\"" + col + "\" is a target column not found in the file");
 			}
 		}
-		output += Basis.G;
 		return output;
 	}
 

@@ -10,19 +10,15 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.LinkedHashSet;
-import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 
 import org.ciat.model.Basis;
 import org.ciat.model.FileProgressBar;
 import org.ciat.model.Utils;
 
-public class GBIFNormalizer {
+public class GBIFNormalizer extends Normalizer {
 
-	private Map<String, Integer> colIndex;
 	private Set<String> taxonKeys;
-	private static final String SEPARATOR = "\t";
 
 	/** @return output file */
 	public void process(File input, File output) {
@@ -30,16 +26,13 @@ public class GBIFNormalizer {
 		File taxaFile = new File("taxa.csv");
 		taxonKeys = loadTargetTaxa(taxaFile);
 
-		try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(output)));
+		try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(output, true)));
 				BufferedReader reader = new BufferedReader(
 						new InputStreamReader(new FileInputStream(input), "UTF-8"))) {
 
 			/* header */
 			String line = reader.readLine();
 			colIndex = Utils.getColumnsIndex(line, SEPARATOR);
-			String header = "taxonkey" + SEPARATOR + "decimallongitude" + SEPARATOR + "decimallatitude"
-					+ SEPARATOR + "countrycode" + SEPARATOR + "type";
-			writer.println(header);
 			/* */
 
 			/* progress bar */
@@ -51,11 +44,7 @@ public class GBIFNormalizer {
 				line += SEPARATOR + " ";
 				String[] values = line.split(SEPARATOR);
 				if (isUseful(values)) {
-					String result = values[colIndex.get("taxonkey")] + SEPARATOR
-							+ values[colIndex.get("decimallongitude")] + SEPARATOR
-							+ values[colIndex.get("decimallatitude")] + SEPARATOR + values[colIndex.get("countrycode")]
-							+ SEPARATOR + getBasis(values[colIndex.get("basisofrecord")]);
-					writer.println(result);
+					String result = normalize(values);
 					writer.println(result);
 				}
 
@@ -73,6 +62,12 @@ public class GBIFNormalizer {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private String normalize(String[] values) {
+		return values[colIndex.get("taxonkey")] + SEPARATOR + values[colIndex.get("decimallongitude")] + SEPARATOR
+				+ values[colIndex.get("decimallatitude")] + SEPARATOR + values[colIndex.get("countrycode")] + SEPARATOR
+				+ getBasis(values[colIndex.get("basisofrecord")]);
 	}
 
 	private boolean isUseful(String[] values) {
@@ -112,27 +107,7 @@ public class GBIFNormalizer {
 		return true;
 	}
 
-	private Set<String> loadTargetTaxa(File vocabularyFile) {
-		Set<String> filters = new TreeSet<String>();
-		try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(vocabularyFile)))) {
-
-			String line = reader.readLine();
-			while (line != null) {
-				if (!line.isEmpty()) {
-					filters.add(line);
-				}
-				line = reader.readLine();
-			}
-
-		} catch (FileNotFoundException e) {
-			System.out.println("File not found " + vocabularyFile.getAbsolutePath());
-		} catch (IOException e) {
-			System.out.println("Cannot read " + vocabularyFile.getAbsolutePath());
-		}
-		return filters;
-	}
-
-	private Basis getBasis(String basisofrecord) {
+	public Basis getBasis(String basisofrecord) {
 		if (basisofrecord.toUpperCase().equals("LIVING_SPECIMEN")) {
 			return Basis.G;
 		}
