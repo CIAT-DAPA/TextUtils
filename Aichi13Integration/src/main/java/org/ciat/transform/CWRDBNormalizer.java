@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
+import org.ciat.model.DataSourceName;
 import org.ciat.model.FileProgressBar;
 import org.ciat.model.TaxonFinder;
 import org.ciat.model.Utils;
@@ -21,7 +22,7 @@ public class CWRDBNormalizer extends Normalizer{
 
 	public void process(File input, File output) {
 
-		try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(output)));
+		try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(output, true)));
 				BufferedReader reader = new BufferedReader(
 						new InputStreamReader(new FileInputStream(input), "UTF-8"))) {
 
@@ -89,7 +90,7 @@ public class CWRDBNormalizer extends Normalizer{
 										String taxonKey = TaxonFinder.getInstance().fetchTaxonInfo(values[colIndex.get("taxon_final")]);
 										if (taxonKey != null) {
 											String result = taxonKey + SEPARATOR + lon + SEPARATOR + lat
-													+ SEPARATOR + country + SEPARATOR + basis;
+													+ SEPARATOR + country + SEPARATOR + basis + SEPARATOR + getDataSourceName();
 											return result;
 										}
 									}
@@ -105,6 +106,8 @@ public class CWRDBNormalizer extends Normalizer{
 
 
 
-	
+	private DataSourceName getDataSourceName() {
+		return DataSourceName.CWRDB;
+	}
 
 }

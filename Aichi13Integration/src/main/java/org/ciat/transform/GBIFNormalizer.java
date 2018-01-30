@@ -13,7 +13,9 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.ciat.model.Basis;
+import org.ciat.model.DataSourceName;
 import org.ciat.model.FileProgressBar;
+import org.ciat.model.TargetTaxa;
 import org.ciat.model.Utils;
 
 public class GBIFNormalizer extends Normalizer {
@@ -23,8 +25,7 @@ public class GBIFNormalizer extends Normalizer {
 	/** @return output file */
 	public void process(File input, File output) {
 
-		File taxaFile = new File("taxa.csv");
-		taxonKeys = loadTargetTaxa(taxaFile);
+		taxonKeys = TargetTaxa.getInstance().getSpeciesKeys();
 
 		try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(output, true)));
 				BufferedReader reader = new BufferedReader(
@@ -65,9 +66,10 @@ public class GBIFNormalizer extends Normalizer {
 	}
 
 	private String normalize(String[] values) {
-		return values[colIndex.get("taxonkey")] + SEPARATOR + values[colIndex.get("decimallongitude")] + SEPARATOR
-				+ values[colIndex.get("decimallatitude")] + SEPARATOR + values[colIndex.get("countrycode")] + SEPARATOR
-				+ getBasis(values[colIndex.get("basisofrecord")]);
+		String result = values[colIndex.get("taxonkey")] + SEPARATOR + values[colIndex.get("decimallongitude")]
+				+ SEPARATOR + values[colIndex.get("decimallatitude")] + SEPARATOR + values[colIndex.get("countrycode")]
+				+ SEPARATOR + getBasis(values[colIndex.get("basisofrecord")]) + SEPARATOR + getDataSourceName();
+		return result;
 	}
 
 	private boolean isUseful(String[] values) {
@@ -107,11 +109,15 @@ public class GBIFNormalizer extends Normalizer {
 		return true;
 	}
 
-	public Basis getBasis(String basisofrecord) {
+	private Basis getBasis(String basisofrecord) {
 		if (basisofrecord.toUpperCase().equals("LIVING_SPECIMEN")) {
 			return Basis.G;
 		}
 		return Basis.H;
+	}
+
+	private DataSourceName getDataSourceName() {
+		return DataSourceName.GBIF;
 	}
 
 }

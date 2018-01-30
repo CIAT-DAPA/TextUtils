@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.ciat.model.FileProgressBar;
+import org.ciat.model.Nativeness;
 import org.ciat.model.TaxonNativeness;
 import org.ciat.model.Utils;
 
@@ -22,19 +23,18 @@ public class NativenessMarker {
 	private Map<Integer, TaxonNativeness> taxaCWR;
 	private static final String SEPARATOR = "\t";
 
-	public void process(File input,File output) {
+	public void process(File input, File output) {
 
 		File taxaFile = new File("nativeness.csv");
 		taxaCWR = loadTargetTaxaNativeness(taxaFile);
 
-		try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(output)));
+		try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(output, true)));
 				BufferedReader reader = new BufferedReader(
 						new InputStreamReader(new FileInputStream(input), "UTF-8"))) {
 
 			/* header */
 			String line = reader.readLine();
-			colIndex = Utils.getColumnsIndex(line,SEPARATOR);
-			writer.println(line);
+			colIndex = Utils.getColumnsIndex(line, SEPARATOR);
 			/* */
 
 			/* progress bar */
@@ -43,11 +43,14 @@ public class NativenessMarker {
 
 			line = reader.readLine();
 			while (line != null) {
-				line += SEPARATOR + " ";
+				line += SEPARATOR;
 				String[] values = line.split(SEPARATOR);
-				if (isUseful(values)) {
-					writer.println(line);
+				if (values.length == colIndex.size() && isNative(values)) {
+					line += Nativeness.N;
+				} else {
+					line += Nativeness.C;
 				}
+				writer.println(line);
 
 				/* show progress */
 				bar.update(line.length());
@@ -65,45 +68,7 @@ public class NativenessMarker {
 		}
 	}
 
-	private boolean isUseful(String[] values) {
-
-
-		/* excluding records with geospatial issues */
-		if (colIndex.get("decimallatitude") != null) {
-			if ((values[colIndex.get("decimallatitude")].equals("") || values[colIndex.get("decimallatitude")] == null
-					|| values[colIndex.get("decimallatitude")].equals("\\N"))
-					|| values[colIndex.get("decimallatitude")].equals("null")
-					|| values[colIndex.get("decimallatitude")].isEmpty()) {
-				return false;
-			}
-
-			if (!Utils.isNumeric(values[colIndex.get("decimallatitude")])) {
-				return false;
-			} else {
-				Double lat = Double.parseDouble(values[colIndex.get("decimallatitude")]);
-				if (lat == 0 || lat > 90 || lat < -90) {
-					return false;
-				}
-			}
-		}
-		/* excluding records with geospatial issues */
-		if (colIndex.get("decimallongitude") != null) {
-			if ((values[colIndex.get("decimallongitude")].equals("") || values[colIndex.get("decimallongitude")] == null
-					|| values[colIndex.get("decimallongitude")].equals("\\N"))
-					|| values[colIndex.get("decimallongitude")].equals("null")
-					|| values[colIndex.get("decimallongitude")].isEmpty()) {
-				return false;
-			}
-			if (!Utils.isNumeric(values[colIndex.get("decimallongitude")])) {
-				return false;
-			} else {
-				Double lat = Double.parseDouble(values[colIndex.get("decimallongitude")]);
-				if (lat == 0 || lat > 180 || lat < -180) {
-					return false;
-				}
-			}
-		}
-
+	private boolean isNative(String[] values) {
 
 		/* check if it's a target taxon */
 		if (colIndex.get("taxonkey") != null && colIndex.get("countrycode") != null) {
@@ -151,7 +116,5 @@ public class NativenessMarker {
 
 		return CWRs;
 	}
-
-
 
 }

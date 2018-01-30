@@ -9,11 +9,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
 
 import org.ciat.model.Basis;
+import org.ciat.model.DataSourceName;
 import org.ciat.model.FileProgressBar;
 import org.ciat.model.Utils;
 
@@ -35,23 +33,14 @@ public class GenesysNormalizer extends Normalizer {
 			FileProgressBar bar = new FileProgressBar(input.length());
 			/* */
 
-			Map<String, Set<String>> coords = new TreeMap<String, Set<String>>();
-
 			line = reader.readLine();
 			while (line != null) {
 				line += SEPARATOR + " ";
 
 				String[] values = line.split(SEPARATOR);
 
-				String taxon = values[colIndex.get("taxonkey")];
-
-				// get only target values to print
-				String occurrence = getTargetValues(values);
-				// include them only if they are new to avoid duplicates
-				if (!coords.get(taxon).contains(occurrence)) {
-					writer.println(occurrence);
-					coords.get(taxon).add(occurrence);
-				}
+				String result = normalize(values);
+				writer.println(result);
 
 				bar.update(line.length());
 				line = reader.readLine();
@@ -66,15 +55,18 @@ public class GenesysNormalizer extends Normalizer {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
 
 	}
-	
-	
-	public Basis getBasis(String basisofrecord) {
-		return Basis.G;
+
+	private String normalize(String[] values) {
+		String result = "";
+
+		result += Basis.G + SEPARATOR + getDataSourceName();
+		return result;
 	}
 
-
+	private DataSourceName getDataSourceName() {
+		return DataSourceName.GENESYS;
+	}
 
 }

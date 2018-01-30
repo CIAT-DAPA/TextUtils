@@ -30,7 +30,7 @@ public class App {
 		log("Starting process");
 
 		File normalized = new File("data1.csv");		
-		try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(normalized, true)))) {
+		try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(normalized)))) {
 			String header = (new Normalizer()).getHeader();
 			writer.println(header);
 		} catch (FileNotFoundException e) {
@@ -40,8 +40,8 @@ public class App {
 		}
 
 		File nativenessed = new File("data2.csv");
-		try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(nativenessed, true)))) {
-			String header = (new Normalizer()).getHeader();
+		try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(nativenessed)))) {
+			String header = (new Normalizer()).getHeader()+ Normalizer.SEPARATOR + "origin";
 			writer.println(header);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -61,8 +61,8 @@ public class App {
 
 		// filter CWR data
 		log("Normalizing CWR data");
-		CWRDBNormalizer cwrdbNormalizer_ = new CWRDBNormalizer();
-		cwrdbNormalizer_.process(new File("cwr.csv"), normalized);
+		CWRDBNormalizer cwrdbNormalizer = new CWRDBNormalizer();
+		cwrdbNormalizer.process(new File("cwr.csv"), normalized);
 
 		log("Marking nativeness");
 		NativenessMarker nativenessMarker = new NativenessMarker();

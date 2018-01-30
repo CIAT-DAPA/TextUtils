@@ -10,7 +10,7 @@ public interface Normalizable {
 		return null;
 	}
 	
-	public static DataSourceName getSource() {
+	public static DataSourceName getDataSourceName() {
 		return null;
 	}
 	

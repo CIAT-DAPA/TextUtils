@@ -23,7 +23,7 @@ public class Maxentnisizer {
 	// index of columns
 	private Map<String, Integer> colIndex = new LinkedHashMap<String, Integer>();
 	// target columns
-	private String[] colTarget = { "taxonkey", "decimallongitude", "decimallatitude", "countrycode", "type" };
+	private String[] colTarget = { "taxonkey", "decimallongitude", "decimallatitude", "countrycode", "basis" };
 
 	private static final String SEPARATOR = "\t";
 
@@ -109,11 +109,11 @@ public class Maxentnisizer {
 	private String getTargetValues(String[] values) {
 		String output = "";
 		for (String col : colTarget) {
-			if (colIndex.get(col) != null) {
+			if (values.length==colIndex.size() && colIndex.get(col) != null) {
 				output += values[colIndex.get(col)];
 				output += SEPARATOR;
 			} else {
-				System.out.println("\"" + col + "\" is a target column not found in the file");
+				System.out.println("\"" + col + "\" is a target column not found in the record");
 			}
 		}
 		return output;
