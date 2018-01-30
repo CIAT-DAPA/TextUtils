@@ -10,14 +10,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
+import org.ciat.model.Basis;
 import org.ciat.model.DataSourceName;
 import org.ciat.model.FileProgressBar;
 import org.ciat.model.TaxonFinder;
 import org.ciat.model.Utils;
 
-public class CWRDBNormalizer extends Normalizer{
+public class CWRDBNormalizer extends Normalizer {
 
-	
 	private static final String INPUT_SEPARATOR = "\\|";
 
 	public void process(File input, File output) {
@@ -44,10 +44,12 @@ public class CWRDBNormalizer extends Normalizer{
 
 				line = line.replace("\"", "");
 				String[] values = line.split(INPUT_SEPARATOR);
-				String normal = normalize(values);
-				if (normal != null && !normal.equals(past)) {
-					writer.println(normal);
-					past = normal;
+				if (isUseful(values)) {
+					String normal = normalize(values);
+					if (normal != null && !normal.equals(past)) {
+						writer.println(normal);
+						past = normal;
+					}
 				}
 
 				/* show progress */
@@ -67,6 +69,17 @@ public class CWRDBNormalizer extends Normalizer{
 	}
 
 	private String normalize(String[] values) {
+		String lon = values[colIndex.get("final_lon")];
+		String lat = values[colIndex.get("final_lat")];
+		String country = values[colIndex.get("final_iso2")];
+		String basis = values[colIndex.get("source")];
+		String taxonKey = TaxonFinder.getInstance().fetchTaxonInfo(values[colIndex.get("taxon_final")]);
+		String result = taxonKey + SEPARATOR + lon + SEPARATOR + lat + SEPARATOR + country + SEPARATOR + basis
+				+ SEPARATOR + getDataSourceName();
+		return result;
+	}
+
+	private boolean isUseful(String[] values) {
 
 		if (values.length == colIndex.size()) {
 			if (!values[colIndex.get("final_origin_stat")].equals("introduced")) {
@@ -85,13 +98,20 @@ public class CWRDBNormalizer extends Normalizer{
 									String lat = values[colIndex.get("final_lat")];
 									String country = values[colIndex.get("final_iso2")];
 									String basis = values[colIndex.get("source")];
-									if (year >= Normalizer.YEAR && Utils.isNumeric(lon) && Utils.isNumeric(lat) && country.length() == 2) {
-
-										String taxonKey = TaxonFinder.getInstance().fetchTaxonInfo(values[colIndex.get("taxon_final")]);
-										if (taxonKey != null) {
-											String result = taxonKey + SEPARATOR + lon + SEPARATOR + lat
-													+ SEPARATOR + country + SEPARATOR + basis + SEPARATOR + getDataSourceName();
-											return result;
+									if (year >= Normalizer.YEAR) {
+										if (basis.equals(Basis.G.toString()) || basis.equals(Basis.H.toString())) {
+											if (Utils.isNumeric(lon) && Utils.isNumeric(lat) && country.length() == 2) {
+												
+												if(Utils.areValidCoordinates(lat,lon)){
+													
+													String taxonKey = TaxonFinder.getInstance()
+															.fetchTaxonInfo(values[colIndex.get("taxon_final")]);
+													if (taxonKey != null) {
+														return true;
+													}
+		
+												}
+											}
 										}
 									}
 								}
@@ -101,10 +121,8 @@ public class CWRDBNormalizer extends Normalizer{
 				}
 			}
 		}
-		return null;
+		return false;
 	}
-
-
 
 	private DataSourceName getDataSourceName() {
 		return DataSourceName.CWRDB;

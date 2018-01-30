@@ -1,53 +1,42 @@
-decimallongitude	decimallatitude	taxonkey	countrycode
-67.9	36.7	5289792	AF
-67.933333	33.116667	5289792	AF
-63.25	34.93333333	5289792	AF
-67.7	32.7	5289792	AF
-67.88333333	36.18333333	5289792	AF
-65.5	31.41666667	5289792	AF
-67.9	36.7	5289792	AF
-68.8598	36.0959	5289792	AF
-66.78	34.36	5289793	AF
-66	34	5289793	AF
-68.9	36.7	5289793	AF
-62.166667	34.333333	5289793	AF
-64.621582	35.852327	9035686	AF
-68.3	36.7	9035686	AF
-62.11666667	34.68333333	5289793	AF
-68.71416667	35.94888889	5289793	AF
-66.78333333	34.36666667	5289793	AF
-70.11666667	37.03333333	5289793	AF
-67.88333333	36.18333333	5289793	AF
-68.9	36.7	5289793	AF
-62.93333333	34.53333333	5289793	AF
-68.5465	35.9352	5289793	AF
-70.6025	37.0822	5289793	AF
-70.1938	36.6778	5289793	AF
-70.2232	37.1722	5289793	AF
-70.0361	36.803	5289793	AF
-70.4627	37.213	5289793	AF
-70.1333	36.9667	5289793	AF
-70.8515	36.8729	5289793	AF
-68.5205	35.8854	8239089	AF
-67.81666667	34.81666667	2705297	AF
-65.75	31	2705297	AF
-67.81666667	34.81666667	2705297	AF
-71.06833333	36.91638889	2705297	AF
-67.16666667	34.38333333	2705297	AF
-67.53333333	34.81666667	2705297	AF
-66.95	34.63333333	2705297	AF
-69.1	35.3	2705297	AF
-69.18333333	34.51666667	2705286	AF
-69.41666667	34.5	2705286	AF
-69.06666667	34.63333333	2705286	AF
-68.9	36.4	2705286	AF
-68.95	34.6	5671916	AF
-67.8	34.85	7226747	AF
-67	36.68333333	2705400	AF
-62.1	34.65	6313800	AF
-62.91666667	32.61666667	6313800	AF
-65.75361111	36.66722222	6313800	AF
-65.16666667	31.73333333	6313800	AF
-65.70527778	31.60777778	6313800	AF
-63.11666667	34.98333333	6313800	AF
-63.18333333	34.5	6313800	AF
+a.id, a.instCode, a.acceNumb, a.orgCty, t.id, t.genus, t.species, t.spAuthor, t.subTaxa, t.subtAuthor, t.taxonName, decimallongitude, decimallatitude, g.datum, g.method, g.uncertainty, g.elevation
+"4463074","TWN001","VI060718","GHA","99292","Abelmoschus","manihot","","","","Abelmoschus manihot",\N,\N,\N,\N,\N,\N
+"4463075","TWN001","VI060716","GHA","99292","Abelmoschus","manihot","","","","Abelmoschus manihot",\N,\N,\N,\N,\N,\N
+"4463076","TWN001","VI060717","GHA","99292","Abelmoschus","manihot","","","","Abelmoschus manihot",\N,\N,\N,\N,\N,\N
+"4463077","TWN001","VI060707","BEN","99292","Abelmoschus","manihot","","","","Abelmoschus manihot",\N,\N,\N,\N,\N,\N
+"4463079","TWN001","VI060705","BEN","99292","Abelmoschus","manihot","","","","Abelmoschus manihot",\N,\N,\N,\N,\N,\N
+"4464582","TWN001","VI060726","GIN","99292","Abelmoschus","manihot","","","","Abelmoschus manihot",\N,\N,\N,\N,\N,\N
+"4464591","TWN001","VI060722","GIN","99292","Abelmoschus","manihot","","","","Abelmoschus manihot",\N,\N,\N,\N,\N,\N
+"4464592","TWN001","VI060728","GIN","99292","Abelmoschus","manihot","","","","Abelmoschus manihot",\N,\N,\N,\N,\N,\N
+"4464594","TWN001","VI060723","GIN","99292","Abelmoschus","manihot","","","","Abelmoschus manihot",\N,\N,\N,\N,\N,\N
+"4464595","TWN001","VI060720","GHA","99292","Abelmoschus","manihot","","","","Abelmoschus manihot",\N,\N,\N,\N,\N,\N
+"4464596","TWN001","VI060727","GIN","99292","Abelmoschus","manihot","","","","Abelmoschus manihot",\N,\N,\N,\N,\N,\N
+"4464597","TWN001","VI060721","GHA","99292","Abelmoschus","manihot","","","","Abelmoschus manihot",\N,\N,\N,\N,\N,\N
+"4464603","TWN001","VI060724","GIN","99292","Abelmoschus","manihot","","","","Abelmoschus manihot",\N,\N,\N,\N,\N,\N
+"4464604","TWN001","VI060725","GIN","99292","Abelmoschus","manihot","","","","Abelmoschus manihot",\N,\N,\N,\N,\N,\N
+"4464586","TWN001","VI060729","IND","206083","Abelmoschus","manihot","","var. tetraphyllus","","Abelmoschus manihot var. tetraphyllus",\N,\N,\N,\N,\N,\N
+"4464589","TWN001","VI060730","IND","206083","Abelmoschus","manihot","","var. tetraphyllus","","Abelmoschus manihot var. tetraphyllus",\N,\N,\N,\N,\N,\N
+"14800","USA016","PI 497024","GHA","148921","Abelmoschus","manihot","(L.) Medik.","","","Abelmoschus manihot (L.) Medik.","-1.66666667","6.83333333",\N,\N,\N,\N
+"14801","USA016","PI 497068","GIN","148921","Abelmoschus","manihot","(L.) Medik.","","","Abelmoschus manihot (L.) Medik.","-11.83333333","10.66666667",\N,\N,\N,\N
+"14802","USA016","PI 497080","GIN","148921","Abelmoschus","manihot","(L.) Medik.","","","Abelmoschus manihot (L.) Medik.","-13","11.91666667",\N,\N,\N,\N
+"14803","USA016","PI 497112","GIN","148921","Abelmoschus","manihot","(L.) Medik.","","","Abelmoschus manihot (L.) Medik.","-10.91666667","9.66666667",\N,\N,\N,\N
+"14804","USA016","PI 497114","CIV","148921","Abelmoschus","manihot","(L.) Medik.","","","Abelmoschus manihot (L.) Medik.","-4.18333333","9.6",\N,\N,\N,\N
+"14805","USA016","PI 497124","CIV","148921","Abelmoschus","manihot","(L.) Medik.","","","Abelmoschus manihot (L.) Medik.","-3.03333333","7.43333333",\N,\N,\N,\N
+"14806","USA016","PI 497138","TGO","148921","Abelmoschus","manihot","(L.) Medik.","","","Abelmoschus manihot (L.) Medik.","1.25","6.91666667",\N,\N,\N,\N
+"14807","USA016","PI 497140","TGO","148921","Abelmoschus","manihot","(L.) Medik.","","","Abelmoschus manihot (L.) Medik.","1.25","6.91666667",\N,\N,\N,\N
+"14808","USA016","PI 497145","TGO","148921","Abelmoschus","manihot","(L.) Medik.","","","Abelmoschus manihot (L.) Medik.","1.25","7.33333333",\N,\N,\N,\N
+"14809","USA016","PI 497146","TGO","148921","Abelmoschus","manihot","(L.) Medik.","","","Abelmoschus manihot (L.) Medik.","1.25","7.33333333",\N,\N,\N,\N
+"14810","USA016","PI 497150","TGO","148921","Abelmoschus","manihot","(L.) Medik.","","","Abelmoschus manihot (L.) Medik.","1.5","7.5",\N,\N,\N,\N
+"14811","USA016","PI 497158","TGO","148921","Abelmoschus","manihot","(L.) Medik.","","","Abelmoschus manihot (L.) Medik.","1.08333333","8",\N,\N,\N,\N
+"14812","USA016","PI 497182","TGO","148921","Abelmoschus","manihot","(L.) Medik.","","","Abelmoschus manihot (L.) Medik.","1","8.58333333",\N,\N,\N,\N
+"14813","USA016","PI 497208","TGO","148921","Abelmoschus","manihot","(L.) Medik.","","","Abelmoschus manihot (L.) Medik.","0.58333333","10.66666667",\N,\N,\N,\N
+"14814","USA016","PI 497216","TGO","148921","Abelmoschus","manihot","(L.) Medik.","","","Abelmoschus manihot (L.) Medik.","1.08333333","9.33333333",\N,\N,\N,\N
+"14815","USA016","PI 497228","TGO","148921","Abelmoschus","manihot","(L.) Medik.","","","Abelmoschus manihot (L.) Medik.","0.41666667","7.66666667",\N,\N,\N,\N
+"30751","USA016","PI 496992","BEN","148921","Abelmoschus","manihot","(L.) Medik.","","","Abelmoschus manihot (L.) Medik.","1.66666667","9.16666667",\N,\N,\N,\N
+"30752","USA016","PI 497021","CMR","148921","Abelmoschus","manihot","(L.) Medik.","","","Abelmoschus manihot (L.) Medik.","9.16666667","4.83333333",\N,\N,\N,\N
+"30753","USA016","PI 497051","GIN","148921","Abelmoschus","manihot","(L.) Medik.","","","Abelmoschus manihot (L.) Medik.","-10.5","8.83333333",\N,\N,\N,\N
+"30754","USA016","PI 497118","CIV","148921","Abelmoschus","manihot","(L.) Medik.","","","Abelmoschus manihot (L.) Medik.","-4.25","9.66666667",\N,\N,\N,\N
+"30755","USA016","PI 497157","TGO","148921","Abelmoschus","manihot","(L.) Medik.","","","Abelmoschus manihot (L.) Medik.","1.16666667","8.08333333",\N,\N,\N,\N
+"31258","USA022","W6 26150","GEO","194498","Vicia","sativa","L.","subsp. cordata","(Wulfen ex Hoppe) Batt.","Vicia sativa L. subsp. cordata (Wulfen ex Hoppe) Batt.","44.69222222","41.64055556",\N,\N,\N,\N
+"270413","USA022","W6 26144","GEO","194498","Vicia","sativa","L.","subsp. cordata","(Wulfen ex Hoppe) Batt.","Vicia sativa L. subsp. cordata (Wulfen ex Hoppe) Batt.","44.67083333","41.66888889",\N,\N,\N,\N
+"286335","USA022","W6 26110","GEO","194498","Vicia","sativa","L.","subsp. cordata","(Wulfen ex Hoppe) Batt.","Vicia sativa L. subsp. cordata (Wulfen ex Hoppe) Batt.","44.52222222","41.60194444",\N,\N,\N,"278"
+"493088","USA022","W6 26106","GEO","194498","Vicia","sativa","L.","subsp. cordata","(Wulfen ex Hoppe) Batt.","Vicia sativa L. subsp. cordata (Wulfen ex Hoppe) Batt.","44.41444444","41.66305556",\N,\N,\N,"939"

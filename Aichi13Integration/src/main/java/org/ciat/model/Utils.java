@@ -25,4 +25,24 @@ public class Utils {
 		}
 		return colIndex;
 	}
+
+	public static boolean areValidCoordinates(String decimallatitude, String decimallongitude) {
+		if (!isNumeric(decimallatitude)) {
+			return false;
+		} else {
+			Double lat = Double.parseDouble(decimallatitude);
+			if (lat == 0 || lat > 90 || lat < -90) {
+				return false;
+			}
+		}
+		if (!isNumeric(decimallongitude)) {
+			return false;
+		} else {
+			Double lat = Double.parseDouble(decimallongitude);
+			if (lat == 0 || lat > 180 || lat < -180) {
+				return false;
+			}
+		}
+		return true;
+	}
 }

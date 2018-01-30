@@ -109,11 +109,9 @@ public class Maxentnisizer {
 	private String getTargetValues(String[] values) {
 		String output = "";
 		for (String col : colTarget) {
-			if (values.length==colIndex.size() && colIndex.get(col) != null) {
+			if (values.length > colIndex.size() && colIndex.get(col) != null) {
 				output += values[colIndex.get(col)];
 				output += SEPARATOR;
-			} else {
-				System.out.println("\"" + col + "\" is a target column not found in the record");
 			}
 		}
 		return output;

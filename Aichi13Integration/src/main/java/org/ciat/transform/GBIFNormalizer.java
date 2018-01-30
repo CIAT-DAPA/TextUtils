@@ -96,7 +96,11 @@ public class GBIFNormalizer extends Normalizer {
 				return false;
 			}
 		}
-		/**/
+		
+		if(!Utils.areValidCoordinates(values[colIndex.get("decimallatitude")],values[colIndex.get("decimallongitude")])){
+			return false;
+		}
+		
 
 		if (colIndex.get("taxonkey") != null) {
 			/* check if it's a target taxon */

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -30,7 +31,7 @@ public class TaxonFinder {
 
 		URLConnection urlc;
 		try {
-			URL url = new URL("http://api.gbif.org/v1/species/match?kingdom=Plantae&name=" + name + "");
+			URL url = new URL("http://api.gbif.org/v1/species/match?kingdom=Plantae&name=" + URLEncoder.encode(name,"UTF-8") + "");
 
 			urlc = url.openConnection();
 			// use post mode
