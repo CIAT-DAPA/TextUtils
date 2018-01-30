@@ -1,9 +1,14 @@
 package org.ciat.model;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class Utils {
+	
+	private static Map<String, Locale> localeMap= initCountryCodeMapping();
+	
 	public static boolean isNumeric(String str) {
 		if (str == null) {
 			return false;
@@ -44,5 +49,24 @@ public class Utils {
 			}
 		}
 		return true;
+	}
+
+	private static Map<String, Locale> initCountryCodeMapping() {
+		String[] countries = Locale.getISOCountries();
+		Map<String, Locale> localeMap = new HashMap<String, Locale>(countries.length);
+		for (String country : countries) {
+			Locale locale = new Locale("", country);
+			localeMap.put(locale.getISO3Country().toUpperCase(), locale);
+		}
+	return localeMap;
+	}
+
+	public static String iso3CountryCodeToIso2CountryCode(String iso3CountryCode) {
+		return localeMap.get(iso3CountryCode).getCountry();
+	}
+
+	public static String iso2CountryCodeToIso3CountryCode(String iso2CountryCode) {
+		Locale locale = new Locale("", iso2CountryCode);
+		return locale.getISO3Country();
 	}
 }

@@ -81,9 +81,8 @@ public class GenesysNormalizer extends Normalizer {
 	private String normalize(String[] values) {
 		String lon = values[colIndex.get("decimallongitude")];
 		String lat = values[colIndex.get("decimallatitude")];
-		String country = values[colIndex.get("a.orgCty")];
+		String country = Utils.iso3CountryCodeToIso2CountryCode(values[colIndex.get("a.orgCty")]);
 		String basis = Basis.G.toString();
-		System.out.println(values[colIndex.get("t.taxonName")]);
 		String taxonKey = TaxonFinder.getInstance().fetchTaxonInfo(values[colIndex.get("t.taxonName")]);
 		String result = taxonKey + SEPARATOR + lon + SEPARATOR + lat + SEPARATOR + country + SEPARATOR + basis
 				+ SEPARATOR + getDataSourceName();
