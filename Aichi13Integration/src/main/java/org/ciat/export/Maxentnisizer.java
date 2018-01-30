@@ -23,7 +23,7 @@ public class Maxentnisizer {
 	// index of columns
 	private Map<String, Integer> colIndex = new LinkedHashMap<String, Integer>();
 	// target columns
-	private String[] colTarget = { "taxonkey", "decimallongitude", "decimallatitude", "countrycode", "basis" };
+	private String[] colTarget = { "taxonkey", "decimallongitude", "decimallatitude", "countrycode", "basis","source","origin" };
 
 	private static final String SEPARATOR = "\t";
 
@@ -63,7 +63,6 @@ public class Maxentnisizer {
 
 				if (!writers.keySet().contains(taxon)) {
 					writers.put(taxon, new PrintWriter(new BufferedWriter(new FileWriter(output, true))));
-					// writers.get(taxon).println(header);
 					coords.put(taxon, new TreeSet<String>());
 				}
 
@@ -114,6 +113,7 @@ public class Maxentnisizer {
 				output += SEPARATOR;
 			}
 		}
+		output = output.substring(0, output.length() - 1);
 		return output;
 	}
 
