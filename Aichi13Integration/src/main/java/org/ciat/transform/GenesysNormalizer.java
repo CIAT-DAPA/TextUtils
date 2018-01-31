@@ -9,10 +9,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.util.Set;
 
+import org.ciat.App;
 import org.ciat.model.Basis;
 import org.ciat.model.DataSourceName;
 import org.ciat.model.FileProgressBar;
+import org.ciat.model.TargetTaxa;
 import org.ciat.model.TaxonFinder;
 import org.ciat.model.Utils;
 
@@ -21,6 +24,8 @@ public class GenesysNormalizer extends Normalizer {
 	private final String INPUT_SEPARATOR = ",";
 
 	public void process(File input, File output) {
+
+		Set<String> taxonKeys = TargetTaxa.getInstance().getSpeciesKeys();
 
 		try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(output, true)));
 				BufferedReader reader = new BufferedReader(
@@ -40,16 +45,29 @@ public class GenesysNormalizer extends Normalizer {
 			line = reader.readLine();
 			while (line != null) {
 				line = line.replaceAll("\"", "");
-
 				line += SEPARATOR + " ";
 
 				String[] values = line.split(INPUT_SEPARATOR);
+				if (values.length > colIndex.size()) {
 
-				if (isUseful(values)) {
-					String result = normalize(values);
-					writer.println(result);
+					String taxonkey = "";
+					taxonkey = values[colIndex.get("t.taxonName")];
+					Basis basis = Basis.G;
+					String year ="1950";
+
+					if (!taxonKeys.contains(taxonkey)) {
+						boolean isUseful = isUseful(values);
+						if (isUseful) {
+
+							String result = normalize(values);
+							writer.println(result);
+						}
+						App.updateCounters(taxonkey, isUseful, year, basis);
+					}
 				}
+
 				bar.update(line.length());
+
 				line = reader.readLine();
 
 			}
@@ -66,14 +84,17 @@ public class GenesysNormalizer extends Normalizer {
 	}
 
 	private boolean isUseful(String[] values) {
-		if (values.length == colIndex.size()) {
-			String lon = values[colIndex.get("decimallongitude")];
-			String lat = values[colIndex.get("decimallatitude")];
-			if (Utils.isNumeric(lon) && Utils.isNumeric(lat)) {
-				if (Utils.areValidCoordinates(lat, lon)) {
-					return true;
-				}
+
+		if (Utils.iso3CountryCodeToIso2CountryCode(values[colIndex.get("a.orgCty")]) == null) {
+			return false;
+		}
+		String lon = values[colIndex.get("decimallongitude")];
+		String lat = values[colIndex.get("decimallatitude")];
+		if (Utils.isNumeric(lon) && Utils.isNumeric(lat)) {
+			if (Utils.areValidCoordinates(lat, lon)) {
+				return true;
 			}
+
 		}
 		return false;
 	}
@@ -82,6 +103,7 @@ public class GenesysNormalizer extends Normalizer {
 		String lon = values[colIndex.get("decimallongitude")];
 		String lat = values[colIndex.get("decimallatitude")];
 		String country = Utils.iso3CountryCodeToIso2CountryCode(values[colIndex.get("a.orgCty")]);
+		country = Utils.iso2CountryCodeToIso3CountryCode(country);
 		String basis = Basis.G.toString();
 		String taxonKey = TaxonFinder.getInstance().fetchTaxonInfo(values[colIndex.get("t.taxonName")]);
 		String result = taxonKey + SEPARATOR + lon + SEPARATOR + lat + SEPARATOR + country + SEPARATOR + basis

@@ -6,9 +6,9 @@ import java.util.Locale;
 import java.util.Map;
 
 public class Utils {
-	
-	private static Map<String, Locale> localeMap= initCountryCodeMapping();
-	
+
+	private static Map<String, Locale> localeMap = initCountryCodeMapping();
+
 	public static boolean isNumeric(String str) {
 		if (str == null) {
 			return false;
@@ -58,11 +58,14 @@ public class Utils {
 			Locale locale = new Locale("", country);
 			localeMap.put(locale.getISO3Country().toUpperCase(), locale);
 		}
-	return localeMap;
+		return localeMap;
 	}
 
 	public static String iso3CountryCodeToIso2CountryCode(String iso3CountryCode) {
-		return localeMap.get(iso3CountryCode).getCountry();
+		if (localeMap.get(iso3CountryCode) != null) {
+			return localeMap.get(iso3CountryCode).getCountry();
+		}
+		return null;
 	}
 
 	public static String iso2CountryCodeToIso3CountryCode(String iso2CountryCode) {

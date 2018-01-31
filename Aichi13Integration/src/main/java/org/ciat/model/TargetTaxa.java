@@ -31,7 +31,7 @@ public class TargetTaxa {
 		return instance;
 	}
 
-	public Set<String> loadTargetTaxa(File vocabularyFile) {
+	private  Set<String> loadTargetTaxa(File vocabularyFile) {
 		Set<String> filters = new TreeSet<String>();
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(vocabularyFile)))) {
 

@@ -23,7 +23,7 @@ public class Maxentnisizer {
 	// index of columns
 	private Map<String, Integer> colIndex = new LinkedHashMap<String, Integer>();
 	// target columns
-	private String[] colTarget = { "taxonkey", "decimallongitude", "decimallatitude", "countrycode", "basis","source","origin" };
+	private String[] colTarget = { "taxonkey", "decimallongitude", "decimallatitude", "countrycode", "basis","origin" };
 
 	private static final String SEPARATOR = "\t";
 

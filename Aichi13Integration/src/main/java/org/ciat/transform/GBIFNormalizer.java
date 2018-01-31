@@ -12,6 +12,7 @@ import java.io.PrintWriter;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import org.ciat.App;
 import org.ciat.model.Basis;
 import org.ciat.model.DataSourceName;
 import org.ciat.model.FileProgressBar;
@@ -20,12 +21,10 @@ import org.ciat.model.Utils;
 
 public class GBIFNormalizer extends Normalizer {
 
-	private Set<String> taxonKeys;
-
 	/** @return output file */
 	public void process(File input, File output) {
 
-		taxonKeys = TargetTaxa.getInstance().getSpeciesKeys();
+		Set<String> taxonKeys = TargetTaxa.getInstance().getSpeciesKeys();
 
 		try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(output, true)));
 				BufferedReader reader = new BufferedReader(
@@ -44,9 +43,21 @@ public class GBIFNormalizer extends Normalizer {
 			while (line != null) {
 				line += SEPARATOR + " ";
 				String[] values = line.split(SEPARATOR);
-				if (isUseful(values)) {
-					String result = normalize(values);
-					writer.println(result);
+				if (values.length > colIndex.size()) {
+
+					String taxonkey = values[colIndex.get("taxonkey")];
+					Basis basis = getBasis(values[colIndex.get("basisofrecord")]);
+					String year = values[colIndex.get("year")];
+
+					if (!taxonKeys.contains(taxonkey)) {
+						boolean isUseful = isUseful(values);
+						if (isUseful) {
+
+							String result = normalize(values);
+							writer.println(result);
+						}
+						App.updateCounters(taxonkey, isUseful, year, basis);
+					}
 				}
 
 				/* show progress */
@@ -58,7 +69,9 @@ public class GBIFNormalizer extends Normalizer {
 			}
 			bar.finish();
 
-		} catch (FileNotFoundException e) {
+		} catch (
+
+		FileNotFoundException e) {
 			System.out.println("File not found " + input.getAbsolutePath());
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -66,9 +79,10 @@ public class GBIFNormalizer extends Normalizer {
 	}
 
 	private String normalize(String[] values) {
+		String country = Utils.iso2CountryCodeToIso3CountryCode(values[colIndex.get("countrycode")]);
 		String result = values[colIndex.get("taxonkey")] + SEPARATOR + values[colIndex.get("decimallongitude")]
-				+ SEPARATOR + values[colIndex.get("decimallatitude")] + SEPARATOR + values[colIndex.get("countrycode")]
-				+ SEPARATOR + getBasis(values[colIndex.get("basisofrecord")]) + SEPARATOR + getDataSourceName();
+				+ SEPARATOR + values[colIndex.get("decimallatitude")] + SEPARATOR + country + SEPARATOR
+				+ getBasis(values[colIndex.get("basisofrecord")]) + SEPARATOR + getDataSourceName();
 		return result;
 	}
 
@@ -96,18 +110,10 @@ public class GBIFNormalizer extends Normalizer {
 				return false;
 			}
 		}
-		
-		if(!Utils.areValidCoordinates(values[colIndex.get("decimallatitude")],values[colIndex.get("decimallongitude")])){
-			return false;
-		}
-		
 
-		if (colIndex.get("taxonkey") != null) {
-			/* check if it's a target taxon */
-			String taxon = values[colIndex.get("taxonkey")];
-			if (!taxonKeys.contains(taxon)) {
-				return false;
-			}
+		if (!Utils.areValidCoordinates(values[colIndex.get("decimallatitude")],
+				values[colIndex.get("decimallongitude")])) {
+			return false;
 		}
 
 		return true;
