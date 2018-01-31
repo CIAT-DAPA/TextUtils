@@ -57,16 +57,19 @@ public class App {
 		log("Normalizing GBIF data");
 		GBIFNormalizer lineFilterer = new GBIFNormalizer();
 		lineFilterer.process(new File("gbif.csv"), normalized);
+		System.gc();
 
 		// filter Genesys data
 		log("Normalizing Genesys data");
 		GenesysNormalizer genesysNormalizer = new GenesysNormalizer();
 		genesysNormalizer.process(new File("genesys.csv"), normalized);
+		System.gc();
 
 		// filter CWR data
 		log("Normalizing CWR data");
 		CWRDBNormalizer cwrdbNormalizer = new CWRDBNormalizer();
 		cwrdbNormalizer.process(new File("cwr.csv"), normalized);
+		System.gc();
 
 		File nativenessed = new File("data2.csv");
 		try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(nativenessed)))) {
@@ -81,16 +84,19 @@ public class App {
 		log("Marking nativeness");
 		NativenessMarker nativenessMarker = new NativenessMarker();
 		nativenessMarker.process(normalized, nativenessed);
+		System.gc();
 
 		// convert to Maxent format
-		log("Data to Maxent");
+		log("Exporting data to Maxent");
 		Maxentnisizer maxentnisizer = new Maxentnisizer();
 		maxentnisizer.process(nativenessed);
+		System.gc();
 
 		// convert to Maxent format
-		log("Data to Maxent");
+		log("Exporting counters");
 		CountExporter countExporter = new CountExporter();
 		countExporter.process();
+		System.gc();
 
 		log("Process finished");
 

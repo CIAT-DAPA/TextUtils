@@ -21,7 +21,7 @@ import org.ciat.model.Utils;
 
 public class GenesysNormalizer extends Normalizer {
 
-	private final String INPUT_SEPARATOR = ",";
+	private static final String INPUT_SEPARATOR = ",";
 
 	public void process(File input, File output) {
 
