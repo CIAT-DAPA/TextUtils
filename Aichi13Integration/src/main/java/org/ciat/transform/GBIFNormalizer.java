@@ -49,7 +49,7 @@ public class GBIFNormalizer extends Normalizer {
 					Basis basis = getBasis(values[colIndex.get("basisofrecord")]);
 					String year = values[colIndex.get("year")];
 
-					if (taxonKeys.contains(taxonkey)) {
+					if (taxonkey!=null && taxonKeys.contains(taxonkey)) {
 						boolean isUseful = isUseful(values);
 						if (isUseful) {
 

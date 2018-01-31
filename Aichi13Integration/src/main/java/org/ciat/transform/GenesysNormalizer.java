@@ -55,7 +55,7 @@ public class GenesysNormalizer extends Normalizer {
 					Basis basis = Basis.G;
 					String year ="1950";
 
-					if (taxonKeys.contains(taxonkey)) {
+					if (taxonkey!=null && taxonKeys.contains(taxonkey)) {
 						boolean isUseful = isUseful(values);
 						if (isUseful) {
 

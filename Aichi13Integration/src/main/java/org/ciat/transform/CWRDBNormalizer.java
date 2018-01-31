@@ -57,7 +57,7 @@ public class CWRDBNormalizer extends Normalizer {
 						year = year.substring(0, 4);
 					}
 
-					if (taxonKeys.contains(taxonkey)) {
+					if (taxonkey!=null && taxonKeys.contains(taxonkey)) {
 						boolean isUseful = isUseful(values);
 						if (isUseful) {
 
