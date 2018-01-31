@@ -99,6 +99,11 @@ public class GBIFNormalizer extends Normalizer {
 			}
 		}
 
+		String country = Utils.iso2CountryCodeToIso3CountryCode(values[colIndex.get("countrycode")]);
+		if (country == null) {
+			return false;
+		}
+
 		Set<String> issues = new LinkedHashSet<>();
 		issues.add("COORDINATE_OUT_OF_RANGE");
 		issues.add("COUNTRY_COORDINATE_MISMATCH");

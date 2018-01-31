@@ -70,10 +70,18 @@ public class Utils {
 	}
 
 	public static String iso2CountryCodeToIso3CountryCode(String iso2CountryCode) {
+		if(iso2CountryCode.equals("ZZ")){
+			return null;
+		}
 		Locale locale = new Locale("", iso2CountryCode);
-		return locale.getISO3Country();
+		try {
+			String result = locale.getISO3Country();
+			return result;
+		} catch (Exception e) {
+			return null;
+		}
 	}
-	
+
 	public static void clearOutputDirectory(File outputDir) {
 		if (outputDir.exists()) {
 			for (File f : outputDir.listFiles()) {

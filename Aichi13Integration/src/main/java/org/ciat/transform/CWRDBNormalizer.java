@@ -116,17 +116,20 @@ public class CWRDBNormalizer extends Normalizer {
 								String lon = values[colIndex.get("final_lon")];
 								String lat = values[colIndex.get("final_lat")];
 								String country = values[colIndex.get("final_iso2")];
-								if (year >= Normalizer.YEAR) {
-									if (Utils.isNumeric(lon) && Utils.isNumeric(lat) && country.length() == 2) {
+								country = Utils.iso2CountryCodeToIso3CountryCode(country);
 
-										if (Utils.areValidCoordinates(lat, lon)) {
+								if (country != null) {
+									if (year >= Normalizer.YEAR) {
+										if (Utils.isNumeric(lon) && Utils.isNumeric(lat)) {
 
-											String taxonKey = TaxonFinder.getInstance()
-													.fetchTaxonInfo(values[colIndex.get("taxon_final")]);
-											if (taxonKey != null) {
-												return true;
+											if (Utils.areValidCoordinates(lat, lon)) {
+
+												String taxonKey = TaxonFinder.getInstance()
+														.fetchTaxonInfo(values[colIndex.get("taxon_final")]);
+												if (taxonKey != null) {
+													return true;
+												}
 											}
-
 										}
 									}
 								}
