@@ -10,7 +10,7 @@ public class MapCounter extends TreeMap<String, Integer> {
 		if (this.containsKey(key)) {
 			this.put(key, this.get(key) + 1);
 		} else {
-			this.put(key, new Integer(0));
+			this.put(key, new Integer(1));
 		}
 	}
 
