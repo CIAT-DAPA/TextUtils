@@ -1,5 +1,6 @@
 package org.ciat.model;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Locale;
@@ -71,5 +72,15 @@ public class Utils {
 	public static String iso2CountryCodeToIso3CountryCode(String iso2CountryCode) {
 		Locale locale = new Locale("", iso2CountryCode);
 		return locale.getISO3Country();
+	}
+	
+	public static void clearOutputDirectory(File outputDir) {
+		if (outputDir.exists()) {
+			for (File f : outputDir.listFiles()) {
+				f.delete();
+			}
+		} else {
+			outputDir.mkdir();
+		}
 	}
 }

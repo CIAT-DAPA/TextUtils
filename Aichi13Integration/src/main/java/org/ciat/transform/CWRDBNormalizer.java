@@ -50,14 +50,14 @@ public class CWRDBNormalizer extends Normalizer {
 				String[] values = line.split(INPUT_SEPARATOR);
 				if (values.length > colIndex.size()) {
 
-					String taxonkey = values[colIndex.get("taxon_final")];
+					String taxonkey = TaxonFinder.getInstance().fetchTaxonInfo(values[colIndex.get("taxon_final")]);
 					Basis basis = getBasis(values[colIndex.get("source")]);
 					String year = values[colIndex.get("colldate")];
 					if (year.length() > 3) {
 						year = year.substring(0, 4);
 					}
 
-					if (!taxonKeys.contains(taxonkey)) {
+					if (taxonKeys.contains(taxonkey)) {
 						boolean isUseful = isUseful(values);
 						if (isUseful) {
 

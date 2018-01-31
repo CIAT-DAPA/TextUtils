@@ -51,11 +51,11 @@ public class GenesysNormalizer extends Normalizer {
 				if (values.length > colIndex.size()) {
 
 					String taxonkey = "";
-					taxonkey = values[colIndex.get("t.taxonName")];
+					taxonkey = TaxonFinder.getInstance().fetchTaxonInfo(values[colIndex.get("t.taxonName")]);
 					Basis basis = Basis.G;
 					String year ="1950";
 
-					if (!taxonKeys.contains(taxonkey)) {
+					if (taxonKeys.contains(taxonkey)) {
 						boolean isUseful = isUseful(values);
 						if (isUseful) {
 

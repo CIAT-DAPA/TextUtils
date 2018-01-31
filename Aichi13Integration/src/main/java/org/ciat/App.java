@@ -101,7 +101,7 @@ public class App {
 		
 		if (Utils.isNumeric(year)) {
 			Integer yearNumber = Integer.parseInt(year);
-			if (yearNumber > 1949) {
+			if (yearNumber >= Normalizer.YEAR) {
 				App.totalPost1950.increase(taxonkey);
 			} else {
 				App.totalPre1950.increase(taxonkey);

@@ -23,19 +23,19 @@ public class Maxentnisizer {
 	// index of columns
 	private Map<String, Integer> colIndex = new LinkedHashMap<String, Integer>();
 	// target columns
-	private String[] colTarget = { "taxonkey", "decimallongitude", "decimallatitude", "countrycode", "basis","origin" };
+	private String[] colTarget = { "decimallongitude", "decimallatitude", "countrycode", "basis","origin" };
 
 	private static final String SEPARATOR = "\t";
 
 	/** @return output file */
 	public void process(File input) {
 
-		File outputDir = new File("coords");
+		File outputDir = new File("parameters/occurrences/raw");
 		if (!outputDir.exists()) {
 			outputDir.mkdirs();
+		} else {
+			Utils.clearOutputDirectory(outputDir);
 		}
-
-		clearOutputDirectory(outputDir);
 
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(input), "UTF-8"))) {
 
@@ -59,7 +59,7 @@ public class Maxentnisizer {
 				String[] values = line.split(SEPARATOR);
 
 				String taxon = values[colIndex.get("taxonkey")];
-				File output = new File(outputDir.getName() + "//" + taxon + ".csv");
+				File output = new File(outputDir.getAbsolutePath() + "/" + taxon + ".csv");
 
 				if (!writers.keySet().contains(taxon)) {
 					writers.put(taxon, new PrintWriter(new BufferedWriter(new FileWriter(output, true))));
@@ -94,15 +94,7 @@ public class Maxentnisizer {
 		}
 	}
 
-	private void clearOutputDirectory(File outputDir) {
-		if (outputDir.exists()) {
-			for (File f : outputDir.listFiles()) {
-				f.delete();
-			}
-		} else {
-			outputDir.mkdir();
-		}
-	}
+
 
 	/** Getting only targeted values **/
 	private String getTargetValues(String[] values) {

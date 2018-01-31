@@ -49,7 +49,7 @@ public class GBIFNormalizer extends Normalizer {
 					Basis basis = getBasis(values[colIndex.get("basisofrecord")]);
 					String year = values[colIndex.get("year")];
 
-					if (!taxonKeys.contains(taxonkey)) {
+					if (taxonKeys.contains(taxonkey)) {
 						boolean isUseful = isUseful(values);
 						if (isUseful) {
 
@@ -69,9 +69,7 @@ public class GBIFNormalizer extends Normalizer {
 			}
 			bar.finish();
 
-		} catch (
-
-		FileNotFoundException e) {
+		} catch (FileNotFoundException e) {
 			System.out.println("File not found " + input.getAbsolutePath());
 		} catch (IOException e) {
 			e.printStackTrace();
