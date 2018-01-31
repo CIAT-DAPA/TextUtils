@@ -57,7 +57,7 @@ public class CWRDBNormalizer extends Normalizer {
 						year = year.substring(0, 4);
 					}
 
-					if (taxonkey!=null && taxonKeys.contains(taxonkey)) {
+					if (taxonkey != null && taxonKeys.contains(taxonkey)) {
 						boolean isUseful = isUseful(values);
 						if (isUseful) {
 
@@ -124,11 +124,8 @@ public class CWRDBNormalizer extends Normalizer {
 
 											if (Utils.areValidCoordinates(lat, lon)) {
 
-												String taxonKey = TaxonFinder.getInstance()
-														.fetchTaxonInfo(values[colIndex.get("taxon_final")]);
-												if (taxonKey != null) {
-													return true;
-												}
+												return true;
+
 											}
 										}
 									}
