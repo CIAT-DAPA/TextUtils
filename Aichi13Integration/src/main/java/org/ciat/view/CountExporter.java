@@ -30,7 +30,7 @@ public class CountExporter {
 	}
 	
 	private void exportDatasetCounter() {
-		File output =new File("summary.properties");
+		File output =new File(Executer.prop.getProperty("path.summary"));
 		try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(output)))) {
 			writer.println("species.matched="+TaxonFinder.getInstance().getMatchedTaxa().keySet().size());
 			writer.println("species.unmatched="+TaxonFinder.getInstance().getUnmatchedTaxa().size());
