@@ -76,26 +76,73 @@
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<executions>
+
 					<execution>
+						<id>build-normalizer</id>
 						<phase>package</phase>
 						<goals>
 							<goal>single</goal>
 						</goals>
+						<configuration>
+							<descriptorRefs>
+								<descriptorRef>jar-with-dependencies</descriptorRef>
+							</descriptorRefs>
+							<finalName>normalize.jar</finalName>
+							<archive>
+								<manifest>
+									<!-- Jar file entry point -->
+									<mainClass>org.ciat.ExecNormalizer</mainClass>
+								</manifest>
+							</archive>
+						</configuration>
 					</execution>
+
+					<execution>
+						<id>build-nativeness</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<descriptorRefs>
+								<descriptorRef>jar-with-dependencies</descriptorRef>
+							</descriptorRefs>
+							<finalName>nativeness.jar</finalName>
+							<archive>
+								<manifest>
+									<!-- Jar file entry point -->
+									<mainClass>org.ciat.ExecNativeness</mainClass>
+								</manifest>
+							</archive>
+						</configuration>
+					</execution>
+					
+					<execution>
+						<id>build-export</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<descriptorRefs>
+								<descriptorRef>jar-with-dependencies</descriptorRef>
+							</descriptorRefs>
+							<finalName>export.jar</finalName>
+							<archive>
+								<manifest>
+									<!-- Jar file entry point -->
+									<mainClass>org.ciat.ExecNativeness</mainClass>
+								</manifest>
+							</archive>
+						</configuration>
+					</execution>
+
 				</executions>
-				<configuration>
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
-					<archive>
-						<manifest>
-							<!-- Jar file entry point -->
-							<mainClass>org.ciat.App</mainClass>
-						</manifest>
-					</archive>
-				</configuration>
+
 			</plugin>
 		</plugins>
 	</build>
+
+
 
 </project>

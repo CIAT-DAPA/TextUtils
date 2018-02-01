@@ -15,6 +15,7 @@ a.id, a.instCode, a.acceNumb, a.orgCty, t.id, t.genus, t.species, t.spAuthor, t.
 "4464604","TWN001","VI060725","GIN","99292","Abelmoschus","manihot","","","","Abelmoschus manihot",\N,\N,\N,\N,\N,\N
 "4464586","TWN001","VI060729","IND","206083","Abelmoschus","manihot","","var. tetraphyllus","","Abelmoschus manihot var. tetraphyllus",\N,\N,\N,\N,\N,\N
 "4464589","TWN001","VI060730","IND","206083","Abelmoschus","manihot","","var. tetraphyllus","","Abelmoschus manihot var. tetraphyllus",\N,\N,\N,\N,\N,\N
+"14700","USA016","PI 497024","GHA","148921","Macleania","rupestris","","","","Macleania rupestris","-1.66666667","6.83333333",\N,\N,\N,\N
 "14800","USA016","PI 497024","GHA","148921","Abelmoschus","manihot","(L.) Medik.","","","Abelmoschus manihot (L.) Medik.","-1.66666667","6.83333333",\N,\N,\N,\N
 "14801","USA016","PI 497068","GIN","148921","Abelmoschus","manihot","(L.) Medik.","","","Abelmoschus manihot (L.) Medik.","-11.83333333","10.66666667",\N,\N,\N,\N
 "14802","USA016","PI 497080","GIN","148921","Abelmoschus","manihot","(L.) Medik.","","","Abelmoschus manihot (L.) Medik.","-13","11.91666667",\N,\N,\N,\N

@@ -20,6 +20,7 @@ import org.ciat.model.Utils;
 public class NativenessMarker {
 
 	private Map<String, Integer> colIndex;
+	private Map<String, Integer> natienessIndex;
 	private Map<Integer, TaxonNativeness> taxaCWR;
 	private static final String SEPARATOR = "\t";
 
@@ -89,19 +90,24 @@ public class NativenessMarker {
 		Map<Integer, TaxonNativeness> CWRs = new TreeMap<Integer, TaxonNativeness>();
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(vocabularyFile)))) {
 
-			String line = reader.readLine(); // skip header
+			String line = reader.readLine();
+			natienessIndex = Utils.getColumnsIndex(line, SEPARATOR);
 			line = reader.readLine();
 			while (line != null) {
 				if (!line.isEmpty()) {
 					String[] values = line.split(SEPARATOR);
-					Integer taxonKey = Integer.parseInt(values[0]);
-					String country = values[1];
-					if (CWRs.containsKey(taxonKey)) {
-						CWRs.get(taxonKey).getNativeCountries().add(country);
-					} else {
-						TaxonNativeness newCWR = new TaxonNativeness(taxonKey);
-						newCWR.getNativeCountries().add(country);
-						CWRs.put(taxonKey, newCWR);
+					if (values.length > 2) {
+						if (Utils.isNumeric(values[natienessIndex.get("taxonkey")])) {
+							Integer taxonKey = Integer.parseInt(values[natienessIndex.get("taxonkey")]);
+							String country = values[natienessIndex.get("ISO3")];
+							if (CWRs.containsKey(taxonKey)) {
+								CWRs.get(taxonKey).getNativeCountries().add(country);
+							} else {
+								TaxonNativeness newCWR = new TaxonNativeness(taxonKey);
+								newCWR.getNativeCountries().add(country);
+								CWRs.put(taxonKey, newCWR);
+							}
+						}
 					}
 
 				}

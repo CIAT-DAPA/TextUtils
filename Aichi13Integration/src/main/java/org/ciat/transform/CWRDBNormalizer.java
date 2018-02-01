@@ -11,7 +11,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.Set;
 
-import org.ciat.App;
+import org.ciat.ExecNormalizer;
 import org.ciat.model.Basis;
 import org.ciat.model.DataSourceName;
 import org.ciat.model.FileProgressBar;
@@ -68,7 +68,7 @@ public class CWRDBNormalizer extends Normalizer {
 							}
 						}
 
-						App.updateCounters(taxonkey, isUseful, year, basis);
+						ExecNormalizer.updateCounters(taxonkey, isUseful, year, basis);
 					}
 				}
 				/* show progress */
@@ -99,7 +99,7 @@ public class CWRDBNormalizer extends Normalizer {
 		return result;
 	}
 
-	private boolean isUseful(String[] values) {
+	public boolean isUseful(String[] values) {
 
 		if (!values[colIndex.get("final_origin_stat")].equals("introduced")) {
 			if (values[colIndex.get("coord_source")].equals("original")
@@ -140,11 +140,11 @@ public class CWRDBNormalizer extends Normalizer {
 		return false;
 	}
 
-	private DataSourceName getDataSourceName() {
+	public DataSourceName getDataSourceName() {
 		return DataSourceName.CWRDB;
 	}
 
-	private Basis getBasis(String basisofrecord) {
+	public Basis getBasis(String basisofrecord) {
 		if (basisofrecord.toUpperCase().equals("G")) {
 			return Basis.G;
 		}

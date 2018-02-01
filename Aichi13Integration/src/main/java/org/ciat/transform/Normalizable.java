@@ -5,26 +5,15 @@ import org.ciat.model.Basis;
 import org.ciat.model.DataSourceName;
 
 public interface Normalizable {
-	
-	public static Basis getBasis(String basisofrecord) {
-		return null;
-	}
-	
-	public static DataSourceName getDataSourceName() {
-		return null;
-	}
-	
-	public static boolean isUseful(String[] values) {
-		return false;
-	}
-	
-	public static void process(File input, File output){
-		
-	}
-	
-	public static String normalize(String line){
-		return line;
-		
-	}
+
+	public Basis getBasis(String basisofrecord);
+
+	public DataSourceName getDataSourceName();
+
+	public boolean isUseful(String[] values);
+
+	public void process(File input, File output);
+
+	public String normalize(String line);
 
 }

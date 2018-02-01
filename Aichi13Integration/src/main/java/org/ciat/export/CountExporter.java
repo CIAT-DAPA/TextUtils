@@ -7,42 +7,42 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import org.ciat.App;
+import org.ciat.ExecNormalizer;
 import org.ciat.model.Utils;
 import org.ciat.transform.Normalizer;
 
 public class CountExporter {
 
 	public void process() {
-		for (String key : App.totalRecords.keySet()) {
-			int totalRecords = App.totalRecords.get(key);
+		for (String key : ExecNormalizer.totalRecords.keySet()) {
+			int totalRecords = ExecNormalizer.totalRecords.get(key);
 			int totalUseful = 0;
-			if (App.totalUseful.containsKey(key)) {
-				totalUseful = App.totalUseful.get(key);
+			if (ExecNormalizer.totalUseful.containsKey(key)) {
+				totalUseful = ExecNormalizer.totalUseful.get(key);
 			}
 			int totalGRecords = 0;
-			if (App.totalGRecords.containsKey(key)) {
-				totalGRecords = App.totalGRecords.get(key);
+			if (ExecNormalizer.totalGRecords.containsKey(key)) {
+				totalGRecords = ExecNormalizer.totalGRecords.get(key);
 			}
 			int totalGUseful = 0;
-			if (App.totalGUseful.containsKey(key)) {
-				totalGUseful = App.totalGUseful.get(key);
+			if (ExecNormalizer.totalGUseful.containsKey(key)) {
+				totalGUseful = ExecNormalizer.totalGUseful.get(key);
 			}
 			int totalHRecords = 0;
-			if (App.totalHRecords.containsKey(key)) {
-				totalHRecords = App.totalHRecords.get(key);
+			if (ExecNormalizer.totalHRecords.containsKey(key)) {
+				totalHRecords = ExecNormalizer.totalHRecords.get(key);
 			}
 			int totalHUseful = 0;
-			if (App.totalHUseful.containsKey(key)) {
-				totalHUseful = App.totalHUseful.get(key);
+			if (ExecNormalizer.totalHUseful.containsKey(key)) {
+				totalHUseful = ExecNormalizer.totalHUseful.get(key);
 			}
 			int totalPost1950 = 0;
-			if (App.totalPost1950.containsKey(key)) {
-				totalPost1950 = App.totalPost1950.get(key);
+			if (ExecNormalizer.totalPost1950.containsKey(key)) {
+				totalPost1950 = ExecNormalizer.totalPost1950.get(key);
 			}
 			int totalPre1950 = 0;
-			if (App.totalPre1950.containsKey(key)) {
-				totalPre1950 = App.totalPre1950.get(key);
+			if (ExecNormalizer.totalPre1950.containsKey(key)) {
+				totalPre1950 = ExecNormalizer.totalPre1950.get(key);
 			}
 
 			File outputDir = new File("gap_analysis" + "/" + key + "/");

@@ -1,7 +1,11 @@
 package org.ciat.transform;
 
+import java.io.File;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import org.ciat.model.Basis;
+import org.ciat.model.DataSourceName;
 
 public class Normalizer implements Normalizable {
 
@@ -23,5 +27,42 @@ public class Normalizer implements Normalizable {
 		}
 		result = result.substring(0, result.length() - 1);
 		return result;
+	}
+
+
+
+	public void process(File file, File normalized) {
+		
+	}
+
+
+
+	@Override
+	public Basis getBasis(String basisofrecord) {
+		return Basis.H;
+	}
+
+
+
+	@Override
+	public DataSourceName getDataSourceName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+	@Override
+	public boolean isUseful(String[] values) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+
+	@Override
+	public String normalize(String line) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

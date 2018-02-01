@@ -12,7 +12,7 @@ import java.io.PrintWriter;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.ciat.App;
+import org.ciat.ExecNormalizer;
 import org.ciat.model.Basis;
 import org.ciat.model.DataSourceName;
 import org.ciat.model.FileProgressBar;
@@ -56,7 +56,7 @@ public class GBIFNormalizer extends Normalizer {
 							String result = normalize(values);
 							writer.println(result);
 						}
-						App.updateCounters(taxonkey, isUseful, year, basis);
+						ExecNormalizer.updateCounters(taxonkey, isUseful, year, basis);
 					}
 				}
 
@@ -84,7 +84,7 @@ public class GBIFNormalizer extends Normalizer {
 		return result;
 	}
 
-	private boolean isUseful(String[] values) {
+	public boolean isUseful(String[] values) {
 
 		// excluding CWR dataset
 		if (colIndex.get("datasetkey") != null
@@ -122,14 +122,14 @@ public class GBIFNormalizer extends Normalizer {
 		return true;
 	}
 
-	private Basis getBasis(String basisofrecord) {
+	public Basis getBasis(String basisofrecord) {
 		if (basisofrecord.toUpperCase().equals("LIVING_SPECIMEN")) {
 			return Basis.G;
 		}
 		return Basis.H;
 	}
 
-	private DataSourceName getDataSourceName() {
+	public DataSourceName getDataSourceName() {
 		return DataSourceName.GBIF;
 	}
 

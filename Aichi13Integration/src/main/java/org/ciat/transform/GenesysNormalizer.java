@@ -11,7 +11,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.Set;
 
-import org.ciat.App;
+import org.ciat.ExecNormalizer;
 import org.ciat.model.Basis;
 import org.ciat.model.DataSourceName;
 import org.ciat.model.FileProgressBar;
@@ -53,7 +53,7 @@ public class GenesysNormalizer extends Normalizer {
 					String taxonkey = "";
 					taxonkey = TaxonFinder.getInstance().fetchTaxonInfo(values[colIndex.get("t.taxonName")]);
 					Basis basis = Basis.G;
-					String year ="1950";
+					String year = Normalizer.YEAR+"";
 
 					if (taxonkey!=null && taxonKeys.contains(taxonkey)) {
 						boolean isUseful = isUseful(values);
@@ -62,7 +62,7 @@ public class GenesysNormalizer extends Normalizer {
 							String result = normalize(values);
 							writer.println(result);
 						}
-						App.updateCounters(taxonkey, isUseful, year, basis);
+						ExecNormalizer.updateCounters(taxonkey, isUseful, year, basis);
 					}
 				}
 
@@ -83,7 +83,7 @@ public class GenesysNormalizer extends Normalizer {
 
 	}
 
-	private boolean isUseful(String[] values) {
+	public boolean isUseful(String[] values) {
 
 		if (Utils.iso3CountryCodeToIso2CountryCode(values[colIndex.get("a.orgCty")]) == null) {
 			return false;
@@ -111,7 +111,7 @@ public class GenesysNormalizer extends Normalizer {
 		return result;
 	}
 
-	private DataSourceName getDataSourceName() {
+	public DataSourceName getDataSourceName(String basisofrecord) {
 		return DataSourceName.GENESYS;
 	}
 
