@@ -1,4 +1,4 @@
-package org.ciat.export;
+package org.ciat.control;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -15,8 +15,8 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import org.ciat.model.FileProgressBar;
 import org.ciat.model.Utils;
+import org.ciat.view.FileProgressBar;
 
 public class Maxentnisizer {
 

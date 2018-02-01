@@ -1,4 +1,4 @@
-package org.ciat;
+package org.ciat.view;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

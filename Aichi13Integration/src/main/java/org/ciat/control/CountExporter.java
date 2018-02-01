@@ -1,4 +1,4 @@
-package org.ciat.export;
+package org.ciat.control;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -10,7 +10,6 @@ import java.io.PrintWriter;
 import org.ciat.model.Basis;
 import org.ciat.model.MapCounter;
 import org.ciat.model.Utils;
-import org.ciat.transform.Normalizer;
 
 public class CountExporter {
 

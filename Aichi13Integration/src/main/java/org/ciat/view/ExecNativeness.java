@@ -1,4 +1,4 @@
-package org.ciat;
+package org.ciat.view;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -7,9 +7,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import org.ciat.transform.NativenessMarker;
-import org.ciat.transform.Normalizable;
-import org.ciat.transform.Normalizer;
+import org.ciat.control.NativenessMarker;
+import org.ciat.control.Normalizable;
+import org.ciat.control.Normalizer;
 
 public class ExecNativeness extends Executer {
 

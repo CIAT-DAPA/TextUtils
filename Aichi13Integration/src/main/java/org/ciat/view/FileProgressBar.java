@@ -1,4 +1,4 @@
-package org.ciat.model;
+package org.ciat.view;
 
 /**
  * @author c00kiemon5ter

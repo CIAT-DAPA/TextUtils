@@ -1,4 +1,4 @@
-package org.ciat.transform;
+package org.ciat.control;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -11,13 +11,12 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.Set;
 
-import org.ciat.export.CountExporter;
 import org.ciat.model.Basis;
 import org.ciat.model.DataSourceName;
-import org.ciat.model.FileProgressBar;
 import org.ciat.model.TargetTaxa;
 import org.ciat.model.TaxonFinder;
 import org.ciat.model.Utils;
+import org.ciat.view.FileProgressBar;
 
 public class GenesysNormalizer extends Normalizer {
 

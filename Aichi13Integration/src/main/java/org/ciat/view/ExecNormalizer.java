@@ -1,4 +1,4 @@
-package org.ciat;
+package org.ciat.view;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -7,11 +7,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import org.ciat.export.CountExporter;
-import org.ciat.transform.CWRDBNormalizer;
-import org.ciat.transform.GBIFNormalizer;
-import org.ciat.transform.GenesysNormalizer;
-import org.ciat.transform.Normalizable;
+import org.ciat.control.CWRDBNormalizer;
+import org.ciat.control.CountExporter;
+import org.ciat.control.GBIFNormalizer;
+import org.ciat.control.GenesysNormalizer;
+import org.ciat.control.Normalizable;
 
 public class ExecNormalizer extends Executer {
 

@@ -1,4 +1,4 @@
-package org.ciat;
+package org.ciat.view;
 
 public interface Executable {
 

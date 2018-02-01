@@ -1,4 +1,4 @@
-package org.ciat.transform;
+package org.ciat.control;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -12,10 +12,10 @@ import java.io.PrintWriter;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.ciat.model.FileProgressBar;
 import org.ciat.model.Nativeness;
 import org.ciat.model.TaxonNativeness;
 import org.ciat.model.Utils;
+import org.ciat.view.FileProgressBar;
 
 public class NativenessMarker {
 

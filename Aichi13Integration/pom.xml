@@ -61,7 +61,7 @@
 							<archive>
 								<manifest>
 									<!-- Jar file entry point -->
-									<mainClass>org.ciat.ExecNormalizer</mainClass>
+									<mainClass>org.ciat.view.ExecNormalizer</mainClass>
 								</manifest>
 							</archive>
 						</configuration>
@@ -81,7 +81,7 @@
 							<archive>
 								<manifest>
 									<!-- Jar file entry point -->
-									<mainClass>org.ciat.ExecNativeness</mainClass>
+									<mainClass>org.ciat.view.ExecNativeness</mainClass>
 								</manifest>
 							</archive>
 						</configuration>
@@ -101,7 +101,7 @@
 							<archive>
 								<manifest>
 									<!-- Jar file entry point -->
-									<mainClass>org.ciat.ExecMaxentnisizer</mainClass>
+									<mainClass>org.ciat.view.ExecMaxentnisizer</mainClass>
 								</manifest>
 							</archive>
 						</configuration>

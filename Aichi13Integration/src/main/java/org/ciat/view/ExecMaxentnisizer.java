@@ -1,8 +1,8 @@
-package org.ciat;
+package org.ciat.view;
 
 import java.io.File;
 
-import org.ciat.export.Maxentnisizer;
+import org.ciat.control.Maxentnisizer;
 
 public class ExecMaxentnisizer extends Executer {
 
