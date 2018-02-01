@@ -48,7 +48,7 @@ public class CWRDBNormalizer extends Normalizer {
 
 				line = line.replace("\"", "");
 				String[] values = line.split(INPUT_SEPARATOR);
-				if (values.length > colIndex.size()) {
+				if (values.length >= colIndex.size()) {
 
 					String taxonkey = TaxonFinder.getInstance().fetchTaxonInfo(values[colIndex.get("taxon_final")]);
 					Basis basis = getBasis(values[colIndex.get("source")]);

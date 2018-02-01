@@ -32,7 +32,7 @@ public class CountExporter {
 	private void exportDatasetCounter() {
 		File output =new File("summary.properties");
 		try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(output)))) {
-			writer.println("species.matched="+TaxonFinder.getInstance().getMatchedTaxa().size());
+			writer.println("species.matched="+TaxonFinder.getInstance().getMatchedTaxa().keySet().size());
 			writer.println("species.unmatched="+TaxonFinder.getInstance().getUnmatchedTaxa().size());
 
 		} catch (FileNotFoundException e) {

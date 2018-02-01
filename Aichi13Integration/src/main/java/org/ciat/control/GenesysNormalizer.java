@@ -48,7 +48,7 @@ public class GenesysNormalizer extends Normalizer {
 				line += SEPARATOR + " ";
 
 				String[] values = line.split(INPUT_SEPARATOR);
-				if (values.length > colIndex.size()) {
+				if (values.length >= colIndex.size()) {
 
 					String taxonkey = "";
 					taxonkey = TaxonFinder.getInstance().fetchTaxonInfo(values[colIndex.get("t.taxonName")]);

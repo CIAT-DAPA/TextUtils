@@ -43,7 +43,7 @@ public class GBIFNormalizer extends Normalizer {
 			while (line != null) {
 				line += SEPARATOR + " ";
 				String[] values = line.split(SEPARATOR);
-				if (values.length > colIndex.size()) {
+				if (values.length >= colIndex.size()) {
 
 					String taxonkey = values[colIndex.get("taxonkey")];
 					Basis basis = getBasis(values[colIndex.get("basisofrecord")]);
