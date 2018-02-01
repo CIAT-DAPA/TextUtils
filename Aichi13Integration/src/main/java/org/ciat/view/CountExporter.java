@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import org.ciat.control.Normalizer;
 import org.ciat.model.Basis;
 import org.ciat.model.MapCounter;
+import org.ciat.model.TaxonFinder;
 import org.ciat.model.Utils;
 
 public class CountExporter {
@@ -24,6 +25,25 @@ public class CountExporter {
 	public static MapCounter totalPre1950 = new MapCounter();
 
 	public void process() {
+		exportSpeciesCounters();
+		exportDatasetCounter();
+	}
+	
+	private void exportDatasetCounter() {
+		File output =new File("summary.properties");
+		try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(output)))) {
+			writer.println("species.matched="+TaxonFinder.getInstance().getMatchedTaxa().size());
+			writer.println("species.unmatched="+TaxonFinder.getInstance().getUnmatchedTaxa().size());
+
+		} catch (FileNotFoundException e) {
+			System.out.println("File not found " + output.getAbsolutePath());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+	private void exportSpeciesCounters(){
 		for (String key : totalRecords.keySet()) {
 			int countTotalRecords = totalRecords.get(key);
 			int countTotalUseful = 0;

@@ -84,6 +84,14 @@ public class TaxonFinder {
 		return null;
 	}
 
+	public Map<String, String> getMatchedTaxa() {
+		return matchedTaxa;
+	}
+
+	public Set<String> getUnmatchedTaxa() {
+		return unmatchedTaxa;
+	}
+
 	public static TaxonFinder getInstance() {
 	      if(instance == null) {
 	          instance = new TaxonFinder();
