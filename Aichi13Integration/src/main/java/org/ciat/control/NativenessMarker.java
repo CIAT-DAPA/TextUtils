@@ -15,6 +15,7 @@ import java.util.TreeMap;
 import org.ciat.model.Nativeness;
 import org.ciat.model.TaxonNativeness;
 import org.ciat.model.Utils;
+import org.ciat.view.Executer;
 import org.ciat.view.FileProgressBar;
 
 public class NativenessMarker {
@@ -26,7 +27,7 @@ public class NativenessMarker {
 
 	public void process(File input, File output) {
 
-		File taxaFile = new File("nativeness.csv");
+		File taxaFile = new File(Executer.prop.getProperty("resource.nativeness"));
 		taxaCWR = loadTargetTaxaNativeness(taxaFile);
 
 		try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(output, true)));
