@@ -15,30 +15,11 @@
 		<maven.eclipse.plugin.version>2.10</maven.eclipse.plugin.version>
 		<maven.jar.plugin.version>3.0.0</maven.jar.plugin.version>
 		<jdk.version>1.8</jdk.version>
-		<jodatime.version>2.5</jodatime.version>
-		<junit.version>4.11</junit.version>
-		<log4j.version>1.2.17</log4j.version>
 		<json.version>20171018</json.version>
 	</properties>
 
 
 	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>${junit.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>joda-time</groupId>
-			<artifactId>joda-time</artifactId>
-			<version>${jodatime.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>${log4j.version}</version>
-		</dependency>
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
@@ -47,19 +28,8 @@
 	</dependencies>
 
 	<build>
-		<finalName>to_maxent</finalName>
+		<finalName>aichi13integration</finalName>
 		<plugins>
-
-			<!-- Set a JDK compiler level -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>${maven.compiler.plugin.version}</version>
-				<configuration>
-					<source>${jdk.version}</source>
-					<target>${jdk.version}</target>
-				</configuration>
-			</plugin>
 
 			<!-- download source code in Eclipse, best practice -->
 			<plugin>
@@ -87,7 +57,7 @@
 							<descriptorRefs>
 								<descriptorRef>jar-with-dependencies</descriptorRef>
 							</descriptorRefs>
-							<finalName>normalize.jar</finalName>
+							<finalName>normalizer</finalName>
 							<archive>
 								<manifest>
 									<!-- Jar file entry point -->
@@ -107,7 +77,7 @@
 							<descriptorRefs>
 								<descriptorRef>jar-with-dependencies</descriptorRef>
 							</descriptorRefs>
-							<finalName>nativeness.jar</finalName>
+							<finalName>nativeness</finalName>
 							<archive>
 								<manifest>
 									<!-- Jar file entry point -->
@@ -127,11 +97,11 @@
 							<descriptorRefs>
 								<descriptorRef>jar-with-dependencies</descriptorRef>
 							</descriptorRefs>
-							<finalName>export.jar</finalName>
+							<finalName>maxenisizer</finalName>
 							<archive>
 								<manifest>
 									<!-- Jar file entry point -->
-									<mainClass>org.ciat.ExecNativeness</mainClass>
+									<mainClass>org.ciat.ExecMaxentnisizer</mainClass>
 								</manifest>
 							</archive>
 						</configuration>

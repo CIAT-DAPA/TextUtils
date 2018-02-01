@@ -14,6 +14,7 @@ import org.ciat.model.Utils;
 import org.ciat.transform.CWRDBNormalizer;
 import org.ciat.transform.GBIFNormalizer;
 import org.ciat.transform.GenesysNormalizer;
+import org.ciat.transform.Normalizable;
 import org.ciat.transform.Normalizer;
 
 public class ExecNormalizer extends Executer {
@@ -49,19 +50,19 @@ public class ExecNormalizer extends Executer {
 
 		// Reduce and normalize
 		log("Normalizing GBIF data");
-		Normalizer gbifNormalizer = new GBIFNormalizer();
+		Normalizable gbifNormalizer = new GBIFNormalizer();
 		gbifNormalizer.process(new File("gbif.csv"), normalized);
 		System.gc();
 
 		// filter Genesys data
 		log("Normalizing Genesys data");
-		Normalizer genesysNormalizer = new GenesysNormalizer();
+		Normalizable genesysNormalizer = new GenesysNormalizer();
 		genesysNormalizer.process(new File("genesys.csv"), normalized);
 		System.gc();
 
 		// filter CWR data
 		log("Normalizing CWR data");
-		Normalizer cwrdbNormalizer = new CWRDBNormalizer();
+		Normalizable cwrdbNormalizer = new CWRDBNormalizer();
 		cwrdbNormalizer.process(new File("cwr.csv"), normalized);
 		System.gc();
 		

@@ -6,6 +6,13 @@ import java.util.Date;
 
 public class Executer implements Executable {
 	private static DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+	
+	private Date startDate;
+	
+	public Executer() {
+		this.startDate = new Date();
+	}
+	
 
 	public static void log(String message) {
 		System.out.println();
@@ -22,4 +29,11 @@ public class Executer implements Executable {
 		
 		
 	}
+
+
+	public Date getStartDate() {
+		return startDate;
+	}
+
+
 }
