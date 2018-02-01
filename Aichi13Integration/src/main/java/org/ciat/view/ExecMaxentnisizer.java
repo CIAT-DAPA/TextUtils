@@ -7,7 +7,7 @@ import org.ciat.control.Maxentnisizer;
 public class ExecMaxentnisizer extends Executer {
 
 	public static void main(String[] args) {
-		ExecMaxentnisizer app = new ExecMaxentnisizer();
+		Executable app = new ExecMaxentnisizer();
 		app.run();
 	}
 
@@ -15,7 +15,7 @@ public class ExecMaxentnisizer extends Executer {
 
 		// convert to Maxent format
 		log("Exporting data to Maxent");
-		File nativenessed = new File("data2.csv");
+		File nativenessed = new File(Executer.prop.getProperty("path.native"));
 		Maxentnisizer maxentnisizer = new Maxentnisizer();
 		maxentnisizer.process(nativenessed);
 		System.gc();

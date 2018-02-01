@@ -14,15 +14,15 @@ import org.ciat.control.Normalizer;
 public class ExecNativeness extends Executer {
 
 	public static void main(String[] args) {
-		ExecNativeness app = new ExecNativeness();
+		Executable app = new ExecNativeness();
 		app.run();
 	}
 
 	public void run() {
 
 		log("Marking nativeness");
-		File normalized = new File("data1.csv");
-		File nativenessed = new File("data2.csv");
+		File normalized = new File(Executer.prop.getProperty("path.normalized"));
+		File nativenessed = new File(Executer.prop.getProperty("path.native"));
 		try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(nativenessed)))) {
 			String header = Normalizable.getHeader() + Normalizer.SEPARATOR + "origin";
 			writer.println(header);

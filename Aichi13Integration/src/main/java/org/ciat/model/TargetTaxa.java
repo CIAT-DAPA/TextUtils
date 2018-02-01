@@ -10,6 +10,8 @@ import java.io.InputStreamReader;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.ciat.view.Executer;
+
 public class TargetTaxa {
 
 	private static TargetTaxa instance = null;
@@ -17,7 +19,7 @@ public class TargetTaxa {
 
 	private TargetTaxa() {
 		super();
-		this.speciesKeys = loadTargetTaxa(new File("taxa.csv"));
+		this.speciesKeys = loadTargetTaxa(new File(Executer.prop.getProperty("resource.targettaxa")));
 	}
 
 	public Set<String> getSpeciesKeys() {

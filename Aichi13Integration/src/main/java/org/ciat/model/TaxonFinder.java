@@ -7,24 +7,32 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import org.json.JSONObject;
 
 public class TaxonFinder {
 	
 	private static TaxonFinder instance = null;
-	private Map<String, String> speciesKeys = new TreeMap<String, String>();
+	private Map<String, String> matchedTaxa = new TreeMap<String, String>();
+	private Set<String> unmatchedTaxa = new TreeSet<String>();
+	
 	
 	public String fetchTaxonInfo(String name) {
 
 		// check first in the Map
 
-		String result = speciesKeys.get(name);
+		String result = matchedTaxa.get(name);
 		if (result != null) {
 			return result;
 		} else {
-			result = "";
+			if (unmatchedTaxa.contains(name)) {
+				return null;
+			} else {
+				result = "";
+			}
 		}
 
 		// make connection
@@ -56,7 +64,7 @@ public class TaxonFinder {
 						value = value.replaceAll("\r", "");
 						result += value;
 						// add result in the Map
-						speciesKeys.put(name, value);
+						matchedTaxa.put(name, value);
 						return result;
 					}
 				}
@@ -72,6 +80,7 @@ public class TaxonFinder {
 			e.printStackTrace();
 		}
 
+		unmatchedTaxa.add(name);
 		return null;
 	}
 

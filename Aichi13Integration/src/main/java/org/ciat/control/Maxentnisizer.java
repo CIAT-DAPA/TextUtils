@@ -105,7 +105,7 @@ public class Maxentnisizer {
 				output += SEPARATOR;
 			}
 		}
-		output = output.substring(0, output.length() - 1);
+		output = output.substring(0, output.length());
 		return output;
 	}
 
