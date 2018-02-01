@@ -16,6 +16,7 @@ import org.ciat.model.DataSourceName;
 import org.ciat.model.TargetTaxa;
 import org.ciat.model.TaxonFinder;
 import org.ciat.model.Utils;
+import org.ciat.view.CountExporter;
 import org.ciat.view.FileProgressBar;
 
 public class GenesysNormalizer extends Normalizer {

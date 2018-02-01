@@ -16,6 +16,7 @@ import org.ciat.model.Basis;
 import org.ciat.model.DataSourceName;
 import org.ciat.model.TargetTaxa;
 import org.ciat.model.Utils;
+import org.ciat.view.CountExporter;
 import org.ciat.view.FileProgressBar;
 
 public class GBIFNormalizer extends Normalizer {

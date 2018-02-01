@@ -1,4 +1,4 @@
-package org.ciat.control;
+package org.ciat.view;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import org.ciat.control.Normalizer;
 import org.ciat.model.Basis;
 import org.ciat.model.MapCounter;
 import org.ciat.model.Utils;

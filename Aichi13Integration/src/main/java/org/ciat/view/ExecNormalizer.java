@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import org.ciat.control.CWRDBNormalizer;
-import org.ciat.control.CountExporter;
 import org.ciat.control.GBIFNormalizer;
 import org.ciat.control.GenesysNormalizer;
 import org.ciat.control.Normalizable;
