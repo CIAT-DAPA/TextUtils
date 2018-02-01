@@ -8,13 +8,7 @@ http___download_eclipse_org_recommenders_models_neon_
 caches
 */target/*
 *.log
-/Aichi13Integration/gap_analysis
-/Aichi13Integration/parameters
-/Aichi13Integration/data1.csv
-/Aichi13Integration/data2.csv
-/CWRFilterer/data.csv
-/CWR_DB_Normalizer/20180124_data.csv
-/CWR_DB_Normalizer/MANIFEST.MF
 /LineFilterer/data.csv
 /LineFilterer/sample/gbif.csv
 /LineFilterer/sample/taxonkey.txt
+/Aichi13Integration/outputs/

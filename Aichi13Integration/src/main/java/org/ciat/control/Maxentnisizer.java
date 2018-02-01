@@ -16,6 +16,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.ciat.model.Utils;
+import org.ciat.view.Executer;
 import org.ciat.view.FileProgressBar;
 
 public class Maxentnisizer {
@@ -30,7 +31,7 @@ public class Maxentnisizer {
 	/** @return output file */
 	public void process(File input) {
 
-		File outputDir = new File("parameters/occurrences/raw");
+		File outputDir = new File(Executer.prop.getProperty("path.raw"));
 		if (!outputDir.exists()) {
 			outputDir.mkdirs();
 		} else {

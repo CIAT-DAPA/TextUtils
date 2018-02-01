@@ -75,7 +75,7 @@ public class CountExporter {
 				countTotalPre1950 = totalPre1950.get(key);
 			}
 
-			File outputDir = new File("gap_analysis" + "/" + key + "/");
+			File outputDir = new File(Executer.prop.getProperty("path.counts") + "/" + key + "/");
 			if (!outputDir.exists()) {
 				outputDir.mkdirs();
 			} else {
