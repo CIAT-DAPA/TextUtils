@@ -9,27 +9,8 @@ import org.ciat.model.DataSourceName;
 
 public class Normalizer implements Normalizable {
 
-	// output separator
-	public static final String SEPARATOR = "\t";
-	public static final int YEAR = 1950;
 	// index of columns
 	protected Map<String, Integer> colIndex = new LinkedHashMap<String, Integer>();
-	// target columns
-	private String[] colTarget = { "taxonkey", "decimallongitude", "decimallatitude", "countrycode", "basis",
-			"source" };
-
-
-
-	public String getHeader() {
-		String result = "";
-		for (String field : colTarget) {
-			result += field + SEPARATOR;
-		}
-		result = result.substring(0, result.length() - 1);
-		return result;
-	}
-
-
 
 	public void process(File file, File normalized) {
 		
@@ -39,14 +20,13 @@ public class Normalizer implements Normalizable {
 
 	@Override
 	public Basis getBasis(String basisofrecord) {
-		return Basis.H;
+		return null;
 	}
 
 
 
 	@Override
 	public DataSourceName getDataSourceName() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -54,7 +34,6 @@ public class Normalizer implements Normalizable {
 
 	@Override
 	public boolean isUseful(String[] values) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -62,7 +41,6 @@ public class Normalizer implements Normalizable {
 
 	@Override
 	public String normalize(String line) {
-		// TODO Auto-generated method stub
-		return null;
+		return line;
 	}
 }

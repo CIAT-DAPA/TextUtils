@@ -6,15 +6,12 @@ import org.ciat.export.Maxentnisizer;
 
 public class ExecMaxentnisizer extends Executer {
 
-
-
 	public static void main(String[] args) {
 		ExecMaxentnisizer app = new ExecMaxentnisizer();
 		app.run();
 	}
 
 	public void run() {
-
 
 		// convert to Maxent format
 		log("Exporting data to Maxent");
@@ -23,10 +20,6 @@ public class ExecMaxentnisizer extends Executer {
 		maxentnisizer.process(nativenessed);
 		System.gc();
 
-
-
 	}
-
-
 
 }

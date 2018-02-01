@@ -8,26 +8,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import org.ciat.export.CountExporter;
-import org.ciat.model.Basis;
-import org.ciat.model.MapCounter;
-import org.ciat.model.Utils;
 import org.ciat.transform.CWRDBNormalizer;
 import org.ciat.transform.GBIFNormalizer;
 import org.ciat.transform.GenesysNormalizer;
 import org.ciat.transform.Normalizable;
-import org.ciat.transform.Normalizer;
 
 public class ExecNormalizer extends Executer {
 
-
-	public static MapCounter totalRecords = new MapCounter();
-	public static MapCounter totalUseful = new MapCounter();
-	public static MapCounter totalGRecords = new MapCounter();
-	public static MapCounter totalGUseful = new MapCounter();
-	public static MapCounter totalHRecords = new MapCounter();
-	public static MapCounter totalHUseful = new MapCounter();
-	public static MapCounter totalPost1950 = new MapCounter();
-	public static MapCounter totalPre1950 = new MapCounter();
 
 	public static void main(String[] args) {
 		Executable app = new ExecNormalizer();
@@ -40,7 +27,7 @@ public class ExecNormalizer extends Executer {
 
 		File normalized = new File("data1.csv");
 		try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(normalized)))) {
-			String header = (new Normalizer()).getHeader();
+			String header = Normalizable.getHeader();
 			writer.println(header);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -75,37 +62,7 @@ public class ExecNormalizer extends Executer {
 
 	}
 
-	public static void updateCounters(String taxonkey, boolean useful, String year, Basis basis) {
-		ExecNormalizer.totalRecords.increase(taxonkey);
-		
-		if (Utils.isNumeric(year)) {
-			Integer yearNumber = Integer.parseInt(year);
-			if (yearNumber >= Normalizer.YEAR) {
-				ExecNormalizer.totalPost1950.increase(taxonkey);
-			} else {
-				ExecNormalizer.totalPre1950.increase(taxonkey);
-			}
-		} else {
-			ExecNormalizer.totalPre1950.increase(taxonkey);
-		}
 
-		if (basis.equals(Basis.G)) {
-			ExecNormalizer.totalGRecords.increase(taxonkey);
-		} else {
-			ExecNormalizer.totalHRecords.increase(taxonkey);
-		}
-
-		if (useful) {
-
-			ExecNormalizer.totalUseful.increase(taxonkey);
-			if (basis.equals(Basis.G)) {
-				ExecNormalizer.totalGUseful.increase(taxonkey);
-			} else {
-				ExecNormalizer.totalHUseful.increase(taxonkey);
-			}
-		}
-
-	}
 
 
 

@@ -10,8 +10,7 @@ import java.io.PrintWriter;
 import org.ciat.transform.NativenessMarker;
 import org.ciat.transform.Normalizer;
 
-public class ExecNativeness extends Executer{
-
+public class ExecNativeness extends Executer {
 
 	public static void main(String[] args) {
 		ExecNativeness app = new ExecNativeness();
@@ -19,7 +18,6 @@ public class ExecNativeness extends Executer{
 	}
 
 	public void run() {
-
 
 		log("Marking nativeness");
 		File normalized = new File("data1.csv");
@@ -37,9 +35,6 @@ public class ExecNativeness extends Executer{
 		nativenessMarker.process(normalized, nativenessed);
 		System.gc();
 
-
 	}
-
-
 
 }

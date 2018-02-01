@@ -11,7 +11,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.Set;
 
-import org.ciat.ExecNormalizer;
+import org.ciat.export.CountExporter;
 import org.ciat.model.Basis;
 import org.ciat.model.DataSourceName;
 import org.ciat.model.FileProgressBar;
@@ -68,7 +68,7 @@ public class CWRDBNormalizer extends Normalizer {
 							}
 						}
 
-						ExecNormalizer.updateCounters(taxonkey, isUseful, year, basis);
+						CountExporter.updateCounters(taxonkey, isUseful, year, basis);
 					}
 				}
 				/* show progress */

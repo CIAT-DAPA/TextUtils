@@ -12,7 +12,7 @@ import java.io.PrintWriter;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.ciat.ExecNormalizer;
+import org.ciat.export.CountExporter;
 import org.ciat.model.Basis;
 import org.ciat.model.DataSourceName;
 import org.ciat.model.FileProgressBar;
@@ -49,14 +49,14 @@ public class GBIFNormalizer extends Normalizer {
 					Basis basis = getBasis(values[colIndex.get("basisofrecord")]);
 					String year = values[colIndex.get("year")];
 
-					if (taxonkey!=null && taxonKeys.contains(taxonkey)) {
+					if (taxonkey != null && taxonKeys.contains(taxonkey)) {
 						boolean isUseful = isUseful(values);
 						if (isUseful) {
 
 							String result = normalize(values);
 							writer.println(result);
 						}
-						ExecNormalizer.updateCounters(taxonkey, isUseful, year, basis);
+						CountExporter.updateCounters(taxonkey, isUseful, year, basis);
 					}
 				}
 

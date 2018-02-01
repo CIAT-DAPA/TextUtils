@@ -11,7 +11,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.Set;
 
-import org.ciat.ExecNormalizer;
+import org.ciat.export.CountExporter;
 import org.ciat.model.Basis;
 import org.ciat.model.DataSourceName;
 import org.ciat.model.FileProgressBar;
@@ -53,16 +53,16 @@ public class GenesysNormalizer extends Normalizer {
 					String taxonkey = "";
 					taxonkey = TaxonFinder.getInstance().fetchTaxonInfo(values[colIndex.get("t.taxonName")]);
 					Basis basis = Basis.G;
-					String year = Normalizer.YEAR+"";
+					String year = Normalizer.YEAR + "";
 
-					if (taxonkey!=null && taxonKeys.contains(taxonkey)) {
+					if (taxonkey != null && taxonKeys.contains(taxonkey)) {
 						boolean isUseful = isUseful(values);
 						if (isUseful) {
 
 							String result = normalize(values);
 							writer.println(result);
 						}
-						ExecNormalizer.updateCounters(taxonkey, isUseful, year, basis);
+						CountExporter.updateCounters(taxonkey, isUseful, year, basis);
 					}
 				}
 
