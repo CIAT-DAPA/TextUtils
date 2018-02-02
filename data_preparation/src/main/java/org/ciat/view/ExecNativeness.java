@@ -21,8 +21,8 @@ public class ExecNativeness extends Executer {
 	public void run() {
 
 		log("Marking nativeness");
-		File normalized = new File(Executer.prop.getProperty("path.normalized"));
-		File nativenessed = new File(Executer.prop.getProperty("path.native"));
+		File normalized = new File(Executer.prop.getProperty("file.normalized"));
+		File nativenessed = new File(Executer.prop.getProperty("file.native"));
 		try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(nativenessed)))) {
 			String header = Normalizable.getHeader() + Normalizer.SEPARATOR + "origin";
 			writer.println(header);

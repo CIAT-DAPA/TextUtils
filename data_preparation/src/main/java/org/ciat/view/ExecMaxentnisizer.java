@@ -15,7 +15,7 @@ public class ExecMaxentnisizer extends Executer {
 
 		// convert to Maxent format
 		log("Exporting data to Maxent");
-		File nativenessed = new File(Executer.prop.getProperty("path.native"));
+		File nativenessed = new File(Executer.prop.getProperty("file.native"));
 		Maxentnisizer maxentnisizer = new Maxentnisizer();
 		maxentnisizer.process(nativenessed);
 		System.gc();

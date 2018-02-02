@@ -24,7 +24,7 @@ public class ExecNormalizer extends Executer {
 
 		log("Starting process");
 
-		File normalized = new File(Executer.prop.getProperty("path.normalized"));
+		File normalized = new File(Executer.prop.getProperty("file.normalized"));
 		try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(normalized)))) {
 			String header = Normalizable.getHeader();
 			writer.println(header);

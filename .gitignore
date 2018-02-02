@@ -11,4 +11,4 @@ caches
 /LineFilterer/data.csv
 /LineFilterer/sample/gbif.csv
 /LineFilterer/sample/taxonkey.txt
-/Aichi13Integration/outputs/
+*/outputs/*
