@@ -101,43 +101,41 @@ public class CWRDBNormalizer extends Normalizer {
 
 	public boolean isUseful(String[] values) {
 
-		if (!values[colIndex.get("final_origin_stat")].equals("introduced")) {
-			if (values[colIndex.get("coord_source")].equals("original")
-					|| values[colIndex.get("coord_source")].equals("georef")) {
-				if (values[colIndex.get("visibility")].equals("1")) {
-					if (values[colIndex.get("source")].equals("G") || values[colIndex.get("source")].equals("H")) {
+		if (!(values[colIndex.get("coord_source")].equals("original")
+				|| values[colIndex.get("coord_source")].equals("georef"))) {
+			return false;
+		}
 
-						String date = values[colIndex.get("colldate")];
-						if (date.length() > 3) {
-							date = date.substring(0, 4);
-							if (Utils.isNumeric(date)) {
+		if (!(values[colIndex.get("source")].equals("G") || values[colIndex.get("source")].equals("H"))) {
+			return false;
+		}
 
-								int year = Integer.parseInt(date);
-								String lon = values[colIndex.get("final_lon")];
-								String lat = values[colIndex.get("final_lat")];
-								String country = values[colIndex.get("final_iso2")];
-								country = Utils.iso2CountryCodeToIso3CountryCode(country);
-
-								if (country != null) {
-									if (year >= Normalizer.YEAR) {
-										if (Utils.isNumeric(lon) && Utils.isNumeric(lat)) {
-
-											if (Utils.areValidCoordinates(lat, lon)) {
-
-												return true;
-
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-
+		String date = values[colIndex.get("colldate")];
+		if (date.length() > 3) {
+			date = date.substring(0, 4);
+			if (Utils.isNumeric(date)) {
+				int year = Integer.parseInt(date);
+				if (year < Normalizer.YEAR) {
+					return false;
 				}
 			}
 		}
-		return false;
+
+		String country = values[colIndex.get("final_iso2")];
+		country = Utils.iso2CountryCodeToIso3CountryCode(country);
+		if (country == null) {
+			return false;
+		}
+
+		String lon = values[colIndex.get("final_lon")];
+		String lat = values[colIndex.get("final_lat")];
+
+		if (!Utils.areValidCoordinates(lat, lon)) {
+			return false;
+		}
+
+		return true;
+
 	}
 
 	public DataSourceName getDataSourceName() {

@@ -53,7 +53,7 @@ public class GenesysNormalizer extends Normalizer {
 					String taxonkey = "";
 					taxonkey = TaxonFinder.getInstance().fetchTaxonInfo(values[colIndex.get("t.taxonName")]);
 					Basis basis = Basis.G;
-					String year = Normalizer.YEAR + "";
+
 
 					if (taxonkey != null && taxonKeys.contains(taxonkey)) {
 						boolean isUseful = isUseful(values);
@@ -62,7 +62,7 @@ public class GenesysNormalizer extends Normalizer {
 							String result = normalize(values);
 							writer.println(result);
 						}
-						CountExporter.updateCounters(taxonkey, isUseful, year, basis);
+						CountExporter.updateCounters(taxonkey, isUseful, null, basis);
 					}
 				}
 
@@ -88,15 +88,14 @@ public class GenesysNormalizer extends Normalizer {
 		if (Utils.iso3CountryCodeToIso2CountryCode(values[colIndex.get("a.orgCty")]) == null) {
 			return false;
 		}
+		
 		String lon = values[colIndex.get("decimallongitude")];
 		String lat = values[colIndex.get("decimallatitude")];
-		if (Utils.isNumeric(lon) && Utils.isNumeric(lat)) {
-			if (Utils.areValidCoordinates(lat, lon)) {
-				return true;
-			}
-
+		if (!Utils.areValidCoordinates(lat, lon)) {
+			return false;
 		}
-		return false;
+
+		return true;
 	}
 
 	private String normalize(String[] values) {

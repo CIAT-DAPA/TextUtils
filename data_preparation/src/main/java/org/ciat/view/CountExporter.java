@@ -24,6 +24,7 @@ public class CountExporter {
 	public static MapCounter totalHUseful = new MapCounter();
 	public static MapCounter totalPost1950 = new MapCounter();
 	public static MapCounter totalPre1950 = new MapCounter();
+	public static MapCounter totalNoDate = new MapCounter();
 
 	public void process() {
 		exportSpeciesCounters();
@@ -135,7 +136,7 @@ public class CountExporter {
 				totalPre1950.increase(taxonkey);
 			}
 		} else {
-			totalPre1950.increase(taxonkey);
+			totalNoDate.increase(taxonkey);
 		}
 
 		if (basis.equals(Basis.G)) {
@@ -145,7 +146,6 @@ public class CountExporter {
 		}
 
 		if (useful) {
-
 			totalUseful.increase(taxonkey);
 			if (basis.equals(Basis.G)) {
 				totalGUseful.increase(taxonkey);
