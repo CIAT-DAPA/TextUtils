@@ -17,6 +17,7 @@ import org.ciat.model.TaxonFinder;
 import org.ciat.model.Utils;
 
 public class CountExporter {
+	
 	private static CountExporter instance = null;
 
 	private Map<String, MapCounter> counters;

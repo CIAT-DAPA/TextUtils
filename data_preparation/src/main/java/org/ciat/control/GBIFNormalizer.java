@@ -91,8 +91,6 @@ public class GBIFNormalizer extends Normalizer {
 			int year = Integer.parseInt(values[colIndex.get("year")]);
 			if (year < Normalizer.YEAR)
 				return false;
-		}else{
-			return false;
 		}
 
 		if (colIndex.get("datasetkey") != null
