@@ -2,11 +2,11 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.ciat</groupId>
-	<artifactId>Aichi13Integration</artifactId>
+	<artifactId>data_preparation</artifactId>
 	<packaging>jar</packaging>
 	<version>1.0</version>
 	<name>${project.artifactId}</name>
-	<url>https://github.com/CIAT-DAPA/TextUtils</url>
+	<url>https://github.com/CIAT-DAPA/aichi13_data_preparation</url>
 
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
@@ -28,7 +28,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>aichi13integration</finalName>
+		<finalName>data_preparation</finalName>
 		<plugins>
 
 			<!-- download source code in Eclipse, best practice -->
