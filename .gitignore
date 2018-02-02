@@ -12,3 +12,4 @@ caches
 /LineFilterer/sample/gbif.csv
 /LineFilterer/sample/taxonkey.txt
 */outputs/*
+/OrganizationsSummary/orgs_summary.csv

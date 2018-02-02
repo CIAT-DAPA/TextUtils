@@ -19,7 +19,7 @@ import java.util.Set;
 
 import org.json.JSONObject;
 
-public class OrganizationsSummary {
+public class DatasetSummary {
 
 	private static final String SEPARATOR = "\t";
 
@@ -28,14 +28,14 @@ public class OrganizationsSummary {
 		Date date = new Date();
 		System.out.println(dateFormat.format(date));
 
-		String fileName = "orgs_keys.csv";
+		String fileName = "dataset_keys.csv";
 		if (args.length > 0) {
 			fileName = args[0];
 		} else {
 			System.out.println("Processing " + fileName);
 		}
 
-		OrganizationsSummary app = new OrganizationsSummary();
+		DatasetSummary app = new DatasetSummary();
 		app.extract(fileName);
 
 		date = new Date();
@@ -46,7 +46,7 @@ public class OrganizationsSummary {
 	private void extract(String fileName) {
 
 		File input = new File(fileName);
-		File output = new File("orgs.csv");
+		File output = new File("dataset_summary.csv");
 
 		try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(output)));
 				BufferedReader reader = new BufferedReader(
@@ -69,7 +69,7 @@ public class OrganizationsSummary {
 
 			Set<String> publishers = new LinkedHashSet<String>();
 
-			String head = "institutioncode" + SEPARATOR + "publishingorgkey" + SEPARATOR;
+			String head = "";
 			for (String keyfield : targetFields) {
 				head += keyfield + SEPARATOR;
 			}
@@ -79,10 +79,9 @@ public class OrganizationsSummary {
 			while (line != null) {
 				line += SEPARATOR + " ";
 				String[] values = line.split(SEPARATOR);
-				String code = values[0];
-				String pub = values[1];
+				String pub = values[0];
 				if (!publishers.contains(pub)) {
-					writer.println(code + SEPARATOR + pub + SEPARATOR + fetchInfo(pub));
+					writer.println(fetchInfo(pub));
 					publishers.add(pub);
 				}
 
@@ -106,8 +105,7 @@ public class OrganizationsSummary {
 	}
 
 
-	private String[] targetFields = { "key", "endorsingNodeKey", "title", "description", "language", "email", "phone", "homepage", "city",
-			"country", "postalCode", "latitude", "longitude", "numPublishedDatasets", "created", "modified" };
+	private String[] targetFields = { "key", "publishingOrganizationKey", "doi", "type", "title", "createdby", "created", "modified" };
 
 	private String fetchInfo(String key) {
 
@@ -115,7 +113,7 @@ public class OrganizationsSummary {
 
 		URLConnection urlc;
 		try {
-			URL url = new URL("http://api.gbif.org/v1/organization/" + key + "");
+			URL url = new URL("http://api.gbif.org/v1/dataset/" + key + "");
 
 			urlc = url.openConnection();
 			// use post mode
