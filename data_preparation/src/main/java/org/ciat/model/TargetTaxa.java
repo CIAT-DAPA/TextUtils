@@ -39,7 +39,7 @@ public class TargetTaxa {
 
 			String line = reader.readLine();
 			while (line != null) {
-				if (!line.isEmpty()) {
+				if (!line.isEmpty()&& Utils.isNumeric(line)) {
 					filters.add(line);
 				}
 				line = reader.readLine();

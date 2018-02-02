@@ -68,7 +68,7 @@ public class CWRDBNormalizer extends Normalizer {
 							}
 						}
 
-						CountExporter.updateCounters(taxonkey, isUseful, year, basis);
+						CountExporter.getInstance().updateCounters(taxonkey, isUseful, year, basis);
 					}
 				}
 				/* show progress */

@@ -62,7 +62,7 @@ public class GenesysNormalizer extends Normalizer {
 							String result = normalize(values);
 							writer.println(result);
 						}
-						CountExporter.updateCounters(taxonkey, isUseful, null, basis);
+						CountExporter.getInstance().updateCounters(taxonkey, isUseful, null, basis);
 					}
 				}
 

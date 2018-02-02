@@ -54,8 +54,7 @@ public class ExecNormalizer extends Executer {
 		
 		// export counters
 		log("Exporting counters");
-		CountExporter countExporter = new CountExporter();
-		countExporter.process();
+		CountExporter.getInstance().process();
 		System.gc();
 
 

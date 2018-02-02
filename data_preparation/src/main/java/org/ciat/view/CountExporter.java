@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.ciat.control.Normalizer;
 import org.ciat.model.Basis;
@@ -15,16 +17,34 @@ import org.ciat.model.TaxonFinder;
 import org.ciat.model.Utils;
 
 public class CountExporter {
+	private static CountExporter instance = null;
 
-	public static MapCounter totalRecords = new MapCounter();
-	public static MapCounter totalUseful = new MapCounter();
-	public static MapCounter totalGRecords = new MapCounter();
-	public static MapCounter totalGUseful = new MapCounter();
-	public static MapCounter totalHRecords = new MapCounter();
-	public static MapCounter totalHUseful = new MapCounter();
-	public static MapCounter totalPost1950 = new MapCounter();
-	public static MapCounter totalPre1950 = new MapCounter();
-	public static MapCounter totalNoDate = new MapCounter();
+	private Map<String, MapCounter> counters;
+
+	private CountExporter() {
+		super();
+		this.counters = new LinkedHashMap<String, MapCounter>();
+		this.counters.put("totalRecords", new MapCounter());
+		this.counters.put("totalUseful", new MapCounter());
+		this.counters.put("totalGRecords", new MapCounter());
+		this.counters.put("totalGUseful", new MapCounter());
+		this.counters.put("totalHRecords", new MapCounter());
+		this.counters.put("totalHUseful", new MapCounter());
+		this.counters.put("totalPost1950", new MapCounter());
+		this.counters.put("totalPre1950", new MapCounter());
+		this.counters.put("totalNoDate", new MapCounter());
+	}
+
+	public Map<String, MapCounter> getCounters() {
+		return counters;
+	}
+
+	public static CountExporter getInstance() {
+		if (instance == null) {
+			instance = new CountExporter();
+		}
+		return instance;
+	}
 
 	public void process() {
 		exportSpeciesCounters();
@@ -50,48 +70,27 @@ public class CountExporter {
 
 		// header of summary file
 		File outputSummary = new File(Executer.prop.getProperty("file.counts.summary"));
-		String header = "totalRecords" + Normalizer.SEPARATOR + "totalUseful" + Normalizer.SEPARATOR + "totalGRecords"
-				+ Normalizer.SEPARATOR + "totalGUseful" + Normalizer.SEPARATOR + "totalHRecords" + Normalizer.SEPARATOR
-				+ "totalHUseful" + Normalizer.SEPARATOR + "totalPost1950" + Normalizer.SEPARATOR + "totalPre1950";
-		try (PrintWriter writerSummary = new PrintWriter(new BufferedWriter(new FileWriter(outputSummary, true)))) {
-			writerSummary.println("taxonkey"+Normalizer.SEPARATOR+header);
+		String header = "";
+
+		for (String name : counters.keySet()) {
+			header += name + Normalizer.SEPARATOR;
+		}
+
+		try (PrintWriter writerSummary = new PrintWriter(new BufferedWriter(new FileWriter(outputSummary)))) {
+			writerSummary.println("taxonkey" + Normalizer.SEPARATOR + header);
 
 			// for each target taxon in the list
-			for (String key : TargetTaxa.getInstance().getSpeciesKeys()) {
-				int countTotalRecords = 0;
-				if (totalRecords.containsKey(key)) {
-					countTotalRecords = totalRecords.get(key);
-				}
-				int countTotalUseful = 0;
-				if (totalUseful.containsKey(key)) {
-					countTotalUseful = totalUseful.get(key);
-				}
-				int countTotalGRecords = 0;
-				if (totalGRecords.containsKey(key)) {
-					countTotalGRecords = totalGRecords.get(key);
-				}
-				int countTotalGUseful = 0;
-				if (totalGUseful.containsKey(key)) {
-					countTotalGUseful = totalGUseful.get(key);
-				}
-				int countTotalHRecords = 0;
-				if (totalHRecords.containsKey(key)) {
-					countTotalHRecords = totalHRecords.get(key);
-				}
-				int countTotalHUseful = 0;
-				if (totalHUseful.containsKey(key)) {
-					countTotalHUseful = totalHUseful.get(key);
-				}
-				int countTotalPost1950 = 0;
-				if (totalPost1950.containsKey(key)) {
-					countTotalPost1950 = totalPost1950.get(key);
-				}
-				int countTotalPre1950 = 0;
-				if (totalPre1950.containsKey(key)) {
-					countTotalPre1950 = totalPre1950.get(key);
+			for (String taxonkey : TargetTaxa.getInstance().getSpeciesKeys()) {
+				String countsLine = "";
+				for (String name : counters.keySet()) {
+					int count = 0;
+					if (counters.get(name).get(taxonkey) != null) {
+						count = counters.get(name).get(taxonkey);
+					}
+					countsLine += count + Normalizer.SEPARATOR;
 				}
 
-				File outputDir = new File(Executer.prop.getProperty("path.counts") + "/" + key + "/");
+				File outputDir = new File(Executer.prop.getProperty("path.counts") + "/" + taxonkey + "/");
 				if (!outputDir.exists()) {
 					outputDir.mkdirs();
 				} else {
@@ -99,17 +98,12 @@ public class CountExporter {
 				}
 
 				File output = new File(outputDir.getAbsolutePath() + "/counts.csv");
-				String countsLine = countTotalRecords + Normalizer.SEPARATOR + countTotalUseful
-						+ Normalizer.SEPARATOR + countTotalGRecords + Normalizer.SEPARATOR + countTotalGUseful
-						+ Normalizer.SEPARATOR + countTotalHRecords + Normalizer.SEPARATOR + countTotalHUseful
-						+ Normalizer.SEPARATOR + countTotalPost1950 + Normalizer.SEPARATOR + countTotalPre1950;
-				
 
 				try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(output)))) {
-					
+
 					writer.println(header);
 					writer.println(countsLine);
-					writerSummary.println(key+Normalizer.SEPARATOR +countsLine);
+					writerSummary.println(taxonkey + Normalizer.SEPARATOR + countsLine);
 
 				} catch (FileNotFoundException e) {
 					System.out.println("File not found " + output.getAbsolutePath());
@@ -125,32 +119,32 @@ public class CountExporter {
 
 	}
 
-	public static void updateCounters(String taxonkey, boolean useful, String year, Basis basis) {
-		totalRecords.increase(taxonkey);
+	public void updateCounters(String taxonkey, boolean useful, String year, Basis basis) {
+		counters.get("totalRecords").increase(taxonkey);
 
 		if (Utils.isNumeric(year)) {
 			Integer yearNumber = Integer.parseInt(year);
 			if (yearNumber >= Normalizer.YEAR) {
-				totalPost1950.increase(taxonkey);
+				counters.get("totalPost1950").increase(taxonkey);
 			} else {
-				totalPre1950.increase(taxonkey);
+				counters.get("totalPre1950").increase(taxonkey);
 			}
 		} else {
-			totalNoDate.increase(taxonkey);
+			counters.get("totalNoDate").increase(taxonkey);
 		}
 
 		if (basis.equals(Basis.G)) {
-			totalGRecords.increase(taxonkey);
+			counters.get("totalGRecords").increase(taxonkey);
 		} else {
-			totalHRecords.increase(taxonkey);
+			counters.get("totalHRecords").increase(taxonkey);
 		}
 
 		if (useful) {
-			totalUseful.increase(taxonkey);
+			counters.get("totalUseful").increase(taxonkey);
 			if (basis.equals(Basis.G)) {
-				totalGUseful.increase(taxonkey);
+				counters.get("totalGUseful").increase(taxonkey);
 			} else {
-				totalHUseful.increase(taxonkey);
+				counters.get("totalHUseful").increase(taxonkey);
 			}
 		}
 

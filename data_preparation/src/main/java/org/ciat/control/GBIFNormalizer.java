@@ -56,7 +56,7 @@ public class GBIFNormalizer extends Normalizer {
 							String result = normalize(values);
 							writer.println(result);
 						}
-						CountExporter.updateCounters(taxonkey, isUseful, year, basis);
+						CountExporter.getInstance().updateCounters(taxonkey, isUseful, year, basis);
 					}
 				}
 
