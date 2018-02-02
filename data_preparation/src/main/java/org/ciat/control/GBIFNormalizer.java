@@ -87,6 +87,12 @@ public class GBIFNormalizer extends Normalizer {
 	public boolean isUseful(String[] values) {
 
 		// excluding CWR dataset
+		if (colIndex.get("year") != null && Utils.isNumeric(values[colIndex.get("year")])) {
+			int year = Integer.parseInt(values[colIndex.get("year")]);
+			if (year < Normalizer.YEAR)
+				return false;
+		}
+
 		if (colIndex.get("datasetkey") != null
 				&& values[colIndex.get("datasetkey")].contains("07044577-bd82-4089-9f3a-f4a9d2170b2e")) {
 			return false;

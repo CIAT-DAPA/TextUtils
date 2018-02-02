@@ -53,7 +53,7 @@ public class CountExporter {
 				+ Normalizer.SEPARATOR + "totalGUseful" + Normalizer.SEPARATOR + "totalHRecords" + Normalizer.SEPARATOR
 				+ "totalHUseful" + Normalizer.SEPARATOR + "totalPost1950" + Normalizer.SEPARATOR + "totalPre1950";
 		try (PrintWriter writerSummary = new PrintWriter(new BufferedWriter(new FileWriter(outputSummary, true)))) {
-			writerSummary.println(header);
+			writerSummary.println("taxonkey"+Normalizer.SEPARATOR+header);
 
 			// for each target taxon in the list
 			for (String key : TargetTaxa.getInstance().getSpeciesKeys()) {
@@ -108,7 +108,7 @@ public class CountExporter {
 					
 					writer.println(header);
 					writer.println(countsLine);
-					writerSummary.println(countsLine);
+					writerSummary.println(key+Normalizer.SEPARATOR +countsLine);
 
 				} catch (FileNotFoundException e) {
 					System.out.println("File not found " + output.getAbsolutePath());
