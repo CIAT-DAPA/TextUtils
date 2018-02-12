@@ -53,7 +53,6 @@ public class DatasetSummary {
 						new InputStreamReader(new FileInputStream(input), "UTF-8"))) {
 
 			/* header */
-			String line = reader.readLine();
 			/* */
 
 			/* progress bar */
@@ -61,7 +60,7 @@ public class DatasetSummary {
 			int exp = (int) Math.ceil((input.length() + "").length()) + 1;
 			int dimensionality = (int) Math.pow(2, exp);
 			int total = Math.toIntExact(input.length() / dimensionality);
-			long done = line.length();
+			long done = 0;
 			int lineNumber = 0;
 			System.out.println("Reading " + input.length() / 1024 + "KB");
 			System.out.println("Updating progress each " + dimensionality + "KB read");
@@ -75,7 +74,8 @@ public class DatasetSummary {
 			}
 			writer.println(head);
 
-			line = reader.readLine();
+
+			String line = reader.readLine();
 			while (line != null) {
 				line += SEPARATOR + " ";
 				String[] values = line.split(SEPARATOR);
